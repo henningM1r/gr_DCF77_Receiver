@@ -11,7 +11,7 @@ options:
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: top_block
+    id: DCF77_Receiver
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -22,7 +22,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: DCF77 GUI
+    title: DCF77 Receiver
     window_size: (1000,1000)
   states:
     bus_sink: false
@@ -42,7 +42,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [440, 12.0]
+    coordinate: [416, 12.0]
     rotation: 0
     state: true
 - name: freq_DCF77
@@ -54,14 +54,16 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 12.0]
+    coordinate: [304, 12.0]
     rotation: 0
     state: true
 - name: gain1
   id: variable_qtgui_range
   parameters:
-    comment: ''
-    gui_hint: ''
+    comment: 'default real: 150
+
+      default simulation: 1'
+    gui_hint: (0,0)
     label: Gain1
     min_len: '200'
     orient: QtCore.Qt.Horizontal
@@ -75,20 +77,22 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 4.0]
+    coordinate: [1016, 12.0]
     rotation: 0
     state: true
 - name: gain2
   id: variable_qtgui_range
   parameters:
-    comment: ''
-    gui_hint: (2,0,1,1)
+    comment: 'default real: 290
+
+      default simulation: 1'
+    gui_hint: (1,0)
     label: Gain2
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '1'
-    step: '1'
+    step: '0.5'
     stop: '450'
     value: '150'
     widget: counter_slider
@@ -96,7 +100,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1104, 4.0]
+    coordinate: [1160, 8.0]
     rotation: 0
     state: true
 - name: hi_thres
@@ -104,12 +108,10 @@ blocks:
   parameters:
     comment: 'Adapt the upper threshold
 
-      so that the high value is
+      so that the one value is provided
 
-      provided each time the signal
-
-      is high'
-    gui_hint: (0,0,1,1)
+      each time the signal is high'
+    gui_hint: (2,0)
     label: upper Threshold
     min_len: '200'
     orient: QtCore.Qt.Horizontal
@@ -123,7 +125,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [576, 12.0]
+    coordinate: [624, 8.0]
     rotation: 0
     state: true
 - name: lo_thres
@@ -131,10 +133,10 @@ blocks:
   parameters:
     comment: 'Adapt the upper threshold
 
-      so that the low value is provided
+      so that the one value is provided
 
-      each time the signal is low'
-    gui_hint: (1,0,1,1)
+      each time the signal is high'
+    gui_hint: (3,0)
     label: lower Threshold
     min_len: '200'
     orient: QtCore.Qt.Horizontal
@@ -148,7 +150,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [768, 4.0]
+    coordinate: [816, 12.0]
     rotation: 0
     state: true
 - name: samp_rate
@@ -160,7 +162,24 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [216, 12.0]
+    coordinate: [200, 12.0]
+    rotation: 0
+    state: enabled
+- name: variable_low_pass_filter_taps_0
+  id: variable_low_pass_filter_taps
+  parameters:
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: '5000'
+    gain: '1.0'
+    samp_rate: samp_rate
+    width: '1000'
+    win: window.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [384, 652.0]
     rotation: 0
     state: enabled
 - name: analog_simple_squelch_cc_0
@@ -171,7 +190,7 @@ blocks:
     alpha: '1'
     comment: 'filter out low noise
 
-      below threshold'
+      below given threshold'
     maxoutbuf: '0'
     minoutbuf: '0'
     threshold: '-50'
@@ -179,9 +198,28 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 244.0]
+    coordinate: [696, 412.0]
     rotation: 0
     state: enabled
+- name: audio_sink_0
+  id: audio_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'for listening to the
+
+      DCF77-signal'
+    device_name: ''
+    num_inputs: '1'
+    ok_to_block: 'True'
+    samp_rate: '48000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 932.0]
+    rotation: 0
+    state: disabled
 - name: blocks_complex_to_mag_squared_0
   id: blocks_complex_to_mag_squared
   parameters:
@@ -195,7 +233,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [272, 728.0]
+    coordinate: [464, 1008.0]
     rotation: 0
     state: enabled
 - name: blocks_message_debug_0
@@ -213,7 +251,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [896, 1032.0]
+    coordinate: [872, 1360.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_1
@@ -231,7 +269,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1104, 252.0]
+    coordinate: [1184, 468.0]
     rotation: 0
     state: enabled
 - name: blocks_threshold_ff_0
@@ -239,21 +277,39 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: 'Decide if received
-
-      value is low=> zero
-
-      or high => one'
-    high: hi_thres
+    comment: ''
+    high: '125'
     init: '1'
-    low: lo_thres
+    low: '2.5'
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [288, 964.0]
+    coordinate: [280, 1116.0]
+    rotation: 0
+    state: true
+- name: freq_xlating_fir_filter_xxx_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: freq_DCF77
+    comment: 'Demodulation from 77.5 kHz
+
+      down to the base band.'
+    decim: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: variable_low_pass_filter_taps_0
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [368, 516.0]
     rotation: 0
     state: enabled
 - name: gr_bit_detector_DCF77
@@ -266,12 +322,12 @@ blocks:
       from gnuradio import gr\nimport pmt\n\n\n\n# the DCF77 detector is initially\
       \ out of sync\n_in_sync = 0\n# counted number of one samples\n_num_ones = 0\n\
       # counted number of zero samples\n_num_zeros = 0\n\n\nclass blk(gr.sync_block):\n\
-      \    \"\"\"DCF77 Bit Detector\"\"\"\n\n    def __init__(self, scaling=16, sample_rate=192000,\
+      \    \"\"\"DCF77 Decoder\"\"\"\n\n    def __init__(self, scaling=16, sample_rate=192000,\
       \ tolerance=0.02):\n        gr.sync_block.__init__(\n            self,\n   \
-      \         name='DCF77 Bit Detector',\n            in_sig=[np.float32],\n   \
-      \         out_sig=[np.float32]\n        )\n\n        # block paramters\n   \
-      \     self.sample_rate = sample_rate\n        self.scaling = scaling\n     \
-      \   self.tolerance = tolerance\n\n        # messaging port\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
+      \         name='DCF77 Decoder',\n            in_sig=[np.float32],\n        \
+      \    out_sig=[np.float32]\n        )\n\n        # block paramters\n        self.sample_rate\
+      \ = sample_rate\n        self.scaling = scaling\n        self.tolerance = tolerance\n\
+      \n        # messaging port\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
       \        \n        # timing tolerance value, if the sampled frame is\n     \
       \   # slightly shorter/longer hant the defined duration\n        self._tolerance\
       \      = self.sample_rate/self.scaling*self.tolerance\n        \n        # 0.1s\
@@ -291,41 +347,43 @@ blocks:
       \ + 2*self._tolerance\n        \n        # 1.8s of ones for the one-bit at position\
       \ 58 (with prolonged ones)\n        self._reinit_one_lo  = self.sample_rate/self.scaling*1.8\
       \ - 2*self._tolerance\n        self._reinit_one_hi  = self.sample_rate/self.scaling*1.8\
-      \ + 2*self._tolerance\n \n        print((self._zero_hi + self._zero_lo)/2)\n\
-      \        print((self._zero_compl_hi + self._zero_compl_lo)/2)\n        print((self._one_hi\
-      \ + self._one_lo)/2)\n        print((self._one_compl_hi + self._one_compl_lo)/2)\n\
-      \        print((self._reinit_zero_hi + self._reinit_zero_lo)/2)\n        print((self._reinit_one_hi\
-      \ + self._reinit_one_lo)/2)\n\n\n    def work(self, input_items, output_items):\n\
-      \        inp = input_items[0]\n        out = output_items[0]\n        \n   \
-      \     # the actual detector-magic happens here\n        out[:] = self.extract_bits(inp)\n\
-      \        \n        # forward input tagged signal\n        return len(output_items[0])\n\
-      \n\n    def extract_bits(self, inp):\n        global _in_sync\n        global\
-      \ _num_ones\n        global _num_zeros\n        \n        out = inp\n      \
-      \  \n        # Process the individual (finite length) stream block currently\
-      \ received.\n        # The synchronization and detection process is basically\
-      \ modelled by a finite state. machine\n        for idx, ch in enumerate(inp):\n\
-      \            # increment current counters of zeros and ones correspondingly\n\
-      \            if (ch == 1):\n                _num_ones += 1\n            else:\
-      \ # ch == 0\n                _num_zeros += 1\n            \n            # first\
-      \ step of synchronization, as soon as an edge\n            # from zero to one\
-      \ is detected\n            if (_in_sync == 0 and ch == 0):\n               \
-      \ _in_sync = -1\n                _num_zeros = 1\n                _num_ones =\
-      \ 0\n                \n                key = pmt.intern(\"edge\")\n        \
-      \        value = pmt.intern(\"0 => -1\")\n                self.add_item_tag(0,\n\
-      \                    self.nitems_written(0) + idx,\n                    key,\n\
-      \                    value\n                )\n            \n            # do\
-      \ not (yet) synchronize if there\n            # is no edge from zero to one\
-      \ yet\n            elif (_in_sync == 0 and ch == 1):\n                pass\n\
-      \            \n            # second step of synchronization succeeds,\n    \
-      \        # as soon as an edge from one to zero is\n            # detected during\
-      \ state -1, given that the\n            # length of zeros fits to parts of the\n\
-      \            # zero/one symbols correspondingly\n            if (_in_sync ==\
-      \ -1 and ch == 1 and \n                 ((_num_zeros > self._zero_lo and _num_zeros\
-      \ < self._zero_hi) or\n                  (_num_zeros > self._one_lo  and _num_zeros\
-      \ < self._one_hi))):\n                _in_sync = -2\n                _num_zeros\
-      \ = 0\n                _num_ones = 1\n                \n                key\
-      \ = pmt.intern(\"edge\")\n                value = pmt.intern(\"-1 => -2\")\n\
-      \                self.add_item_tag(0,\n                    self.nitems_written(0)\
+      \ + 2*self._tolerance\n \n        print(\"zero\", (self._zero_hi + self._zero_lo)/2)\n\
+      \        print(\"zero_comp\", (self._zero_compl_hi + self._zero_compl_lo)/2)\n\
+      \        print(\"one\", (self._one_hi + self._one_lo)/2)\n        print(\"one_comp\"\
+      , (self._one_compl_hi + self._one_compl_lo)/2)\n        print(\"zero_reinit\"\
+      , (self._reinit_zero_hi + self._reinit_zero_lo)/2)\n        print(\"one_reinit\"\
+      , (self._reinit_one_hi + self._reinit_one_lo)/2)\n\n\n    def work(self, input_items,\
+      \ output_items):\n        inp = input_items[0]\n        out = output_items[0]\n\
+      \        \n        # the actual detector-magic happens here\n        out[:]\
+      \ = self.extract_bits(inp)\n        \n        # forward input tagged signal\n\
+      \        return len(output_items[0])\n\n\n    def extract_bits(self, inp):\n\
+      \        global _in_sync\n        global _num_ones\n        global _num_zeros\n\
+      \        \n        out = inp\n        \n        # Process the individual (finite\
+      \ length) stream block currently received.\n        # The synchronization and\
+      \ detection process is basically modelled by a finite state. machine\n     \
+      \   for idx, ch in enumerate(inp):\n            # increment current counters\
+      \ of zeros and ones correspondingly\n            if (ch == 1):\n           \
+      \     _num_ones += 1\n            else: # ch == 0\n                _num_zeros\
+      \ += 1\n            \n            # first step of synchronization, as soon as\
+      \ an edge\n            # from zero to one is detected\n            if (_in_sync\
+      \ == 0 and ch == 0):\n                _in_sync = -1\n                _num_zeros\
+      \ = 1\n                _num_ones = 0\n                \n                key\
+      \ = pmt.intern(\"edge\")\n                value = pmt.intern(f\"0 => -1 {_num_zeros},\
+      \ {_num_ones}\")\n                self.add_item_tag(0,\n                   \
+      \ self.nitems_written(0) + idx,\n                    key,\n                \
+      \    value\n                )\n            \n            # do not (yet) synchronize\
+      \ if there\n            # is no edge from zero to one yet\n            elif\
+      \ (_in_sync == 0 and ch == 1):\n                pass\n            \n       \
+      \     # second step of synchronization succeeds,\n            # as soon as an\
+      \ edge from one to zero is\n            # detected during state -1, given that\
+      \ the\n            # length of zeros fits to parts of the\n            # zero/one\
+      \ symbols correspondingly\n            if (_in_sync == -1 and ch == 1 and \n\
+      \                 ((_num_zeros > self._zero_lo and _num_zeros < self._zero_hi)\
+      \ or\n                  (_num_zeros > self._one_lo  and _num_zeros < self._one_hi))):\n\
+      \                _in_sync = -2\n                _num_zeros = 0\n           \
+      \     _num_ones = 1\n                \n                key = pmt.intern(\"edge\"\
+      )\n                value = pmt.intern(f\"-1 => -2  {_num_zeros}, {_num_ones}\"\
+      )\n                self.add_item_tag(0,\n                    self.nitems_written(0)\
       \ + idx,\n                    key,\n                    value\n            \
       \    )\n            \n            # second step of synchronization fails otherwise\n\
       \            elif (_in_sync == -1 and ch == 1 and\n                (_num_zeros\
@@ -354,7 +412,7 @@ blocks:
       \ or _num_ones > self._one_compl_hi) or\n                  (_num_ones > self._zero_compl_hi\
       \ and _num_ones < self._one_compl_lo))):\n                _in_sync = -1\n  \
       \              _num_zeros = 1\n                _num_ones = 0\n             \
-      \   \n                key = pmt.intern(\"edge\")\n                value = pmt.intern(\"\
+      \   \n                key = pmt.intern(\"edge\")\n                value = pmt.intern(f\"\
       ERR: -2 => -1: {_num_zeros}, {_num_ones}\")\n                self.add_item_tag(0,\n\
       \                    self.nitems_written(0) + idx,\n                    key,\n\
       \                    value\n                )\n            \n            # do\
@@ -366,33 +424,33 @@ blocks:
       \ < self._zero_hi) or\n                (_num_zeros > self._one_lo  and _num_zeros\
       \ < self._one_hi))):\n                _in_sync = 2\n                _num_ones\
       \ = 1\n                \n                key = pmt.intern(\"edge\")\n      \
-      \          value = pmt.intern(\"1 => 2\")\n                self.add_item_tag(0,\n\
-      \                    self.nitems_written(0) + idx,\n                    key,\n\
-      \                    value\n                )\n            \n            \n\
-      \            # detect zero bit on falling edge at each end of the symbol frame\n\
-      \            if (_in_sync == 2 and ch == 0):\n            \n               \
-      \ # detect a zero bit, if approx 0.1sec zeros and 0.9sec ones\n            \
-      \    # (in that order) with slight tolerances are detected\n               \
-      \ if (_num_zeros > self._zero_lo and _num_zeros < self._zero_hi and\n      \
-      \              _num_ones > self._zero_compl_lo and _num_ones < self._zero_compl_hi):\n\
-      \                    \n                    # reset counters to zero\n      \
-      \              _num_ones = 0\n                    _num_zeros = 1\n         \
-      \           \n                    _in_sync = 1\n                    \n     \
-      \               key = pmt.intern(\"edge\")\n                    value = pmt.intern(\"\
-      2 => 1: BIT ZERO\")\n                    self.add_item_tag(0,\n            \
-      \            self.nitems_written(0) + idx,\n                        key,\n \
-      \                       value\n                    )\n                    \n\
-      \                    self.message_port_pub(pmt.intern(\"msg_out\"), pmt.intern(\"\
-      0\"))\n                \n                # detect a one bit, if approx 0.2sec\
-      \ zeros and 0.8sec ones\n                # (in that order) with slight tolerances\
-      \ are detected\n                elif (_num_zeros > self._one_lo and _num_zeros\
-      \ < self._one_hi and\n                      _num_ones > self._one_compl_lo and\
-      \ _num_ones < self._one_compl_hi):\n                    \n                 \
-      \   # reset counters to zero\n                    _num_ones = 0\n          \
-      \          _num_zeros = 1\n                    \n                    _in_sync\
+      \          value = pmt.intern(f\"1 => 2 {_num_zeros}, {_num_ones}\")\n     \
+      \           self.add_item_tag(0,\n                    self.nitems_written(0)\
+      \ + idx,\n                    key,\n                    value\n            \
+      \    )\n            \n            \n            # detect zero bit on falling\
+      \ edge at each end of the symbol frame\n            if (_in_sync == 2 and ch\
+      \ == 0):\n            \n                # detect a zero bit, if approx 0.1sec\
+      \ zeros and 0.9sec ones\n                # (in that order) with slight tolerances\
+      \ are detected\n                if (_num_zeros > self._zero_lo and _num_zeros\
+      \ < self._zero_hi and\n                    _num_ones > self._zero_compl_lo and\
+      \ _num_ones < self._zero_compl_hi):\n                    \n                \
+      \    # reset counters to zero\n                    _num_ones = 0\n         \
+      \           _num_zeros = 1\n                    \n                    _in_sync\
       \ = 1\n                    \n                    key = pmt.intern(\"edge\")\n\
-      \                    value = pmt.intern(\"2 => 1: BIT ONE\")\n             \
-      \       self.add_item_tag(0,\n                        self.nitems_written(0)\
+      \                    value = pmt.intern(\"2 => 1: BIT ZERO\")\n            \
+      \        self.add_item_tag(0,\n                        self.nitems_written(0)\
+      \ + idx,\n                        key,\n                        value\n    \
+      \                )\n                    \n                    self.message_port_pub(pmt.intern(\"\
+      msg_out\"), pmt.intern(\"0\"))\n                \n                # detect a\
+      \ one bit, if approx 0.2sec zeros and 0.8sec ones\n                # (in that\
+      \ order) with slight tolerances are detected\n                elif (_num_zeros\
+      \ > self._one_lo and _num_zeros < self._one_hi and\n                      _num_ones\
+      \ > self._one_compl_lo and _num_ones < self._one_compl_hi):\n              \
+      \      \n                    # reset counters to zero\n                    _num_ones\
+      \ = 0\n                    _num_zeros = 1\n                    \n          \
+      \          _in_sync = 1\n                    \n                    key = pmt.intern(\"\
+      edge\")\n                    value = pmt.intern(\"2 => 1: BIT ONE\")\n     \
+      \               self.add_item_tag(0,\n                        self.nitems_written(0)\
       \ + idx,\n                        key,\n                        value\n    \
       \                )\n                    \n                    self.message_port_pub(pmt.intern(\"\
       msg_out\"), pmt.intern(\"1\"))\n                \n                # detect a\
@@ -438,24 +496,24 @@ blocks:
     alias: ''
     comment: 'syncs to falling edge
 
-      * decodes 0, 0.1sec zero and 0.9sec one => bit zero
+      * decodes 0, 0.1sec zero and 0.9sec one
 
-      * decodes 1, 0.2sec zero and 0.8sec one => bit one
+      * decodes 1, 0.2sec zero and 0.8sec one
 
-      * decodes ''new minute'' if 1,8 or 1,9sec one'
+      * decodes new minute if 1,8 or 1,9sec one'
     maxoutbuf: '0'
     minoutbuf: '0'
     sample_rate: samp_rate
     scaling: decimation
     tolerance: '0.02'
   states:
-    _io_cache: ('DCF77 Bit Detector', 'blk', [('scaling', '16'), ('sample_rate', '192000'),
+    _io_cache: ('DCF77 Decoder', 'blk', [('scaling', '16'), ('sample_rate', '192000'),
       ('tolerance', '0.02')], [('0', 'float', 1)], [('0', 'float', 1), ('msg_out',
-      'message', 1)], 'DCF77 Bit Detector', ['sample_rate', 'scaling', 'tolerance'])
+      'message', 1)], 'DCF77 Decoder', ['sample_rate', 'scaling', 'tolerance'])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [512, 964.0]
+    coordinate: [464, 1116.0]
     rotation: 0
     state: true
 - name: low_pass_filter_0
@@ -481,35 +539,33 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [392, 204.0]
+    coordinate: [408, 308.0]
     rotation: 0
-    state: enabled
-- name: note_0
-  id: note
+    state: disabled
+- name: network_tcp_source_1
+  id: network_tcp_source
   parameters:
+    addr: 127.0.0.1
+    affinity: ''
     alias: ''
-    comment: "Do not worry if the Message Debug Print shows several ERROR first...\n\
-      \nWhen running this flowchart ensure that:\n* Ensure that the general reception\
-      \ of the signal at 77.5 kH is good and\n   distinguishable this will only work\
-      \ in central Europe:\n  https://www.ptb.de/cms/en/ptb/fachabteilungen/abt4/fb-44/ag-442/dissemination-of-legal-time/dcf77/reach-of-dcf77.html\n\
-      * Ensure that the amplitudes for \"low\" and \"high\" of \"data0\"\n   are sufficiently\
-      \ distinct (e.g. low appox. 0.5, and high approx. 100) by adjusting\n   the\
-      \ gain2 and gain one ranges\n* Ensure that the higher threshold is set where\
-      \ \"high\" is visible\n  in the \"data0\" chart, e.g. approx. 100\n* Ensure\
-      \ that the lower theshold is approx- 0.5 (zoom into \"data0\")\n* then you should\
-      \ obtain either a 1 or a 0 each second, or a \"new Minute\" signal\n* the signal1\
-      \ should should show edges and detected bits\n\nto decode the received bits,\
-      \ run the DecodeDCF77.py script\n* since you did not start at the beginning,\
-      \ the first minute is usually incomplete\n* so wait until the decoder synchronized\
-      \ to the new minute signal"
-    note: INSTRUCTIONS
+    comment: 'This block takes the DCF77
+
+      signal from a simulated
+
+      Channel at 77.5 kHz.'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    port: '55554'
+    server: 'False'
+    type: complex
+    vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 396.0]
+    coordinate: [88, 508.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: osmosdr_source_0
   id: osmosdr_source
   parameters:
@@ -868,9 +924,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 116.0]
+    coordinate: [88, 212.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_freq_sink_x_0
   id: qtgui_freq_sink_x
   parameters:
@@ -949,21 +1005,19 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 92.0]
+    coordinate: [408, 220.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_sink_x_0
   id: qtgui_sink_x
   parameters:
     affinity: ''
     alias: ''
     bw: samp_rate
-    comment: 'View downsampled and scaled input signal
-
-      (as spectrum, waterfall, signal, symbol constellation)'
+    comment: ''
     fc: '0'
     fftsize: '1024'
-    gui_hint: (5,0,1,1)
+    gui_hint: (0,4)
     maxoutbuf: '0'
     minoutbuf: '0'
     name: '""'
@@ -971,8 +1025,8 @@ blocks:
     plotfreq: 'True'
     plottime: 'True'
     plotwaterfall: 'True'
-    rate: '100'
-    showports: 'True'
+    rate: '10'
+    showports: 'False'
     showrf: 'False'
     type: complex
     wintype: window.WIN_BLACKMAN_hARRIS
@@ -980,9 +1034,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1344, 88.0]
+    coordinate: [952, 204.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_time_sink_x_0
   id: qtgui_time_sink_x
   parameters:
@@ -1016,7 +1070,7 @@ blocks:
     ctrlpanel: 'False'
     entags: 'True'
     grid: 'False'
-    gui_hint: (3,0,1,1)
+    gui_hint: (5,0)
     label1: ''
     label10: ''
     label2: ''
@@ -1038,7 +1092,7 @@ blocks:
     marker7: '-1'
     marker8: '-1'
     marker9: '-1'
-    name: '""'
+    name: real valued noisy baseband signal
     nconnections: '1'
     size: samp_rate*5
     srate: samp_rate
@@ -1079,7 +1133,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1104, 580.0]
+    coordinate: [1136, 756.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_1
@@ -1115,7 +1169,7 @@ blocks:
     ctrlpanel: 'False'
     entags: 'True'
     grid: 'False'
-    gui_hint: (4,0,1,1)
+    gui_hint: (6,0)
     label1: Signal 1
     label10: Signal 10
     label2: Signal 2
@@ -1137,9 +1191,9 @@ blocks:
     marker7: '-1'
     marker8: '-1'
     marker9: '-1'
-    name: '""'
+    name: decoded_DCF77_bits
     nconnections: '1'
-    size: '40000'
+    size: samp_rate
     srate: samp_rate
     stemplot: 'False'
     style1: '1'
@@ -1178,9 +1232,106 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [856, 820.0]
+    coordinate: [872, 1092.0]
     rotation: 0
     state: enabled
+- name: qtgui_time_sink_x_2
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: (4,0)
+    label1: Signal 1
+    label10: Signal 10
+    label2: Signal 2
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: received_complex_passband_signal
+    nconnections: '1'
+    size: samp_rate*4
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '0.15'
+    ymin: '-0.15'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 332.0]
+    rotation: 0
+    state: true
 - name: rational_resampler_xxx_0
   id: rational_resampler_xxx
   parameters:
@@ -1202,7 +1353,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [848, 228.0]
+    coordinate: [952, 444.0]
     rotation: 0
     state: enabled
 - name: rational_resampler_xxx_1
@@ -1226,7 +1377,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 572.0]
+    coordinate: [872, 756.0]
     rotation: 0
     state: enabled
 - name: virtual_sink_0
@@ -1239,7 +1390,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1368, 252.0]
+    coordinate: [1400, 468.0]
     rotation: 0
     state: true
 - name: virtual_sink_1
@@ -1252,7 +1403,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 724.0]
+    coordinate: [872, 1004.0]
     rotation: 0
     state: enabled
 - name: virtual_source_0
@@ -1265,7 +1416,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 724.0]
+    coordinate: [96, 1004.0]
     rotation: 0
     state: true
 - name: virtual_source_1
@@ -1278,7 +1429,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 980.0]
+    coordinate: [96, 1132.0]
     rotation: 0
     state: enabled
 - name: zeromq_push_msg_sink_1
@@ -1288,27 +1439,37 @@ blocks:
     affinity: ''
     alias: ''
     bind: 'True'
-    comment: ''
+    comment: 'provide signal to a ZMQ server
+
+      to futher decode the bits
+
+      to convenien
+
+      date & time information'
     timeout: '500'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [848, 956.0]
+    coordinate: [872, 1228.0]
     rotation: 0
     state: enabled
 
 connections:
+- [analog_simple_squelch_cc_0, '0', qtgui_sink_x_0, '0']
+- [analog_simple_squelch_cc_0, '0', qtgui_time_sink_x_2, '0']
 - [analog_simple_squelch_cc_0, '0', rational_resampler_xxx_0, '0']
+- [blocks_complex_to_mag_squared_0, '0', audio_sink_0, '0']
 - [blocks_complex_to_mag_squared_0, '0', rational_resampler_xxx_1, '0']
 - [blocks_complex_to_mag_squared_0, '0', virtual_sink_1, '0']
-- [blocks_multiply_const_vxx_1, '0', qtgui_sink_x_0, '0']
 - [blocks_multiply_const_vxx_1, '0', virtual_sink_0, '0']
 - [blocks_threshold_ff_0, '0', gr_bit_detector_DCF77, '0']
+- [freq_xlating_fir_filter_xxx_0, '0', analog_simple_squelch_cc_0, '0']
 - [gr_bit_detector_DCF77, '0', qtgui_time_sink_x_1, '0']
 - [gr_bit_detector_DCF77, msg_out, blocks_message_debug_0, print]
 - [gr_bit_detector_DCF77, msg_out, zeromq_push_msg_sink_1, in]
 - [low_pass_filter_0, '0', analog_simple_squelch_cc_0, '0']
+- [network_tcp_source_1, '0', freq_xlating_fir_filter_xxx_0, '0']
 - [osmosdr_source_0, '0', low_pass_filter_0, '0']
 - [osmosdr_source_0, '0', qtgui_freq_sink_x_0, '0']
 - [rational_resampler_xxx_0, '0', blocks_multiply_const_vxx_1, '0']
