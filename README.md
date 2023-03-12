@@ -1,4 +1,4 @@
-# gr-DCF77_Receiver
+# gr_DCF77_Receiver
 This is a basic DCF77 receiver for GNURadio, containing:
 1. signal demodulation and detection of the DCF77 signal with an SDR using GnuRadio (and Python modules)
 2. a simple live decoder of received bits provided by the GnuRadio DCF77 receiver
@@ -65,17 +65,17 @@ The DCF77 receiver was tested with:
     + The terminal should provide received bits continuously, and a time & date message each minute.
 
 Optionally, you can:
-+ run the `Encode.py`
-+ and adapt the `DCF77_Transmitter.grc` to take the time vector from a TCP source instead of the fixed Vector Source.
++ Run the `Encode.py`.
++ Adapt the `DCF77_Transmitter.grc` to take the time vector from a TCP source instead of the fixed Vector Source.
 + Note that if the simulation is too slow on an older computer, the new minute might overwrite the current signal. This might lead to an incomplete minute each time.
 
 
 #### Signal Reception with SDR
 + Set up your SDR with your computer.
 + Ensure that the raw DCF77 signal reception at 77.5 kHz is good enough, e.g. using gqrx or another signal analysis tool. It should reach at least at approximately -75dB or better.
-+ To start the DCF77 receiver, open the flowchart in `/examples/DCF77_Receiver/DCF77_receiver.grc`with GNURadio Companion
++ To start the DCF77 receiver, open the flowchart in `/examples/DCF77_Receiver/DCF77_receiver.grc` with GNURadio Companion
     + deactivate/unhide the source from the simulation provided by TCP
-    + activatehide/ the osmocom source
+    + activate/hide the osmocom source
     + Press `run` button.
     + Set the Gain2 and Gain2 slider values in the DCF77 GUI so that the amplitude of data0 is centered roughly around the value 100.
     + Adjust the upper_threshold and lower_threshold slider values, if needed.
