@@ -1,18 +1,13 @@
 # -*- coding: iso-8859-1 -*-
 
-# https://learning-0mq-with-pyzmq.readthedocs.io/en/latest/pyzmq/patterns/pushpull.html
-# https://de.wikipedia.org/wiki/DCF77
-# https://en.wikipedia.org/wiki/DCF77
-
 
 import time
 import zmq
-import random
-import binascii
 
 
 
 weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
 
 def decode_BCD4(bits):
     list1 = [bits[0], bits[1], bits[2], bits[3]]
@@ -135,7 +130,7 @@ def consumer():
         data = consumer_receiver.recv()
         received_msg = data.decode('ascii')[3:]
         
-        print(f"{count}: {received_msg}")
+        print(f"decoded bit at {count}: {received_msg}")
         
         if received_msg == "0":
             bitstream.append(0)

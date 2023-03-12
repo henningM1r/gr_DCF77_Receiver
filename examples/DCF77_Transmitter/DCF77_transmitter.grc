@@ -92,7 +92,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1224, 364.0]
+    coordinate: [1144, 396.0]
     rotation: 0
     state: true
 - name: analog_sig_source_x_2
@@ -101,9 +101,9 @@ blocks:
     affinity: ''
     alias: ''
     amp: '1'
-    comment: 'modulate pass band signal
+    comment: 'modulation signal to shift the
 
-      to 77.5 kHz'
+      pass band signal to 77.5 kHz'
     freq: '77500'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -116,7 +116,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1448, 140.0]
+    coordinate: [1384, 156.0]
     rotation: 0
     state: true
 - name: blocks_add_xx_0
@@ -134,7 +134,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [784, 200.0]
+    coordinate: [704, 232.0]
     rotation: 0
     state: enabled
 - name: blocks_char_to_float_0
@@ -142,7 +142,9 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
+    comment: 'converts byte values
+
+      to float value'
     maxoutbuf: '0'
     minoutbuf: '0'
     scale: '1'
@@ -151,7 +153,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [344, 316.0]
+    coordinate: [288, 348.0]
     rotation: 0
     state: enabled
 - name: blocks_float_to_complex_0
@@ -167,7 +169,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1456, 304.0]
+    coordinate: [1400, 336.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_xx_0
@@ -185,7 +187,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1208, 300.0]
+    coordinate: [1128, 332.0]
     rotation: 0
     state: true
 - name: blocks_multiply_xx_0
@@ -203,7 +205,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1704, 288.0]
+    coordinate: [1664, 320.0]
     rotation: 0
     state: true
 - name: blocks_repeat_0
@@ -225,7 +227,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [560, 316.0]
+    coordinate: [480, 348.0]
     rotation: 0
     state: enabled
 - name: blocks_tags_strobe_0_0_1
@@ -245,7 +247,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [552, 180.0]
+    coordinate: [456, 212.0]
     rotation: 0
     state: enabled
 - name: blocks_vector_source_x_0
@@ -267,7 +269,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [24, 188.0]
+    coordinate: [24, 212.0]
     rotation: 0
     state: disabled
 - name: blocks_vector_source_x_0_0
@@ -295,7 +297,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [24, 300.0]
+    coordinate: [24, 332.0]
     rotation: 0
     state: enabled
 - name: epy_block_0
@@ -419,7 +421,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [912, 304.0]
+    coordinate: [792, 336.0]
     rotation: 0
     state: enabled
 - name: network_tcp_sink_0
@@ -428,7 +430,7 @@ blocks:
     addr: 127.0.0.1
     affinity: ''
     alias: ''
-    comment: to the DCF77 channel
+    comment: ''
     mode: '2'
     port: '55553'
     type: complex
@@ -437,7 +439,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1904, 292.0]
+    coordinate: [1864, 324.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -518,7 +520,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1904, 84.0]
+    coordinate: [1864, 132.0]
     rotation: 0
     state: true
 - name: qtgui_time_sink_x_0
@@ -615,7 +617,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1904, 188.0]
+    coordinate: [1864, 228.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0_0
@@ -671,7 +673,7 @@ blocks:
     marker7: '-1'
     marker8: '-1'
     marker9: '-1'
-    name: DCF77_bits
+    name: DCF77_symbols
     nconnections: '1'
     size: samp_rate*4
     srate: samp_rate
@@ -712,7 +714,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [904, 188.0]
+    coordinate: [840, 220.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0_0_0
@@ -809,9 +811,33 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1192, 180.0]
+    coordinate: [1096, 212.0]
     rotation: 0
     state: enabled
+- name: zeromq_sub_source_0
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:55552
+    affinity: ''
+    alias: ''
+    comment: 'sends bits from DCF77 Encoder
+
+      1 symbol per second'
+    hwm: '-1'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'False'
+    timeout: '100'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [24, 484.0]
+    rotation: 0
+    state: disabled
 
 connections:
 - [analog_const_source_x_0, '0', blocks_float_to_complex_0, '1']
@@ -830,6 +856,7 @@ connections:
 - [blocks_vector_source_x_0_0, '0', blocks_char_to_float_0, '0']
 - [epy_block_0, '0', blocks_multiply_const_xx_0, '0']
 - [epy_block_0, '0', qtgui_time_sink_x_0_0_0, '0']
+- [zeromq_sub_source_0, '0', blocks_char_to_float_0, '0']
 
 metadata:
   file_format: 1

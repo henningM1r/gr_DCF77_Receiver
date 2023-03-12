@@ -63,7 +63,7 @@ blocks:
     comment: 'default real: 150
 
       default simulation: 1'
-    gui_hint: (0,0)
+    gui_hint: ''
     label: Gain1
     min_len: '200'
     orient: QtCore.Qt.Horizontal
@@ -77,7 +77,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1016, 12.0]
+    coordinate: [1024, 8.0]
     rotation: 0
     state: true
 - name: gain2
@@ -86,7 +86,7 @@ blocks:
     comment: 'default real: 290
 
       default simulation: 1'
-    gui_hint: (1,0)
+    gui_hint: (2,0,1,1)
     label: Gain2
     min_len: '200'
     orient: QtCore.Qt.Horizontal
@@ -111,7 +111,7 @@ blocks:
       so that the one value is provided
 
       each time the signal is high'
-    gui_hint: (2,0)
+    gui_hint: (0,0,1,1)
     label: upper Threshold
     min_len: '200'
     orient: QtCore.Qt.Horizontal
@@ -136,7 +136,7 @@ blocks:
       so that the one value is provided
 
       each time the signal is high'
-    gui_hint: (3,0)
+    gui_hint: (1,0,1,1)
     label: lower Threshold
     min_len: '200'
     orient: QtCore.Qt.Horizontal
@@ -150,7 +150,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [816, 12.0]
+    coordinate: [824, 8.0]
     rotation: 0
     state: true
 - name: samp_rate
@@ -179,9 +179,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [384, 652.0]
+    coordinate: [376, 644.0]
     rotation: 0
-    state: enabled
+    state: true
 - name: analog_simple_squelch_cc_0
   id: analog_simple_squelch_cc
   parameters:
@@ -217,7 +217,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [872, 932.0]
+    coordinate: [864, 908.0]
     rotation: 0
     state: disabled
 - name: blocks_complex_to_mag_squared_0
@@ -233,7 +233,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [464, 1008.0]
+    coordinate: [456, 1000.0]
     rotation: 0
     state: enabled
 - name: blocks_message_debug_0
@@ -251,7 +251,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [872, 1360.0]
+    coordinate: [864, 1360.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_1
@@ -277,7 +277,11 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
+    comment: 'Decide whether
+
+      the received signal
+
+      is a zero or a one'
     high: '125'
     init: '1'
     low: '2.5'
@@ -287,7 +291,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [280, 1116.0]
+    coordinate: [304, 1108.0]
     rotation: 0
     state: true
 - name: freq_xlating_fir_filter_xxx_0
@@ -311,23 +315,23 @@ blocks:
     bus_structure: null
     coordinate: [368, 516.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: gr_bit_detector_DCF77
   id: epy_block
   parameters:
-    _source_code: "\"\"\"\nDecode DCF77\n\"\"\"\n\n\"\"\"\nEach time this file is\
-      \ saved, GRC will instantiate the first class it finds\nto get ports and parameters\
-      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
-      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
-      from gnuradio import gr\nimport pmt\n\n\n\n# the DCF77 detector is initially\
+    _source_code: "\"\"\"\nBit Detector DCF77\n\"\"\"\n\n\"\"\"\nEach time this file\
+      \ is saved, GRC will instantiate the first class it finds\nto get ports and\
+      \ parameters of your block. The arguments to __init__  will\nbe the parameters.\
+      \ All of them are required to have default values!\n\"\"\"\n\nimport numpy as\
+      \ np\nfrom gnuradio import gr\nimport pmt\n\n\n\n# the DCF77 detector is initially\
       \ out of sync\n_in_sync = 0\n# counted number of one samples\n_num_ones = 0\n\
       # counted number of zero samples\n_num_zeros = 0\n\n\nclass blk(gr.sync_block):\n\
-      \    \"\"\"DCF77 Decoder\"\"\"\n\n    def __init__(self, scaling=16, sample_rate=192000,\
+      \    \"\"\"Bit Detector DCF77\"\"\"\n\n    def __init__(self, scaling=16, sample_rate=192000,\
       \ tolerance=0.02):\n        gr.sync_block.__init__(\n            self,\n   \
-      \         name='DCF77 Decoder',\n            in_sig=[np.float32],\n        \
-      \    out_sig=[np.float32]\n        )\n\n        # block paramters\n        self.sample_rate\
-      \ = sample_rate\n        self.scaling = scaling\n        self.tolerance = tolerance\n\
-      \n        # messaging port\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
+      \         name='Bit Detector DCF77',\n            in_sig=[np.float32],\n   \
+      \         out_sig=[np.float32]\n        )\n\n        # block paramters\n   \
+      \     self.sample_rate = sample_rate\n        self.scaling = scaling\n     \
+      \   self.tolerance = tolerance\n\n        # messaging port\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
       \        \n        # timing tolerance value, if the sampled frame is\n     \
       \   # slightly shorter/longer hant the defined duration\n        self._tolerance\
       \      = self.sample_rate/self.scaling*self.tolerance\n        \n        # 0.1s\
@@ -507,13 +511,13 @@ blocks:
     scaling: decimation
     tolerance: '0.02'
   states:
-    _io_cache: ('DCF77 Decoder', 'blk', [('scaling', '16'), ('sample_rate', '192000'),
+    _io_cache: ('Bit Detector DCF77', 'blk', [('scaling', '16'), ('sample_rate', '192000'),
       ('tolerance', '0.02')], [('0', 'float', 1)], [('0', 'float', 1), ('msg_out',
-      'message', 1)], 'DCF77 Decoder', ['sample_rate', 'scaling', 'tolerance'])
+      'message', 1)], 'Bit Detector DCF77', ['sample_rate', 'scaling', 'tolerance'])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [464, 1116.0]
+    coordinate: [512, 1108.0]
     rotation: 0
     state: true
 - name: low_pass_filter_0
@@ -539,9 +543,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [408, 308.0]
+    coordinate: [400, 316.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: network_tcp_source_1
   id: network_tcp_source
   parameters:
@@ -563,9 +567,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [88, 508.0]
+    coordinate: [96, 508.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: osmosdr_source_0
   id: osmosdr_source
   parameters:
@@ -926,7 +930,7 @@ blocks:
     bus_structure: null
     coordinate: [88, 212.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: qtgui_freq_sink_x_0
   id: qtgui_freq_sink_x
   parameters:
@@ -1007,36 +1011,7 @@ blocks:
     bus_structure: null
     coordinate: [408, 220.0]
     rotation: 0
-    state: disabled
-- name: qtgui_sink_x_0
-  id: qtgui_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    bw: samp_rate
-    comment: ''
-    fc: '0'
-    fftsize: '1024'
-    gui_hint: (0,4)
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    name: '""'
-    plotconst: 'True'
-    plotfreq: 'True'
-    plottime: 'True'
-    plotwaterfall: 'True'
-    rate: '10'
-    showports: 'False'
-    showrf: 'False'
-    type: complex
-    wintype: window.WIN_BLACKMAN_hARRIS
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [952, 204.0]
-    rotation: 0
-    state: disabled
+    state: enabled
 - name: qtgui_time_sink_x_0
   id: qtgui_time_sink_x
   parameters:
@@ -1070,7 +1045,7 @@ blocks:
     ctrlpanel: 'False'
     entags: 'True'
     grid: 'False'
-    gui_hint: (5,0)
+    gui_hint: (3,0,1,1)
     label1: ''
     label10: ''
     label2: ''
@@ -1092,7 +1067,7 @@ blocks:
     marker7: '-1'
     marker8: '-1'
     marker9: '-1'
-    name: real valued noisy baseband signal
+    name: '""'
     nconnections: '1'
     size: samp_rate*5
     srate: samp_rate
@@ -1133,7 +1108,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1136, 756.0]
+    coordinate: [1120, 764.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_1
@@ -1169,7 +1144,7 @@ blocks:
     ctrlpanel: 'False'
     entags: 'True'
     grid: 'False'
-    gui_hint: (6,0)
+    gui_hint: (4,0,1,1)
     label1: Signal 1
     label10: Signal 10
     label2: Signal 2
@@ -1232,7 +1207,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [872, 1092.0]
+    coordinate: [864, 1084.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_2
@@ -1266,7 +1241,7 @@ blocks:
     ctrlpanel: 'False'
     entags: 'True'
     grid: 'False'
-    gui_hint: (4,0)
+    gui_hint: ''
     label1: Signal 1
     label10: Signal 10
     label2: Signal 2
@@ -1329,7 +1304,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 332.0]
+    coordinate: [952, 324.0]
     rotation: 0
     state: true
 - name: rational_resampler_xxx_0
@@ -1377,7 +1352,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [872, 756.0]
+    coordinate: [864, 756.0]
     rotation: 0
     state: enabled
 - name: virtual_sink_0
@@ -1403,7 +1378,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [872, 1004.0]
+    coordinate: [864, 996.0]
     rotation: 0
     state: enabled
 - name: virtual_source_0
@@ -1416,7 +1391,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [96, 1004.0]
+    coordinate: [88, 996.0]
     rotation: 0
     state: true
 - name: virtual_source_1
@@ -1429,7 +1404,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [96, 1132.0]
+    coordinate: [88, 1124.0]
     rotation: 0
     state: enabled
 - name: zeromq_push_msg_sink_1
@@ -1443,7 +1418,7 @@ blocks:
 
       to futher decode the bits
 
-      to convenien
+      to human-readible
 
       date & time information'
     timeout: '500'
@@ -1451,12 +1426,11 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [872, 1228.0]
+    coordinate: [864, 1220.0]
     rotation: 0
     state: enabled
 
 connections:
-- [analog_simple_squelch_cc_0, '0', qtgui_sink_x_0, '0']
 - [analog_simple_squelch_cc_0, '0', qtgui_time_sink_x_2, '0']
 - [analog_simple_squelch_cc_0, '0', rational_resampler_xxx_0, '0']
 - [blocks_complex_to_mag_squared_0, '0', audio_sink_0, '0']

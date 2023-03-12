@@ -84,9 +84,7 @@ blocks:
     affinity: ''
     alias: ''
     amp: NoiseGain
-    comment: 'Gaussian noise is added
-
-      to simulate a noisy channel'
+    comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
     noise_type: analog.GR_GAUSSIAN
@@ -97,9 +95,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 444.0]
+    coordinate: [56, 404.0]
     rotation: 0
-    state: enabled
+    state: true
 - name: blocks_add_xx_0
   id: blocks_add_xx
   parameters:
@@ -124,9 +122,7 @@ blocks:
     addr: 127.0.0.1
     affinity: ''
     alias: ''
-    comment: 'signal to the
-
-      DCF77-Receiver'
+    comment: ''
     mode: '2'
     port: '55554'
     type: complex
@@ -144,9 +140,7 @@ blocks:
     addr: 127.0.0.1
     affinity: ''
     alias: ''
-    comment: 'signal from the simulated
-
-      DCF77-Transmitter'
+    comment: ''
     maxoutbuf: '384000'
     minoutbuf: '192000'
     port: '55553'
