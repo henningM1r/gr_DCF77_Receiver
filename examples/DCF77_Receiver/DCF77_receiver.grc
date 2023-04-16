@@ -529,7 +529,7 @@ blocks:
     comment: 'A fairly dense filter to just
 
       pick up the DCF77 spike'
-    cutoff_freq: 1.2e3
+    cutoff_freq: 0.7e3
     decim: '1'
     gain: gain1
     interp: '1'
@@ -537,7 +537,7 @@ blocks:
     minoutbuf: '0'
     samp_rate: samp_rate
     type: fir_filter_ccf
-    width: '250'
+    width: '100'
     win: window.WIN_KAISER
   states:
     bus_sink: false
@@ -981,7 +981,7 @@ blocks:
     legend: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: '""'
+    name: '"unfiltered received signal frequency"'
     nconnections: '1'
     norm_window: 'False'
     showports: 'False'
@@ -1012,6 +1012,87 @@ blocks:
     coordinate: [408, 220.0]
     rotation: 0
     state: enabled
+- name: qtgui_freq_sink_x_1
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: '2000'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: '77500'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"filtered complex passband signal frequency"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-180'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 220.0]
+    rotation: 0
+    state: true
 - name: qtgui_time_sink_x_0
   id: qtgui_time_sink_x
   parameters:
@@ -1263,7 +1344,7 @@ blocks:
     marker7: '-1'
     marker8: '-1'
     marker9: '-1'
-    name: received_complex_passband_signal
+    name: received complex passband signal
     nconnections: '1'
     size: samp_rate*4
     srate: samp_rate
@@ -1304,7 +1385,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 324.0]
+    coordinate: [952, 332.0]
     rotation: 0
     state: true
 - name: rational_resampler_xxx_0
@@ -1431,6 +1512,7 @@ blocks:
     state: enabled
 
 connections:
+- [analog_simple_squelch_cc_0, '0', qtgui_freq_sink_x_1, '0']
 - [analog_simple_squelch_cc_0, '0', qtgui_time_sink_x_2, '0']
 - [analog_simple_squelch_cc_0, '0', rational_resampler_xxx_0, '0']
 - [blocks_complex_to_mag_squared_0, '0', audio_sink_0, '0']

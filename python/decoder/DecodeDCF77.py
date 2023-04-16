@@ -66,7 +66,7 @@ def decode_bitstream(bitstream, count):
     if bitstream[20] == 1:
         print("20: Beginn of time information")
     elif bitstream[20] == 0:
-        print("20: Fehler")
+        print("20: error, is 1 instead of 0!")
         return
     
     min_dec0  = decode_BCD4([bitstream[24], bitstream[23], bitstream[22], bitstream[21]])

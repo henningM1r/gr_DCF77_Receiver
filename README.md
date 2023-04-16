@@ -31,7 +31,7 @@ The DCF77 receiver was tested with:
     + pyzmq 22.2.1
     + gnuradio-osmosdr 0.2.0
 + An SDR receiver capable of receiving in the range of at least 1 kHz - 1 MHz, e.g. an _Airspy Discovery HF+_ is configured and used for this project.
-+ An antenna that provides a sufficiently clear DCF77 signal, e.g. a simple _YouLoop_ loop antenna was used for this project. Indoor reception should probably be possible if you are close enough (<1000 km) to the DCF77 transmitter in Mainflingen, Germany. You should mount the antenna close to a window.
++ An antenna that provides a sufficiently clear DCF77 signal, e.g. a simple _YouLoop_ loop antenna was used for this project. Indoor reception should probably be possible if you are close enough (<1000 km) to the DCF77 transmitter in Mainflingen, Germany. You should mount the antenna close to a window or outside.
     +  https://www.ptb.de/cms/en/ptb/fachabteilungen/abt4/fb-44/ag-442/dissemination-of-legal-time/dcf77/reach-of-dcf77.html
 + The user might also need some antenna cables and adapters to connect the SDR with the antenna.
 + This project has been successfully tested in:
@@ -97,4 +97,4 @@ Optionally, you can:
 + A Low Noise Amplifier (LNA) is not needed.
 + The decoder does __not__ consider the rare special cases of leap seconds.
 + Even a single lost bit during reception causes the synchronization of a full minute to fail. Additional resilience of the Decoder has __not__ been implemented yet.
-+ I'd like to acknowledge that I found some very useful inspiration in https://github.com/duggabe/gr-RTTY-basics, on the bit detector.
++ I'd like to acknowledge that I found some very useful inspiration in https://github.com/duggabe/gr-RTTY-basics on the bit detector.
