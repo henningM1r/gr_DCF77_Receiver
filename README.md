@@ -28,7 +28,7 @@ The DCF77 receiver was tested with:
 + Radioconda 2023.02.24 & gnuradio & GNURadio Companion 3.10.5.1 (Windows)
 + Python 3.10.6
     + PyQt5 5.15.7
-    + pyzmq 22.2.1
+    + pyzmq 23.1.0
     + gnuradio-osmosdr 0.2.0
 + An SDR receiver capable of receiving in the range of at least 1 kHz - 1 MHz, e.g. an _Airspy Discovery HF+_ is configured and used for this project.
 + An antenna that provides a sufficiently clear DCF77 signal, e.g. a simple _YouLoop_ loop antenna was used for this project. Indoor reception should probably be possible if you are close enough (<1000 km) to the DCF77 transmitter in Mainflingen, Germany. You should mount the antenna close to a window or outside.
