@@ -315,7 +315,7 @@ blocks:
     bus_structure: null
     coordinate: [368, 516.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: gr_bit_detector_DCF77
   id: epy_block
   parameters:
@@ -520,6 +520,19 @@ blocks:
     coordinate: [512, 1108.0]
     rotation: 0
     state: true
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: windows needs the import of zmq
+    imports: import zmq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 76.0]
+    rotation: 0
+    state: true
 - name: low_pass_filter_0
   id: low_pass_filter
   parameters:
@@ -545,7 +558,7 @@ blocks:
     bus_structure: null
     coordinate: [400, 316.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: network_tcp_source_1
   id: network_tcp_source
   parameters:
@@ -569,7 +582,7 @@ blocks:
     bus_structure: null
     coordinate: [96, 508.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: osmosdr_source_0
   id: osmosdr_source
   parameters:
@@ -930,7 +943,7 @@ blocks:
     bus_structure: null
     coordinate: [88, 212.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_freq_sink_x_0
   id: qtgui_freq_sink_x
   parameters:
@@ -1011,7 +1024,7 @@ blocks:
     bus_structure: null
     coordinate: [408, 220.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_freq_sink_x_1
   id: qtgui_freq_sink_x
   parameters:
