@@ -106,7 +106,7 @@ def decode_bitstream(bitstream, count):
     
     # check parity for the date and weekday values
     if (bitstream[36] ^ bitstream[37] ^ bitstream[38] ^ bitstream[39] ^ bitstream[40] ^
-        bitstream[42] ^ bitstream[43] ^ bitstream[44] ^
+        bitstream[41] ^ bitstream[42] ^ bitstream[43] ^ bitstream[44] ^
         bitstream[45] ^ bitstream[46] ^ bitstream[47] ^ bitstream[48] ^ bitstream[49] ^
         bitstream[50] ^ bitstream[51] ^ bitstream[52] ^ bitstream[53] ^ bitstream[54] ^
         bitstream[55] ^ bitstream[56] ^ bitstream[57] ^ bitstream[58] == 0):
