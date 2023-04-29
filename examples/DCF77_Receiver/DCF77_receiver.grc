@@ -181,7 +181,7 @@ blocks:
     bus_structure: null
     coordinate: [376, 644.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: analog_simple_squelch_cc_0
   id: analog_simple_squelch_cc
   parameters:
@@ -319,183 +319,192 @@ blocks:
 - name: gr_bit_detector_DCF77
   id: epy_block
   parameters:
-    _source_code: "\"\"\"\nBit Detector DCF77\n\"\"\"\n\n\"\"\"\nEach time this file\
-      \ is saved, GRC will instantiate the first class it finds\nto get ports and\
-      \ parameters of your block. The arguments to __init__  will\nbe the parameters.\
-      \ All of them are required to have default values!\n\"\"\"\n\nimport numpy as\
-      \ np\nfrom gnuradio import gr\nimport pmt\n\n\n\n# the DCF77 detector is initially\
-      \ out of sync\n_in_sync = 0\n# counted number of one samples\n_num_ones = 0\n\
-      # counted number of zero samples\n_num_zeros = 0\n\n\nclass blk(gr.sync_block):\n\
+    _source_code: "\nimport numpy as np\nfrom gnuradio import gr\nimport pmt\n\n\n\
+      \"\"\"\nBit Detector DCF77\n\"\"\"\n\n\"\"\"\nEach time this file is saved,\
+      \ GRC will instantiate the first class it finds\nto get ports and parameters\
+      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
+      \ them are required to have default values!\n\"\"\"\n\n\n# the DCF77 detector\
+      \ is initially out of sync\n_in_sync = 0\n# counted number of one samples\n\
+      _num_ones = 0\n# counted number of zero samples\n_num_zeros = 0\n\n\nclass blk(gr.sync_block):\n\
       \    \"\"\"Bit Detector DCF77\"\"\"\n\n    def __init__(self, scaling=16, sample_rate=192000,\
       \ tolerance=0.02):\n        gr.sync_block.__init__(\n            self,\n   \
       \         name='Bit Detector DCF77',\n            in_sig=[np.float32],\n   \
       \         out_sig=[np.float32]\n        )\n\n        # block paramters\n   \
       \     self.sample_rate = sample_rate\n        self.scaling = scaling\n     \
       \   self.tolerance = tolerance\n\n        # messaging port\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
-      \        \n        # timing tolerance value, if the sampled frame is\n     \
-      \   # slightly shorter/longer hant the defined duration\n        self._tolerance\
-      \      = self.sample_rate/self.scaling*self.tolerance\n        \n        # 0.1s\
-      \ of zeros for the zero-bit (100ms pause)\n        self._zero_lo        = self.sample_rate/self.scaling*0.1\
-      \ - self._tolerance\n        self._zero_hi        = self.sample_rate/self.scaling*0.1\
-      \ + self._tolerance\n        \n        # 0.9s of ones for the zero-bit\n   \
-      \     self._zero_compl_lo  = self.sample_rate/self.scaling*0.9 - self._tolerance\n\
-      \        self._zero_compl_hi  = self.sample_rate/self.scaling*0.9 + self._tolerance\n\
-      \        \n        # 0.2s of zeros for the one-bit (200ms pause)\n        self._one_lo\
-      \         = self.sample_rate/self.scaling*0.2 - self._tolerance\n        self._one_hi\
-      \         = self.sample_rate/self.scaling*0.2 + self._tolerance\n        \n\
-      \        # 0.8s of ones for the one-bit\n        self._one_compl_lo   = self.sample_rate/self.scaling*0.8\
-      \ - self._tolerance\n        self._one_compl_hi   = self.sample_rate/self.scaling*0.8\
-      \ + self._tolerance\n        \n        # 1.9s of ones for the zero-bit at position\
-      \ 58 (with prolonged ones)\n        self._reinit_zero_lo = self.sample_rate/self.scaling*1.9\
-      \ - 2*self._tolerance\n        self._reinit_zero_hi = self.sample_rate/self.scaling*1.9\
-      \ + 2*self._tolerance\n        \n        # 1.8s of ones for the one-bit at position\
-      \ 58 (with prolonged ones)\n        self._reinit_one_lo  = self.sample_rate/self.scaling*1.8\
-      \ - 2*self._tolerance\n        self._reinit_one_hi  = self.sample_rate/self.scaling*1.8\
-      \ + 2*self._tolerance\n \n        print(\"zero\", (self._zero_hi + self._zero_lo)/2)\n\
-      \        print(\"zero_comp\", (self._zero_compl_hi + self._zero_compl_lo)/2)\n\
+      \n        # timing tolerance value, if the sampled frame is\n        # slightly\
+      \ shorter/longer hant the defined duration\n        self._tolerance = self.sample_rate/self.scaling*self.tolerance\n\
+      \n        # 0.1s of zeros for the zero-bit (100ms pause)\n        self._zero_lo\
+      \ = (self.sample_rate/self.scaling*0.1 - self._tolerance)\n        self._zero_hi\
+      \ = (self.sample_rate/self.scaling*0.1 + self._tolerance)\n\n        # 0.9s\
+      \ of ones for the zero-bit\n        self._zero_compl_lo = (self.sample_rate/self.scaling*0.9\n\
+      \                               - self._tolerance)\n        self._zero_compl_hi\
+      \ = (self.sample_rate/self.scaling*0.9\n                               + self._tolerance)\n\
+      \n        # 0.2s of zeros for the one-bit (200ms pause)\n        self._one_lo\
+      \ = (self.sample_rate/self.scaling*0.2\n                        - self._tolerance)\n\
+      \        self._one_hi = (self.sample_rate/self.scaling*0.2\n               \
+      \         + self._tolerance)\n\n        # 0.8s of ones for the one-bit\n   \
+      \     self._one_compl_lo = (self.sample_rate/self.scaling*0.8\n            \
+      \                  - self._tolerance)\n        self._one_compl_hi = (self.sample_rate/self.scaling*0.8\n\
+      \                              + self._tolerance)\n\n        # 1.9s of ones\
+      \ for the zero-bit at position 58 (with prolonged ones)\n        self._reinit_zero_lo\
+      \ = (self.sample_rate/self.scaling*1.9\n                                - 2*self._tolerance)\n\
+      \        self._reinit_zero_hi = (self.sample_rate/self.scaling*1.9\n       \
+      \                         + 2*self._tolerance)\n\n        # 1.8s of ones for\
+      \ the one-bit at position 58 (with prolonged ones)\n        self._reinit_one_lo\
+      \ = (self.sample_rate/self.scaling*1.8\n                               - 2*self._tolerance)\n\
+      \        self._reinit_one_hi = (self.sample_rate/self.scaling*1.8\n        \
+      \                       + 2*self._tolerance)\n\n        print(\"zero\", (self._zero_hi\
+      \ + self._zero_lo)/2)\n        print(\"zero_comp\", (self._zero_compl_hi + self._zero_compl_lo)/2)\n\
       \        print(\"one\", (self._one_hi + self._one_lo)/2)\n        print(\"one_comp\"\
       , (self._one_compl_hi + self._one_compl_lo)/2)\n        print(\"zero_reinit\"\
       , (self._reinit_zero_hi + self._reinit_zero_lo)/2)\n        print(\"one_reinit\"\
-      , (self._reinit_one_hi + self._reinit_one_lo)/2)\n\n\n    def work(self, input_items,\
+      , (self._reinit_one_hi + self._reinit_one_lo)/2)\n\n    def work(self, input_items,\
       \ output_items):\n        inp = input_items[0]\n        out = output_items[0]\n\
-      \        \n        # the actual detector-magic happens here\n        out[:]\
-      \ = self.extract_bits(inp)\n        \n        # forward input tagged signal\n\
-      \        return len(output_items[0])\n\n\n    def extract_bits(self, inp):\n\
-      \        global _in_sync\n        global _num_ones\n        global _num_zeros\n\
-      \        \n        out = inp\n        \n        # Process the individual (finite\
-      \ length) stream block currently received.\n        # The synchronization and\
-      \ detection process is basically modelled by a finite state. machine\n     \
-      \   for idx, ch in enumerate(inp):\n            # increment current counters\
-      \ of zeros and ones correspondingly\n            if (ch == 1):\n           \
-      \     _num_ones += 1\n            else: # ch == 0\n                _num_zeros\
-      \ += 1\n            \n            # first step of synchronization, as soon as\
-      \ an edge\n            # from zero to one is detected\n            if (_in_sync\
-      \ == 0 and ch == 0):\n                _in_sync = -1\n                _num_zeros\
-      \ = 1\n                _num_ones = 0\n                \n                key\
-      \ = pmt.intern(\"edge\")\n                value = pmt.intern(f\"0 => -1 {_num_zeros},\
-      \ {_num_ones}\")\n                self.add_item_tag(0,\n                   \
-      \ self.nitems_written(0) + idx,\n                    key,\n                \
-      \    value\n                )\n            \n            # do not (yet) synchronize\
-      \ if there\n            # is no edge from zero to one yet\n            elif\
-      \ (_in_sync == 0 and ch == 1):\n                pass\n            \n       \
-      \     # second step of synchronization succeeds,\n            # as soon as an\
-      \ edge from one to zero is\n            # detected during state -1, given that\
-      \ the\n            # length of zeros fits to parts of the\n            # zero/one\
-      \ symbols correspondingly\n            if (_in_sync == -1 and ch == 1 and \n\
-      \                 ((_num_zeros > self._zero_lo and _num_zeros < self._zero_hi)\
-      \ or\n                  (_num_zeros > self._one_lo  and _num_zeros < self._one_hi))):\n\
+      \n        # the actual detector-magic happens here\n        out[:] = self.extract_bits(inp)\n\
+      \n        # forward input tagged signal\n        return len(output_items[0])\n\
+      \n    def extract_bits(self, inp):\n        global _in_sync\n        global\
+      \ _num_ones\n        global _num_zeros\n\n        out = inp\n\n        # Process\
+      \ the individual (finite length) stream block\n        # currently received.\
+      \ The synchronization and detection process\n        # is basically modelled\
+      \ by a finite state. machine\n        for idx, ch in enumerate(inp):\n     \
+      \       # increment current counters of zeros and ones correspondingly\n   \
+      \         if (ch == 1):\n                _num_ones += 1\n            else: \
+      \  # ch == 0\n                _num_zeros += 1\n\n            # first step of\
+      \ synchronization, as soon as an edge\n            # from zero to one is detected\n\
+      \            if (_in_sync == 0 and ch == 0):\n                _in_sync = -1\n\
+      \                _num_zeros = 1\n                _num_ones = 0\n\n         \
+      \       key = pmt.intern(\"edge\")\n                value = pmt.intern(f\"0\
+      \ => -1 {_num_zeros}, {_num_ones}\")\n                self.add_item_tag(0,\n\
+      \                                  self.nitems_written(0) + idx,\n         \
+      \                         key,\n                                  value)\n\n\
+      \            # do not (yet) synchronize if there\n            # is no edge from\
+      \ zero to one yet\n            elif (_in_sync == 0 and ch == 1):\n         \
+      \       pass\n\n            # second step of synchronization succeeds,\n   \
+      \         # as soon as an edge from one to zero is\n            # detected during\
+      \ state -1, given that the\n            # length of zeros fits to parts of the\n\
+      \            # zero/one symbols correspondingly\n            if (_in_sync ==\
+      \ -1 and ch == 1 and\n                    ((_num_zeros > self._zero_lo and\n\
+      \                      _num_zeros < self._zero_hi) or\n                    \
+      \ (_num_zeros > self._one_lo and\n                      _num_zeros < self._one_hi))):\n\
       \                _in_sync = -2\n                _num_zeros = 0\n           \
-      \     _num_ones = 1\n                \n                key = pmt.intern(\"edge\"\
-      )\n                value = pmt.intern(f\"-1 => -2  {_num_zeros}, {_num_ones}\"\
-      )\n                self.add_item_tag(0,\n                    self.nitems_written(0)\
-      \ + idx,\n                    key,\n                    value\n            \
-      \    )\n            \n            # second step of synchronization fails otherwise\n\
-      \            elif (_in_sync == -1 and ch == 1 and\n                (_num_zeros\
-      \ < self._zero_lo or _num_zeros > self._one_hi)):\n                _in_sync\
-      \ = 0\n                \n                key = pmt.intern(\"edge\")\n      \
-      \          value = pmt.intern(f\"ERR: -1 => 0: {_num_zeros}, {_num_ones}\")\n\
-      \                self.add_item_tag(0,\n                    self.nitems_written(0)\
-      \ + idx,\n                    key,\n                    value\n            \
-      \    )\n                _num_zeros = 0\n                _num_ones = 1\n    \
-      \        \n            # do not (yet) synchronize if there\n            # is\
-      \ no edge from zero to one yet\n            elif (_in_sync == -1 and ch == 0):\n\
-      \                pass\n            \n            # third (and last) step of\
-      \ synchronization succeeds,\n            # as soon as an edge from one to zero\
-      \ is\n            # detected during state -2, given that the\n            #\
-      \ length of ones fits to parts of the\n            # zero/one symbols correspondingly\n\
-      \            if (_in_sync == -2 and ch == 0 and \n                ((_num_ones\
-      \ > self._zero_compl_lo and _num_ones < self._zero_compl_hi) or\n          \
-      \      (_num_ones > self._one_compl_lo and _num_ones < self._one_compl_hi))):\n\
-      \                _in_sync = 1\n                _num_zeros = 1\n            \
-      \    _num_ones = 0\n                \n                key = pmt.intern(\"edge\"\
-      )\n                value = pmt.intern(\"-2 => 1\")\n                self.add_item_tag(0,\n\
-      \                    self.nitems_written(0) + idx,\n                    key,\n\
-      \                    value\n                )\n            \n            # third\
-      \ (and last) step of synchronization fails otherwise\n            elif (_in_sync\
-      \ == -2 and ch == 0 and\n                 ((_num_ones < self._zero_compl_lo\
-      \ or _num_ones > self._one_compl_hi) or\n                  (_num_ones > self._zero_compl_hi\
-      \ and _num_ones < self._one_compl_lo))):\n                _in_sync = -1\n  \
-      \              _num_zeros = 1\n                _num_ones = 0\n             \
-      \   \n                key = pmt.intern(\"edge\")\n                value = pmt.intern(f\"\
-      ERR: -2 => -1: {_num_zeros}, {_num_ones}\")\n                self.add_item_tag(0,\n\
-      \                    self.nitems_written(0) + idx,\n                    key,\n\
-      \                    value\n                )\n            \n            # do\
-      \ not (yet) synchronize if there\n            # is no edge from one to zero\
-      \ yet\n            elif  (_in_sync == -2 and ch == 1):\n                pass\n\
-      \            \n            \n            # sync on rising edge is successful\n\
-      \            # so far it is either a zero or a one symbol\n            if (_in_sync\
-      \ == 1 and ch == 1 and \n                ((_num_zeros > self._zero_lo and _num_zeros\
-      \ < self._zero_hi) or\n                (_num_zeros > self._one_lo  and _num_zeros\
-      \ < self._one_hi))):\n                _in_sync = 2\n                _num_ones\
-      \ = 1\n                \n                key = pmt.intern(\"edge\")\n      \
-      \          value = pmt.intern(f\"1 => 2 {_num_zeros}, {_num_ones}\")\n     \
-      \           self.add_item_tag(0,\n                    self.nitems_written(0)\
-      \ + idx,\n                    key,\n                    value\n            \
-      \    )\n            \n            \n            # detect zero bit on falling\
-      \ edge at each end of the symbol frame\n            if (_in_sync == 2 and ch\
-      \ == 0):\n            \n                # detect a zero bit, if approx 0.1sec\
-      \ zeros and 0.9sec ones\n                # (in that order) with slight tolerances\
-      \ are detected\n                if (_num_zeros > self._zero_lo and _num_zeros\
-      \ < self._zero_hi and\n                    _num_ones > self._zero_compl_lo and\
-      \ _num_ones < self._zero_compl_hi):\n                    \n                \
+      \     _num_ones = 1\n\n                key = pmt.intern(\"edge\")\n        \
+      \        value = pmt.intern(f\"-1 => -2  {_num_zeros}, {_num_ones}\")\n    \
+      \            self.add_item_tag(0,\n                                  self.nitems_written(0)\
+      \ + idx,\n                                  key,\n                         \
+      \         value)\n\n            # second step of synchronization fails otherwise\n\
+      \            elif (_in_sync == -1 and ch == 1 and\n                    (_num_zeros\
+      \ < self._zero_lo or\n                     _num_zeros > self._one_hi)):\n  \
+      \              _in_sync = 0\n\n                key = pmt.intern(\"edge\")\n\
+      \                value = pmt.intern(f\"ERR: -1 => 0: {_num_zeros}, {_num_ones}\"\
+      )\n                self.add_item_tag(0,\n                                  self.nitems_written(0)\
+      \ + idx,\n                                  key,\n                         \
+      \         value)\n                _num_zeros = 0\n                _num_ones\
+      \ = 1\n\n            # do not (yet) synchronize if there\n            # is no\
+      \ edge from zero to one yet\n            elif (_in_sync == -1 and ch == 0):\n\
+      \                pass\n\n            # third (and last) step of synchronization\
+      \ succeeds,\n            # as soon as an edge from one to zero is\n        \
+      \    # detected during state -2, given that the\n            # length of ones\
+      \ fits to parts of the\n            # zero/one symbols correspondingly\n   \
+      \         if (_in_sync == -2 and ch == 0 and\n                    ((_num_ones\
+      \ > self._zero_compl_lo and\n                      _num_ones < self._zero_compl_hi)\
+      \ or\n                     (_num_ones > self._one_compl_lo and\n           \
+      \           _num_ones < self._one_compl_hi))):\n                _in_sync = 1\n\
+      \                _num_zeros = 1\n                _num_ones = 0\n\n         \
+      \       key = pmt.intern(\"edge\")\n                value = pmt.intern(\"-2\
+      \ => 1\")\n                self.add_item_tag(0,\n                          \
+      \        self.nitems_written(0) + idx,\n                                  key,\n\
+      \                                  value)\n\n            # third (and last)\
+      \ step of synchronization fails otherwise\n            elif (_in_sync == -2\
+      \ and ch == 0 and\n                    ((_num_ones < self._zero_compl_lo or\n\
+      \                      _num_ones > self._one_compl_hi) or\n                \
+      \     (_num_ones > self._zero_compl_hi and\n                      _num_ones\
+      \ < self._one_compl_lo))):\n                _in_sync = -1\n                _num_zeros\
+      \ = 1\n                _num_ones = 0\n\n                key = pmt.intern(\"\
+      edge\")\n                value = pmt.intern(f\"ERR: -2 => -1: {_num_zeros},\
+      \ {_num_ones}\")\n                self.add_item_tag(0,\n                   \
+      \               self.nitems_written(0) + idx,\n                            \
+      \      key,\n                                  value)\n\n            # do not\
+      \ (yet) synchronize if there\n            # is no edge from one to zero yet\n\
+      \            elif (_in_sync == -2 and ch == 1):\n                pass\n\n  \
+      \          # sync on rising edge is successful\n            # so far it is either\
+      \ a zero or a one symbol\n            if (_in_sync == 1 and ch == 1 and\n  \
+      \                  ((_num_zeros > self._zero_lo and\n                      _num_zeros\
+      \ < self._zero_hi) or\n                     (_num_zeros > self._one_lo and\n\
+      \                      _num_zeros < self._one_hi))):\n                _in_sync\
+      \ = 2\n                _num_ones = 1\n\n                key = pmt.intern(\"\
+      edge\")\n                value = pmt.intern(f\"1 => 2 {_num_zeros}, {_num_ones}\"\
+      )\n                self.add_item_tag(0,\n                                  self.nitems_written(0)\
+      \ + idx,\n                                  key,\n                         \
+      \         value)\n\n            # detect zero bit on falling edge at each end\
+      \ of the symbol frame\n            if (_in_sync == 2 and ch == 0):\n\n     \
+      \           # detect a zero bit, if approx 0.1sec zeros and 0.9sec ones\n  \
+      \              # (in that order) with slight tolerances are detected\n     \
+      \           if (_num_zeros > self._zero_lo and\n                        _num_zeros\
+      \ < self._zero_hi and\n                        _num_ones > self._zero_compl_lo\
+      \ and\n                        _num_ones < self._zero_compl_hi):\n\n       \
+      \             # reset counters to zero\n                    _num_ones = 0\n\
+      \                    _num_zeros = 1\n\n                    _in_sync = 1\n\n\
+      \                    key = pmt.intern(\"edge\")\n                    value =\
+      \ pmt.intern(\"2 => 1: BIT ZERO\")\n                    self.add_item_tag(0,\n\
+      \                                      self.nitems_written(0) + idx,\n     \
+      \                                 key,\n                                   \
+      \   value)\n\n                    self.message_port_pub(pmt.intern(\"msg_out\"\
+      ),\n                                          pmt.intern(\"0\"))\n\n       \
+      \         # detect a one bit, if approx 0.2sec zeros and 0.8sec ones\n     \
+      \           # (in that order) with slight tolerances are detected\n        \
+      \        elif (_num_zeros > self._one_lo and\n                      _num_zeros\
+      \ < self._one_hi and\n                      _num_ones > self._one_compl_lo and\n\
+      \                      _num_ones < self._one_compl_hi):\n\n                \
       \    # reset counters to zero\n                    _num_ones = 0\n         \
-      \           _num_zeros = 1\n                    \n                    _in_sync\
-      \ = 1\n                    \n                    key = pmt.intern(\"edge\")\n\
-      \                    value = pmt.intern(\"2 => 1: BIT ZERO\")\n            \
-      \        self.add_item_tag(0,\n                        self.nitems_written(0)\
-      \ + idx,\n                        key,\n                        value\n    \
-      \                )\n                    \n                    self.message_port_pub(pmt.intern(\"\
-      msg_out\"), pmt.intern(\"0\"))\n                \n                # detect a\
-      \ one bit, if approx 0.2sec zeros and 0.8sec ones\n                # (in that\
-      \ order) with slight tolerances are detected\n                elif (_num_zeros\
-      \ > self._one_lo and _num_zeros < self._one_hi and\n                      _num_ones\
-      \ > self._one_compl_lo and _num_ones < self._one_compl_hi):\n              \
-      \      \n                    # reset counters to zero\n                    _num_ones\
-      \ = 0\n                    _num_zeros = 1\n                    \n          \
-      \          _in_sync = 1\n                    \n                    key = pmt.intern(\"\
-      edge\")\n                    value = pmt.intern(\"2 => 1: BIT ONE\")\n     \
-      \               self.add_item_tag(0,\n                        self.nitems_written(0)\
-      \ + idx,\n                        key,\n                        value\n    \
-      \                )\n                    \n                    self.message_port_pub(pmt.intern(\"\
-      msg_out\"), pmt.intern(\"1\"))\n                \n                # detect a\
-      \ zero bit and a new minute, if approx 0.1sec zeros and 1.9sec ones\n      \
-      \          # (in that order) with slight tolerances are detected\n         \
-      \       elif (_num_zeros > self._zero_lo and _num_zeros < self._zero_hi and\n\
-      \                      _num_ones > self._reinit_zero_lo and _num_ones < self._reinit_zero_hi):\n\
-      \                    \n                    msg = \"new minute, 0\"\n       \
-      \             self.message_port_pub(pmt.intern(\"msg_out\"), pmt.intern(msg))\n\
-      \                    \n                    # reset counters to zero\n      \
-      \              _num_ones = 0\n                    _num_zeros = 1\n         \
-      \           \n                    _in_sync = 1\n                    \n     \
-      \               key = pmt.intern(\"edge\")\n                    value = pmt.intern(\"\
+      \           _num_zeros = 1\n\n                    _in_sync = 1\n\n         \
+      \           key = pmt.intern(\"edge\")\n                    value = pmt.intern(\"\
+      2 => 1: BIT ONE\")\n                    self.add_item_tag(0,\n             \
+      \                         self.nitems_written(0) + idx,\n                  \
+      \                    key,\n                                      value)\n\n\
+      \                    self.message_port_pub(pmt.intern(\"msg_out\"),\n      \
+      \                                    pmt.intern(\"1\"))\n\n                #\
+      \ detect a zero bit and a new minute, if approx 0.1sec\n                # zeros\
+      \ and 1.9sec ones (in that order) with slight\n                # tolerances\
+      \ are detected\n                elif (_num_zeros > self._zero_lo and\n     \
+      \                 _num_zeros < self._zero_hi and\n                      _num_ones\
+      \ > self._reinit_zero_lo and\n                      _num_ones < self._reinit_zero_hi):\n\
+      \n                    msg = \"new minute, 0\"\n                    self.message_port_pub(pmt.intern(\"\
+      msg_out\"),\n                                          pmt.intern(msg))\n\n\
+      \                    # reset counters to zero\n                    _num_ones\
+      \ = 0\n                    _num_zeros = 1\n\n                    _in_sync =\
+      \ 1\n\n                    key = pmt.intern(\"edge\")\n                    value\
+      \ = pmt.intern(\"2 => 1: NEW MIN\")\n                    self.add_item_tag(0,\n\
+      \                                      self.nitems_written(0) + idx,\n     \
+      \                                 key,\n                                   \
+      \   value)\n\n                # detect a one bit and a new minute, if approx\
+      \ 0.2sec\n                # zeros and 1.8sec ones (in that order) with slight\n\
+      \                # tolerances are detected\n                elif (_num_zeros\
+      \ > self._one_lo and\n                      _num_zeros < self._one_hi and\n\
+      \                      _num_ones > self._reinit_one_lo and\n               \
+      \       _num_ones < self._reinit_one_hi):\n\n                    msg = \"new\
+      \ minute, 1\"\n                    self.message_port_pub(pmt.intern(\"msg_out\"\
+      ),\n                                          pmt.intern(msg))\n\n         \
+      \           # reset counters to zero\n                    _num_ones = 0\n  \
+      \                  _num_zeros = 1\n\n                    _in_sync = 1\n\n  \
+      \                  key = pmt.intern(\"edge\")\n                    value = pmt.intern(\"\
       2 => 1: NEW MIN\")\n                    self.add_item_tag(0,\n             \
-      \           self.nitems_written(0) + idx,\n                        key,\n  \
-      \                      value\n                    )\n                \n    \
-      \            # detect a one bit and a new minute, if approx 0.2sec zeros and\
-      \ 1.8sec ones\n                # (in that order) with slight tolerances are\
-      \ detected\n                elif (_num_zeros > self._one_lo and _num_zeros <\
-      \ self._one_hi and\n                      _num_ones > self._reinit_one_lo and\
-      \ _num_ones < self._reinit_one_hi):\n                    \n                \
-      \    msg = \"new minute, 1\"\n                    self.message_port_pub(pmt.intern(\"\
-      msg_out\"), pmt.intern(msg))\n                    \n                    # reset\
-      \ counters to zero\n                    _num_ones = 0\n                    _num_zeros\
-      \ = 1\n                    \n                    _in_sync = 1\n            \
-      \        \n                    key = pmt.intern(\"edge\")\n                \
-      \    value = pmt.intern(\"2 => 1: NEW MIN\")\n                    self.add_item_tag(0,\n\
-      \                        self.nitems_written(0) + idx,\n                   \
-      \     key,\n                        value\n                    )\n         \
-      \   \n            elif (_in_sync == 2 and ch == 1):\n                pass\n\
-      \        \n        # detect and treat the case when sync is apparently lost\
-      \ and the counters start to overload\n        if (_num_zeros > self._one_hi*2\
-      \ or _num_zeros > self._reinit_one_hi*2):\n            msg = \"ERROR\"\n   \
-      \         self.message_port_pub(pmt.intern(\"msg_out\"), pmt.intern(f\"({msg}),\
-      \ zeros: {_num_zeros}, ones: {_num_ones}\"))\n            \n            # trigger\
-      \ a re-sync\n            _in_sync = 0\n            \n            # reset all\
-      \ counters to zero\n            _num_ones = 0\n            _num_zeros = 1\n\
-      \            \n            key = pmt.intern(\"edge\")\n            value = pmt.intern(\"\
-      2 => -1: ERROR\")\n            self.add_item_tag(0,\n                self.nitems_written(0)\
-      \ + idx,\n                key,\n                value\n            )\n     \
-      \   \n        # return (float) signal block\n        return out\n"
+      \                         self.nitems_written(0) + idx,\n                  \
+      \                    key,\n                                      value)\n\n\
+      \            elif (_in_sync == 2 and ch == 1):\n                pass\n\n   \
+      \     # detect and treat the case when sync is apparently lost\n        # and\
+      \ the counters start to overload\n        if (_num_zeros > self._one_hi*2 or\n\
+      \                _num_zeros > self._reinit_one_hi*2):\n            msg = \"\
+      ERROR\"\n            self.message_port_pub(pmt.intern(\"msg_out\"),\n      \
+      \                            pmt.intern(f\"({msg}), zeros:\"\n             \
+      \                                f\"{_num_zeros},\"\n                      \
+      \                       f\" ones: {_num_ones}\"))\n\n            # trigger a\
+      \ re-sync\n            _in_sync = 0\n\n            # reset all counters to zero\n\
+      \            _num_ones = 0\n            _num_zeros = 1\n\n            key =\
+      \ pmt.intern(\"edge\")\n            value = pmt.intern(\"2 => -1: ERROR\")\n\
+      \            self.add_item_tag(0,\n                              self.nitems_written(0)\
+      \ + idx,\n                              key,\n                             \
+      \ value)\n\n        # return (float) signal block\n        return out\n"
     affinity: ''
     alias: ''
     comment: 'syncs to falling edge
