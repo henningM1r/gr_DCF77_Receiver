@@ -1,6 +1,6 @@
 # gr_DCF77_Receiver
 This is a basic DCF77 receiver for GNURadio, containing:
-1. signal demodulation and detection of the DCF77 signal with an SDR using GnuRadio (and Python modules)
+1. signal demodulation and detection of the DCF77 signal with an SDR using GNURadio (and Python modules)
 2. a simple live decoder of received bits provided by the GnuRadio DCF77 receiver
 3. and additional tools for testing the receiver (especially, if no SDR hardware is available):
 + a DCF77 bit encoder
