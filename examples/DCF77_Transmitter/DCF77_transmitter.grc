@@ -303,20 +303,20 @@ blocks:
 - name: epy_block_0
   id: epy_block
   parameters:
-    _source_code: "\"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved,\
-      \ GRC will instantiate the first class it finds\nto get ports and parameters\
-      \ of your block. The arguments to __init__  will\nbe the parameters. All of\
-      \ them are required to have default values!\n\"\"\"\n\nimport numpy as np\n\
-      from gnuradio import gr\nimport pmt\n\n\n\n# counted number of zero samples\n\
-      _num_zeros = 0\n\n# counted number of one samples\n_num_ones = 0\n\n# counted\
-      \ number of two samples\n_num_twos = 0\n\n# counted number of seconds\n_num_secs\
-      \ = 0\n\n\nclass blk(gr.sync_block):\n\n    def __init__(self, scaling=1, samp_rate=768000):\n\
-      \        \"\"\"arguments to this function show up as parameters in GRC\"\"\"\
-      \n        gr.sync_block.__init__(\n            self,\n            name='DCF77-Signalling',\n\
-      \            in_sig=[np.float32],\n            out_sig=[np.float32]\n      \
-      \  )\n\n        # block parameters\n        self.scaling = scaling\n       \
-      \ self.sample_rate = samp_rate\n\n        # messaging port\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
-      \        \n        # 0.1s of zeros for the zero-bit (100ms pause)\n        self._zero\
+    _source_code: "\nimport numpy as np\nfrom gnuradio import gr\nimport pmt\n\n\n\
+      \"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved, GRC will instantiate\
+      \ the first class it finds\nto get ports and parameters of your block. The arguments\
+      \ to __init__  will\nbe the parameters. All of them are required to have default\
+      \ values!\n\"\"\"\n\n# counted number of zero samples\n_num_zeros = 0\n\n# counted\
+      \ number of one samples\n_num_ones = 0\n\n# counted number of two samples\n\
+      _num_twos = 0\n\n# counted number of seconds\n_num_secs = 0\n\n\nclass blk(gr.sync_block):\n\
+      \n    def __init__(self, scaling=1, samp_rate=768000):\n        \"\"\"arguments\
+      \ to this function show up as parameters in GRC\"\"\"\n        gr.sync_block.__init__(\n\
+      \            self,\n            name='DCF77-Signalling',\n            in_sig=[np.float32],\n\
+      \            out_sig=[np.float32]\n        )\n\n        # block parameters\n\
+      \        self.scaling = scaling\n        self.sample_rate = samp_rate\n\n  \
+      \      # messaging port\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
+      \n        # 0.1s of zeros for the zero-bit (100ms pause)\n        self._zero\
       \ = int(self.sample_rate/self.scaling*0.1)\n\n        # 0.9s of ones for the\
       \ zero-bit\n        self._zero_compl = int(self.sample_rate/self.scaling*0.9)\n\
       \n        # 0.2s of zeros for the one-bit (200ms pause)\n        self._one =\
@@ -329,82 +329,82 @@ blocks:
       zero:\", self._zero)\n        print(\"zero_compl:\", self._zero_compl)\n   \
       \     print(\"one:\", self._one)\n        print(\"one_compl:\", self._one_compl)\n\
       \        print(\"reinit_zero:\", self._reinit_zero)\n        print(\"reinit_one:\"\
-      , self._reinit_one)\n\n\n    def work(self, input_items, output_items):\n  \
-      \      inp = input_items[0]\n        out = output_items[0]\n        \n     \
-      \   tags = self.get_tags_in_window(0, 0, len(inp))\n\n        out[:] = self.bits_to_base_band_signal(inp)\n\
-      \        \n        # forward input tagged signal\n        return len(output_items[0])\n\
-      \   \n\n    def bits_to_base_band_signal(self, inp):\n        global _num_zeros\
-      \        \n        global _num_ones\n        global _num_twos\n        global\
-      \ _num_secs\n\n        # The total number of samples does not change from input\
-      \ to output\n        # just the value might change \n        out = inp\n\n \
-      \       #tags = self.get_tags_in_window(0, 0, len(inp))\n\n        # Process\
-      \ the individual (finite length) stream block currently received.\n        #\
-      \ Either a frame (sample_rate) full of ones, or a frame full of zeros is received.\n\
+      , self._reinit_one)\n\n    def work(self, input_items, output_items):\n    \
+      \    inp = input_items[0]\n        out = output_items[0]\n\n        # tags =\
+      \ self.get_tags_in_window(0, 0, len(inp))\n\n        out[:] = self.bits_to_base_band_signal(inp)\n\
+      \n        # forward input tagged signal\n        return len(output_items[0])\n\
+      \n    def bits_to_base_band_signal(self, inp):\n        global _num_zeros\n\
+      \        global _num_ones\n        global _num_twos\n        global _num_secs\n\
+      \n        # The total number of samples does not change from input to output\n\
+      \        # just the value might change\n        out = inp\n\n        # tags\
+      \ = self.get_tags_in_window(0, 0, len(inp))\n\n        # Process the individual\
+      \ (finite length) stream block currently\n        # received. Either a frame\
+      \ (sample_rate) full of ones, or a frame\n        # full of zeros is received.\n\
       \        for idx, ch in enumerate(inp):\n            # 1 is default, especially\
       \ for the 59th second\n            out[idx] = 1\n\n            if _num_secs\
-      \ > 59: \n                _num_secs = 0\n            \n            # receiving\
-      \ frame of zeros\n            if (ch == 0):\n                _num_zeros += 1\n\
-      \                _num_ones = 0\n                _num_twos = 0     \n       \
-      \             \n                # if the number of zeros is below 0.1s of the\
-      \ frame\n                if (_num_zeros < self._zero and _num_secs < 59):\n\
-      \                    # set the output to \"1\" for the current sample\n    \
-      \                out[idx] = 0\n                \n                # if the number\
-      \ of zeros is equal 0.1s of the frame\n                elif (_num_zeros == self._zero\
-      \ and _num_secs < 59):\n                    # set output to \"0\" for the current\
-      \ sample\n                    out[idx] = 0\n                        \n     \
-      \               # set tag for this 100ms pause\n                    key = pmt.intern(\"\
+      \ > 59:\n                _num_secs = 0\n\n            # receiving frame of zeros\n\
+      \            if (ch == 0):\n                _num_zeros += 1\n              \
+      \  _num_ones = 0\n                _num_twos = 0\n\n                # if the\
+      \ number of zeros is below 0.1s of the frame\n                if (_num_zeros\
+      \ < self._zero and\n                        _num_secs < 59):\n             \
+      \       # set the output to \"1\" for the current sample\n                 \
+      \   out[idx] = 0\n\n                # if the number of zeros is equal 0.1s of\
+      \ the frame\n                elif (_num_zeros == self._zero and\n          \
+      \            _num_secs < 59):\n                    # set output to \"0\" for\
+      \ the current sample\n                    out[idx] = 0\n\n                 \
+      \   # set tag for this 100ms pause\n                    key = pmt.intern(\"\
       0\")\n                    value = pmt.intern(\"100ms\")\n                  \
-      \  self.add_item_tag(0,\n                        self.nitems_written(0) + idx,\n\
-      \                        key,\n                        value\n             \
-      \       )\n            \n                # if the number of zeros is above 0.1s\
-      \ of the frame\n                elif (_num_zeros > self._zero and _num_secs\
-      \ < 59):\n                    # set output to \"1\" for the current sample\n\
-      \                    out[idx] = 1\n               \n                # full second\
-      \ from a full frame of zeros\n                if _num_zeros >= self.sample_rate:\n\
-      \                    _num_zeros = 0\n                    _num_ones = 0\n   \
-      \                 _num_twos = 0\n                    _num_secs += 1\n      \
-      \              \n                    if _num_secs < 59:\n                  \
-      \      # set tag for full second\n                        key = pmt.intern(\"\
+      \  self.add_item_tag(0,\n                                      self.nitems_written(0)\
+      \ + idx,\n                                      key,\n                     \
+      \                 value)\n\n                # if the number of zeros is above\
+      \ 0.1s of the frame\n                elif (_num_zeros > self._zero and\n   \
+      \                   _num_secs < 59):\n                    # set output to \"\
+      1\" for the current sample\n                    out[idx] = 1\n\n           \
+      \     # full second from a full frame of zeros\n                if _num_zeros\
+      \ >= self.sample_rate:\n                    _num_zeros = 0\n               \
+      \     _num_ones = 0\n                    _num_twos = 0\n                   \
+      \ _num_secs += 1\n\n                    if _num_secs < 59:\n               \
+      \         # set tag for full second\n                        key = pmt.intern(\"\
       sec\")\n                        value = pmt.intern(\"0\")\n                \
-      \        self.add_item_tag(0,\n                            self.nitems_written(0)\
-      \ + idx,\n                            key,\n                            value\n\
-      \                        )\n\n                    print(f\"{_num_secs:02d}:\
+      \        self.add_item_tag(0,\n                                          self.nitems_written(0)\
+      \ + idx,\n                                          key,\n                 \
+      \                         value)\n\n                    print(f\"{_num_secs:02d}:\
       \ 0\")\n\n            # receiving frame of ones\n            elif (ch == 1):\n\
       \                _num_ones += 1\n                _num_zeros = 0\n          \
-      \      _num_twos = 0\n                    \n                # if the number\
-      \ of ones is below 0.2s of the frame\n                if (_num_ones < self._one\
-      \ and _num_secs < 59):\n                    # set the output to \"0\" for the\
-      \ current sample\n                    out[idx] = 0\n\n                # if the\
-      \ number of ones is equal 0.2s of the frame\n                elif (_num_ones\
-      \ == self._one and _num_secs < 59):\n                    # set output to \"\
-      0\" for the current sample\n                    out[idx] = 0\n             \
-      \       # set tag for this 200ms pause\n                    key = pmt.intern(\"\
-      1\")\n                    value = pmt.intern(\"200ms\")\n                  \
-      \  self.add_item_tag(0,\n                        self.nitems_written(0) + idx,\n\
-      \                        key,\n                        value\n             \
-      \       )\n\n                # if the number of ones is above 0.2s of the frame\n\
-      \                elif (_num_ones > self._one and _num_secs < 59):\n        \
-      \            # set output to \"1\" for the current sample\n                \
-      \    out[idx] = 1\n               \n                # full second from a full\
-      \ frame of ones\n                if _num_ones >= self.sample_rate:\n       \
-      \             _num_ones = 0\n                    _num_zeros = 0\n          \
-      \          _num_twos = 0\n                    _num_secs += 1\n\n           \
-      \         if _num_secs < 59:\n                        # set tag for full second\n\
-      \                        key = pmt.intern(\"sec\")\n                       \
-      \ value = pmt.intern(\"1\")\n                        self.add_item_tag(0,\n\
-      \                            self.nitems_written(0) + idx,\n               \
-      \             key,\n                            value\n                    \
-      \    )\n\n                    print(f\"{_num_secs:02d}: 1\")\n\n           \
-      \ # receiving frame of twos (=> 59th second)\n            elif (ch == 2):\n\
-      \                _num_zeros = 0\n                _num_ones = 0\n           \
-      \     \n                if _num_twos == 0:\n                    _num_secs +=\
+      \      _num_twos = 0\n\n                # if the number of ones is below 0.2s\
+      \ of the frame\n                if (_num_ones < self._one and\n            \
+      \            _num_secs < 59):\n                    # set the output to \"0\"\
+      \ for the current sample\n                    out[idx] = 0\n\n             \
+      \   # if the number of ones is equal 0.2s of the frame\n                elif\
+      \ (_num_ones == self._one and\n                      _num_secs < 59):\n    \
+      \                # set output to \"0\" for the current sample\n            \
+      \        out[idx] = 0\n                    # set tag for this 200ms pause\n\
+      \                    key = pmt.intern(\"1\")\n                    value = pmt.intern(\"\
+      200ms\")\n                    self.add_item_tag(0,\n                       \
+      \               self.nitems_written(0) + idx,\n                            \
+      \          key,\n                                      value)\n\n          \
+      \      # if the number of ones is above 0.2s of the frame\n                elif\
+      \ (_num_ones > self._one and _num_secs < 59):\n                    # set output\
+      \ to \"1\" for the current sample\n                    out[idx] = 1\n\n    \
+      \            # full second from a full frame of ones\n                if _num_ones\
+      \ >= self.sample_rate:\n                    _num_ones = 0\n                \
+      \    _num_zeros = 0\n                    _num_twos = 0\n                   \
+      \ _num_secs += 1\n\n                    if _num_secs < 59:\n               \
+      \         # set tag for full second\n                        key = pmt.intern(\"\
+      sec\")\n                        value = pmt.intern(\"1\")\n                \
+      \        self.add_item_tag(0,\n                                          self.nitems_written(0)\
+      \ + idx,\n                                          key,\n                 \
+      \                         value)\n\n                    print(f\"{_num_secs:02d}:\
+      \ 1\")\n\n            # receiving frame of twos (=> 59th second)\n         \
+      \   elif (ch == 2):\n                _num_zeros = 0\n                _num_ones\
+      \ = 0\n\n                if _num_twos == 0:\n                    _num_secs +=\
       \ 1\n                    _num_twos += 1\n\n                    out[idx] = 1\n\
       \n                    print(f\"{_num_secs:02d}: _\")\n\n                elif\
       \ _num_twos >= 1 and _num_twos < self.sample_rate:\n                    _num_twos\
-      \ += 1\n                    \n                    out[idx] = 1\n           \
-      \         \n                elif _num_twos >= self.sample_rate:\n          \
-      \          _num_twos = 0\n                    \n                    out[idx]\
-      \ = 1\n        \n        # return (float) signal block\n        return out\n"
+      \ += 1\n\n                    out[idx] = 1\n\n                elif _num_twos\
+      \ >= self.sample_rate:\n                    _num_twos = 0\n\n              \
+      \      out[idx] = 1\n\n        # return (float) signal block\n        return\
+      \ out\n"
     affinity: ''
     alias: ''
     comment: "* encode bits to signals\n* each bit has a total signal\n   length of\
