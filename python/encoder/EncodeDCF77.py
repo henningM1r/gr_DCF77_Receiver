@@ -21,31 +21,28 @@ import zmq
 import pytz
 import numpy as np
 
-import os
-
-
 
 class DCF77Encoder():
 
     def __init__(self, tcp_addr="127.0.0.1", port=55552):
         # provide bit-stream via ZMQ_PUB as client to server
         # simulated RF-transmission in GNURadio
-        
+
         # usually the local host
-        self.host        = f"tcp://{tcp_addr}:{port}"
+        self.host = f"tcp://{tcp_addr}:{port}"
 
         # The same port as used by the server
-        self.port        = port
+        self.port = port
 
         # open PUB socked for ZMQ
         self.pub_context = zmq.Context()
-        self.pub_socket    = self.pub_context.socket(zmq.PUB)
+        self.pub_socket = self.pub_context.socket(zmq.PUB)
         self.pub_socket.bind(self.host)
-
 
     def run(self):
         # send intial synchronization block
-        sync_block = np.array([0,0,0,0,0,0,0,0,0,0,0,0,2], dtype=np.byte)
+        sync_block = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+                              dtype=np.byte)
 
         for idx, symbol in enumerate(sync_block):
             print(f"sending symbols at {idx:02d}: ", symbol)
@@ -59,7 +56,7 @@ class DCF77Encoder():
             # and not the current minute
             [day, month, year, hh, mm, ss, weekday, CEST, CET] = \
                 self.get_next_time_info(tz="Europe/Berlin", offset=1)
-            
+
             if ss == "00":
                 # triggers at each new minute at 00 seconds
                 print(f"new minute: {hh}:{mm}:{ss}")
@@ -72,20 +69,20 @@ class DCF77Encoder():
                 bitstream = self.encode_dcf77_bitstream(
                               day=day, month=month, year=year,
                               hh=hh, mm=mm, ss=ss, weekday=weekday,
-                              weather= weather,
+                              weather=weather,
                               call_bit=False,
                               time_shift=False, time_offset=0,
                               CEST=CEST, CET=CET, leap=False)
 
-                print(f"sending full block: \n {bitstream}\n with 1 symbol per second")
+                print(f"sending full block: \n {bitstream}\n"
+                      " with 1 symbol per second")
                 tcp_data = np.array(bitstream, dtype=np.byte)
                 self.pub_socket.send(tcp_data)
                 time.sleep(1)
-            
+
             else:
                 time.sleep(1)
                 print(f"Wait for next minute. Current time: {hh}:{mm}:{ss}")
-
 
     def encode_minute(self, mm):
         mm = [int(a) for a in str(mm)]
@@ -108,7 +105,6 @@ class DCF77Encoder():
 
         return res
 
-
     def encode_hour(self, hh):
         hh = [int(a) for a in str(hh)]
 
@@ -130,7 +126,6 @@ class DCF77Encoder():
 
         return res
 
-
     def encode_cal_day(self, day):
         d = [int(a) for a in str(day)]
 
@@ -148,7 +143,6 @@ class DCF77Encoder():
         val = val_1 + val_10
 
         return val
-
 
     def encode_cal_month(self, month):
         m = [int(a) for a in str(month)]
@@ -168,7 +162,6 @@ class DCF77Encoder():
 
         return val
 
-
     def encode_cal_year(self, year):
         y = [int(a) for a in str(year)]
 
@@ -187,7 +180,6 @@ class DCF77Encoder():
 
         return val
 
-
     def encode_weekday(self, weekday):
         binary_string_weekday = format(weekday, '03b')
         listed_val = list(binary_string_weekday)
@@ -198,15 +190,14 @@ class DCF77Encoder():
 
         return val
 
-
     def parity_date(self, cal_day, cal_weekday, cal_month, cal_year):
-        full_date_sum = sum(cal_day) + sum(cal_weekday) + sum(cal_month) + sum(cal_year)
+        full_date_sum = (sum(cal_day) + sum(cal_weekday)
+                         + sum(cal_month) + sum(cal_year))
         parity = full_date_sum % 2
         res = parity
         return res
 
-
-    def encode_dcf77_bitstream(self, 
+    def encode_dcf77_bitstream(self,
                                day: int, month: int, year: int,
                                hh: int, mm: int, ss: int, weekday: int,
                                weather,
@@ -216,7 +207,7 @@ class DCF77Encoder():
 
         # bit-stream for a full minute
         bitstream = [0 for i in range(60)]
-        
+
         # [0] start-bit => always zero (indicates start of next minute)
         bitstream[0] = 0
 
@@ -225,17 +216,17 @@ class DCF77Encoder():
 
         # [15] call bit => (usually) zero
         # ignored
-        bitstream[15] = int(call_bit == True)
+        bitstream[15] = int(call_bit is True)
 
         # [16] time shift (summer/winter) => (usually) zero
         bitstream[16] = 0
-        
+
         # [17][18] time offset  => 10 MESZ, 01 MEZ
-        bitstream[17] = int(CEST == True)
-        bitstream[18] = int(CET  == True)
+        bitstream[17] = int(CEST is True)
+        bitstream[18] = int(CET is True)
 
         # [19] leap sec  => (usualy) zero
-        bitstream[15] = int(leap == True)
+        bitstream[15] = int(leap is True)
 
         # [20] => always one
         bitstream[20] = 1
@@ -263,25 +254,28 @@ class DCF77Encoder():
         bitstream[50:58] = cal_year
 
         # [58] => parity of (cal_day, cal_weekday, cal_month, cal_year)
-        bitstream[58] = self.parity_date(cal_day, cal_weekday, cal_month, cal_year)
+        bitstream[58] = self.parity_date(cal_day, cal_weekday,
+                                         cal_month, cal_year)
 
         # [59] skip impulse
-        #bitstream[59] = 'new minute, 1'
+        # bitstream[59] = 'new minute, 1'
         bitstream[59] = 2
 
         return bitstream
 
-
     def get_next_time_info(self, tz, offset=60):
         """
         NOTE:
-        * set offset=60, if you want to provide the next minute to the transmitter
-        * set offset=0, if you want to compare the current minute to https://www.dcf77logs.de/live
+        * set offset=60, if you want to provide the next minute to
+                         the transmitter
+        * set offset=0, if you want to compare the current minute
+                         to https://www.dcf77logs.de/live
 
         :param tz:
         :param offset:
         :return:
         """
+
         tz_berlin = pytz.timezone(tz)
         now = datetime.now(tz_berlin)
 
@@ -289,15 +283,15 @@ class DCF77Encoder():
         # within the current minute (from 0 to 59)
         next = now + timedelta(0, offset)
         CEST = bool(now.dst())
-        CET  = not bool(CEST)
+        CET = not bool(CEST)
 
-        #dmy_string = now.strftime("%d/%m/%Y")
+        # dmy_string = now.strftime("%d/%m/%Y")
         day_string = next.strftime("%d")
         month_string = next.strftime("%m")
         # take only last two digits of year
         year_string = str(int(next.strftime("%Y")) % 100)
 
-        #hhmmss_string = now.strftime("%H:%M:%S")
+        # hhmmss_string = now.strftime("%H:%M:%S")
         hh_string = next.strftime("%H")
         mm_string = next.strftime("%M")
         ss_string = next.strftime("%S")
@@ -308,14 +302,12 @@ class DCF77Encoder():
         weekday_num = next.weekday() + 1
 
         # indicate that it is running
-        #print("...")
+        # print("...")
 
-        return [day_string, month_string, year_string, hh_string, mm_string, ss_string, weekday_num, CEST, CET]
+        return [day_string, month_string, year_string, hh_string,
+                mm_string, ss_string, weekday_num, CEST, CET]
 
 
 if __name__ == '__main__':
     my_encoder = DCF77Encoder(port=55552)
     my_encoder.run()
-
-    
-
