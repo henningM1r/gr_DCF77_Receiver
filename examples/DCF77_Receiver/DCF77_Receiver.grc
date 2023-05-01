@@ -533,7 +533,7 @@ blocks:
   id: import
   parameters:
     alias: ''
-    comment: windows needs the import of zmq
+    comment: Windows needs the import of zmq
     imports: import zmq
   states:
     bus_sink: false

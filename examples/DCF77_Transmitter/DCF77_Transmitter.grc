@@ -104,12 +104,12 @@ blocks:
     comment: 'modulation signal to shift the
 
       pass band signal to 77.5 kHz'
-    freq: '77500'
+    freq: freq_DCF77
     maxoutbuf: '0'
     minoutbuf: '0'
     offset: '0'
     phase: '0'
-    samp_rate: '192000'
+    samp_rate: samp_rate
     type: complex
     waveform: analog.GR_COS_WAVE
   states:
@@ -408,8 +408,8 @@ blocks:
     affinity: ''
     alias: ''
     comment: "* encode bits to signals\n* each bit has a total signal\n   length of\
-      \ \"samp_rate\"\n* convert 0 bit to:\n 100ms low (0) , 900ms high (1)\n* convert\
-      \ 1 bit to:\n200ms low (0),  800ms high (1)"
+      \ \"samp_rate\"\n* convert 0 to:\n 100ms low (0) , 900ms high (1)\n* convert\
+      \ 1 to:\n200ms low (0),  800ms high (1)\n*convert 2 to:\nTBD"
     maxoutbuf: '0'
     minoutbuf: '0'
     samp_rate: samp_rate
@@ -424,6 +424,19 @@ blocks:
     coordinate: [792, 336.0]
     rotation: 0
     state: enabled
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: Windows needs the import of zmq
+    imports: import zmq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 12.0]
+    rotation: 0
+    state: true
 - name: network_tcp_sink_0
   id: network_tcp_sink
   parameters:
