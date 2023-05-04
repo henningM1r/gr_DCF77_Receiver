@@ -304,14 +304,10 @@ blocks:
   id: epy_block
   parameters:
     _source_code: "\nimport numpy as np\nfrom gnuradio import gr\nimport pmt\n\n\n\
-      \"\"\"\nEmbedded Python Blocks:\n\nEach time this file is saved, GRC will instantiate\
-      \ the first class it finds\nto get ports and parameters of your block. The arguments\
-      \ to __init__  will\nbe the parameters. All of them are required to have default\
-      \ values!\n\"\"\"\n\n# counted number of zero samples\n_num_zeros = 0\n\n# counted\
-      \ number of one samples\n_num_ones = 0\n\n# counted number of two samples\n\
-      _num_twos = 0\n\n# counted number of seconds\n_num_secs = 0\n\n\nclass blk(gr.sync_block):\n\
-      \n    def __init__(self, scaling=1, samp_rate=768000):\n        \"\"\"arguments\
-      \ to this function show up as parameters in GRC\"\"\"\n        gr.sync_block.__init__(\n\
+      # counted number of zero samples\n_num_zeros = 0\n\n# counted number of one\
+      \ samples\n_num_ones = 0\n\n# counted number of two samples\n_num_twos = 0\n\
+      \n# counted number of seconds\n_num_secs = 0\n\n\nclass blk(gr.sync_block):\n\
+      \n    def __init__(self, scaling=1, samp_rate=768000):\n        gr.sync_block.__init__(\n\
       \            self,\n            name='DCF77-Signalling',\n            in_sig=[np.float32],\n\
       \            out_sig=[np.float32]\n        )\n\n        # block parameters\n\
       \        self.scaling = scaling\n        self.sample_rate = samp_rate\n\n  \
@@ -416,8 +412,7 @@ blocks:
     scaling: '1'
   states:
     _io_cache: ('DCF77-Signalling', 'blk', [('scaling', '1'), ('samp_rate', '768000')],
-      [('0', 'float', 1)], [('0', 'float', 1), ('msg_out', 'message', 1)], 'arguments
-      to this function show up as parameters in GRC', ['scaling'])
+      [('0', 'float', 1)], [('0', 'float', 1), ('msg_out', 'message', 1)], '', ['scaling'])
     bus_sink: false
     bus_source: false
     bus_structure: null

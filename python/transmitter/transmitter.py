@@ -4,14 +4,6 @@ from gnuradio import gr
 import pmt
 
 
-"""
-Embedded Python Blocks:
-
-Each time this file is saved, GRC will instantiate the first class it finds
-to get ports and parameters of your block. The arguments to __init__  will
-be the parameters. All of them are required to have default values!
-"""
-
 # counted number of zero samples
 _num_zeros = 0
 
@@ -28,7 +20,6 @@ _num_secs = 0
 class blk(gr.sync_block):
 
     def __init__(self, scaling=1, samp_rate=768000):
-        """arguments to this function show up as parameters in GRC"""
         gr.sync_block.__init__(
             self,
             name='DCF77-Signalling',

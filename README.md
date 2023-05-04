@@ -97,7 +97,9 @@ Optionally, you can:
 + A Low Noise Amplifier (LNA) is not needed.
 + The decoder does __not__ consider the rare special cases of leap seconds.
 + Even a single lost bit during reception causes the synchronization of a full minute to fail. Additional resilience of the Decoder has __not__ been implemented yet.
-+ The project provides the decoded DCF77 signal more or less in real-time, but it is probably _not_ accurate in terms of milliseconds.
-+ The dedicated bits for leap seconds are detected, but the decoder does _not_ specifically act on it, yet.
-+ Weather information (MeteoTime) is _not_ decoded since it is encrypted and commercially licensed, cf. https://www.meteotime.com/. The simulated encoder only provides random bits at bit positions 1 to 14.
-+ I would like to _acknowledge_ that I found some very useful inspiration in https://github.com/duggabe/gr-RTTY-basics on the bit detector.
++ The project provides the decoded DCF77 signal more or less in real-time, but it is probably __not__ accurate in terms of milliseconds.
++ The dedicated bits for leap seconds are detected, but the decoder does __not__ specifically act on it, yet.
++ Weather information (MeteoTime) is __not__ decoded since it is encrypted and commercially licensed, cf. https://www.meteotime.com/. The simulated encoder only provides random bits at bit positions 1 to 14.
++ The additional pseudo-random sequences with 512 chips modulated onto in the carrier of DCF77 via phase modulation has not __not__ been treated here, yet.
+    + https://en.wikipedia.org/wiki/DCF77#Phase_modulation
++ I would like to __acknowledge__ that I found some very useful inspiration in https://github.com/duggabe/gr-RTTY-basics on the bit detector.
