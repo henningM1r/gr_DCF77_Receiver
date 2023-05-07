@@ -134,6 +134,4 @@ Optionally, you can:
 + Even a single lost bit during reception causes the synchronization of a full minute to fail. Additional resilience of the Decoder has __not__ been implemented yet.
 + The project provides the decoded DCF77 signal more or less in real-time, but it is probably __not__ accurate in terms of milliseconds.
 + Weather information (MeteoTime) is __not__ decoded since it is encrypted and commercially licensed, cf. https://www.meteotime.com/. The simulated encoder only provides random bits at bit positions 1 to 14.
-    + https://en.wikipedia.org/wiki/DCF77#Phase_modulation
-    + https://www.ptb.de/cms/en/ptb/fachabteilungen/abt4/fb-44/ag-442/dissemination-of-legal-time/dcf77/dcf77-phase-modulation.html
 + I would like to __acknowledge__ that I found some very useful inspiration in https://github.com/duggabe/gr-RTTY-basics on the bit detector.

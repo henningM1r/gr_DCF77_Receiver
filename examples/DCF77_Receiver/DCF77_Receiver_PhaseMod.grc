@@ -936,7 +936,7 @@ blocks:
       110110001010100100011100011011010101110001001100010001000000001\n\nThe opposite\
       \ codeword for symbol 1 is its bit-wise inverted version\n\nIt has a number\
       \ of:\n* 256 ones\n* 256 zeros\n\nExcept for the first two bits, it can  be\
-      \ repoduced with the following python script.\n(mabe because the initial state=[0,0,0,0,0,0,0,0,0]\
+      \ repoduced with the following python script.\n(maybe because the initial state=[0,0,0,0,0,0,0,0,0]\
       \ is not permitted)\n\n===\nimport numpy as np\nfrom pylfsr import LFSR\n\n\
       state = [1,0,0,0,0,0,0,0,0]\n\nfpoly = [9,5]\nL = LFSR(fpoly=fpoly, conf='galois',\
       \ initstate=state) \nL.info()\nL.runKCycle(511) # length of period\nL.info()\n\
@@ -946,7 +946,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2632, 972.0]
+    coordinate: [1288, 2004.0]
     rotation: 0
     state: true
 - name: note_1
