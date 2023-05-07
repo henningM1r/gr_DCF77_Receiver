@@ -1,8 +1,10 @@
 # gr_DCF77_Receiver
 This is a basic DCF77 receiver for GNURadio, containing:
-1. signal demodulation and detection of the DCF77 signal with an SDR using GNURadio (and Python modules)
-2. a simple live decoder of received bits provided by the GnuRadio DCF77 receiver
-3. and additional tools for testing the receiver (especially, if no SDR hardware is available):
+1. signal demodulation and detection of the DCF77 OOK signal with an SDR using GNURadio (and Python modules)
+2. signal demodulation and detection of the DCF77 phase-modulated signal with an SDR using GNURadio (and Python modules)
+2. a simple live decoder of the received OOK bits provided by the GnuRadio DCF77 receiver
+3. a simple live decoder of the received phase-modulated bits provided by the GnuRadio DCF77 receiver
+4. and additional tools for testing the receivers (especially, if no SDR hardware is available):
 + a DCF77 bit encoder
 + a simulated DCF77 transmitter
 + a simulated DCF77 channel (AWGN)
@@ -12,13 +14,22 @@ This is a basic DCF77 receiver for GNURadio, containing:
 The __flowgraphs__ are provided in the `examples` folder:
 + `DCF_transmitter.grc`
     + only for simulation
+    + includes the OOK signaling
+    + includes phase modulated pseudo-random sequences signaling
 + `DCF_channel.grc`
     + only for simulation
-+ `DCF77_receiver.grc`
++ `DCF77_receiver_OOK.grc`
     + for both SDR reception and for simulation
+    + includes detection of the OOK signal
++ `DCF77_receiver_PhaseMod.grc`
+    + only for SDR reception
+    + not for simulation yet
+    + includes detection of the phase-modulated pseudo-random sequences
+
 
 Supplementary tools are provided in the `python` folder:
-+ `DecodeDCF77.py` decodes the received bits from a specified ZMQ server upon receiving them. It shows the current time, date, weekday, etc. at each new minute.
++ `DecodeDCF77_OOK.py` decodes the received OOK bits from a specified ZMQ server upon receiving them. It shows the current time, date, weekday, etc. at each new minute.
++ `DecodeDCF77_PhaseMod.py` decodes the received phase-modulated bits from a specified ZMQ server upon receiving them. It shows the current time, date, weekday, etc. at each new minute.
 + `EncodeDCF77.py` encodes the the current time and publishes bits to a ZMQ server. 
 
 
@@ -42,6 +53,8 @@ The DCF77 receiver was tested with:
 ### Instructions/Setup
 
 #### Simulation
+
+##### DCF77 On-Off-Keying (OOK) Simulation
 + Open all 3 flowcharts (DCF77_Transmitter.grc, DCF77_Channel.grc, DCF77_Receiver.grc) in GNURadio Companion.
 + Generate the python files with the "Generate the flowgraph"-button.
 + Open 4 separate terminals (e.g.: T1, T2, T3, T4).
@@ -56,11 +69,11 @@ The DCF77 receiver was tested with:
     + It should be run in the 2nd step.
     + A GUI should appear.
 + T3: Go to ```/examples/DCF77_Receiver/```
-+ Run Receiver with: `python3 DCF77_Receiver.py`
++ Run Receiver with: `python3 DCF77_Receiver_OOK.py`
     + It should be run in the 3rd step.
     + A GUI should appear.
 + T4: (compare above) go to ```/examples/DCF77_Receiver/```
-+ Run the decoder with: `python3 DecodeDCF77.py`
++ Run the decoder with: `python3 DecodeDCF77_PhaseMod.py`
     + It should be run in the 4th step.
     + The terminal should provide received bits continuously, and a time & date message each minute.
 
@@ -69,37 +82,58 @@ Optionally, you can:
 + Adapt the `DCF77_Transmitter.grc` to take the time vector from a TCP source instead of the fixed Vector Source.
 + Note that if the simulation is too slow on an older computer, the new minute might overwrite the current signal. This might lead to an incomplete minute each time.
 
+##### DCF77 Phase Modulation Simulation
++ The simulation for DCF77 phase modulation is not implemented yet.
 
 #### Signal Reception with SDR
+
+##### DCF77 On-Off-Keying (OOK) with SDR
 + Set up your SDR with your computer.
 + Ensure that the raw DCF77 signal reception at 77.5 kHz is good enough, e.g. using gqrx or another signal analysis tool. It should reach at least at approximately -75dB or better.
-+ To start the DCF77 receiver, open the flowchart in `/examples/DCF77_Receiver/DCF77_receiver.grc` with GNURadio Companion
++ To start the DCF77 receiver, open the flowchart in `/examples/DCF77_Receiver/DCF77_receiver_OOK.grc` with GNURadio Companion
     + deactivate/unhide the source from the simulation provided by TCP
     + activate/hide the osmocom source
     + Press `run` button.
     + Set the Gain2 and Gain2 slider values in the DCF77 GUI so that the amplitude of data0 is centered roughly around the value 100.
     + Adjust the upper_threshold and lower_threshold slider values, if needed.
-    + After parameter adjustment, the GNURadio Companion debug console should show a debug message each second with either '0' or '1' or 'new message'.
+    + After parameter adjustment, the GNURadio Companion debug console should show a debug message each second with either '0', '1' or '2' (for new minute).
 
 + Next, open a terminal or Powershell.
     + Change to your cloned repository.
-    + Run the DecodeDCF77 with ```python3 ./python/decoder/DecodeDCF77.py```.
+    + Run the DecodeDCF77 with ```python3 ./python/decoder/DecodeDCF77_OOK.py```.
     + The terminal should show the received bits together with a sequence of indices.
-    + after approximately 2 minutes, DecodeDCF77 should be synchronized with the transmitter. It should provide the current time, date, etc. each minute.
+    + after approximately 2 minutes, DecodeDCF77_OOK should be synchronized with the transmitter. It should provide the current time, date, etc. each minute.
     + NOTE: sometimes a bit can not be decoded correctly, e.g. due to bad reception. Then the current frame of the minute is corrupted and both the decoder and detector will produce error messages and will attempt to re-synchronize.
     + NOTE: feel free to compare the currently received bits live with: https://www.dcf77logs.de/live. Your signal should only lag a single second.
 
+##### DCF77 Phase Modulation with SDR
++ Set up your SDR with your computer.
++ Ensure that the raw DCF77 signal reception at 77.5 kHz is good enough, e.g. using gqrx or another signal analysis tool. It should reach at least at approximately -75dB or better.
++ To start the DCF77 receiver, open the flowchart in `/examples/DCF77_Receiver/DCF77_receiver_PhaseMod.grc` with GNURadio Companion
+    + Press `run` button.
+    + Set the Gain2 slider values in the DCF77 GUI so that the amplitude of data0 is centered roughly around the value 100.
+    + Adjust the upper_threshold and lower_threshold slider values, if needed.
+    + The sliders for shift_step and shift_poll_freq can be adjusted to avoid phase drift. This parameter should rather not be changed unless you observe phase drift.
+    + The slider for chip size changes the number of samples per chip. This parameter should rather not be changed.
+    + After parameter adjustment, the GNURadio Companion debug console should show a debug message each second with either '0', '1' or '2' (for new minute).
+
++ Next, open a terminal or Powershell.
+    + Change to your cloned repository.
+    + Run the DecodeDCF77 with ```python3 ./python/decoder/DecodeDCF77_PhaseMod.py```.
+    + The terminal should show the received bits together with a sequence of indices.
+    + after approximately 2 minutes, DecodeDCF77_PhaseMod should be synchronized with the transmitter. It should provide the current time, date, etc. each minute.
+    + NOTE: sometimes a bit can not be decoded correctly, e.g. due to bad reception. Then the current frame of the minute is corrupted and both the decoder and detector will produce error messages and will attempt to re-synchronize.
+    + NOTE: feel free to compare the currently received bits live with: https://www.dcf77logs.de/live. Your signal should only lag a single second.
 
 ### REMARKS
-+ This project has __not__ been tested with other SDR receivers.
++ This project has __not__ been tested with other SDR receivers, yet.
 + This project has __not__ been tested with a receiver setup using a sound card.
 + This project has __not__ been tested with other antennas (e.g. a ferrite antenna).
 + A Low Noise Amplifier (LNA) is not needed.
-+ The decoder does __not__ consider the rare special cases of leap seconds.
++ The dedicated bits for leap seconds are detected, but the decoders do __not__ specifically act on it, yet.
 + Even a single lost bit during reception causes the synchronization of a full minute to fail. Additional resilience of the Decoder has __not__ been implemented yet.
 + The project provides the decoded DCF77 signal more or less in real-time, but it is probably __not__ accurate in terms of milliseconds.
-+ The dedicated bits for leap seconds are detected, but the decoder does __not__ specifically act on it, yet.
 + Weather information (MeteoTime) is __not__ decoded since it is encrypted and commercially licensed, cf. https://www.meteotime.com/. The simulated encoder only provides random bits at bit positions 1 to 14.
-+ The additional pseudo-random sequences with 512 chips modulated onto in the carrier of DCF77 via phase modulation has not __not__ been treated here, yet.
     + https://en.wikipedia.org/wiki/DCF77#Phase_modulation
+    + https://www.ptb.de/cms/en/ptb/fachabteilungen/abt4/fb-44/ag-442/dissemination-of-legal-time/dcf77/dcf77-phase-modulation.html
 + I would like to __acknowledge__ that I found some very useful inspiration in https://github.com/duggabe/gr-RTTY-basics on the bit detector.

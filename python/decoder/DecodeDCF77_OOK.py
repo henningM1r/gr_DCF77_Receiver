@@ -33,24 +33,26 @@ def decode_BCD3(bits):
 
 
 def decode_bitstream(bitstream, count):
-    if count != 59:
+    print("\n=== Minute decoded ===")
+
+    if count != 60:
         print("Decoding error")
-        print(f"Received bits: {len(bitstream)}")
+        print(f"#Received bits: {len(bitstream)}")
         return
 
     if bitstream[0] == 1:
-        print("Start-bit is 1 instead of 0!")
+        print("00: Start-bit is 1 instead of 0!")
         return
 
     print("\n")
     print(f"00: Start-bit is {bitstream[0]}")
-    print("01-15: Weather-info is ignored here.")
-    print(f"Calling bit: {bitstream[15]}")
+    print("01-14: Weather-info is ignored here.")
+    print(f"15: Calling bit: {bitstream[15]}")
 
     if bitstream[16] == 1:
         print("16: clock change")
     elif bitstream[16] == 0:
-        print("16: no clock change")
+        print("16: No clock change")
 
     if bitstream[17] == 0 and bitstream[18] == 1:
         print("17-18: CET - winter time")
@@ -60,12 +62,12 @@ def decode_bitstream(bitstream, count):
     if bitstream[19] == 1:
         print("19: leap second")
     elif bitstream[19] == 0:
-        print("19: no leap second")
+        print("19: No leap second")
 
     if bitstream[20] == 1:
         print("20: Beginn of time information")
     elif bitstream[20] == 0:
-        print("20: error, is 1 instead of 0!")
+        print("20: Error, is 1 instead of 0!")
         return
 
     min_dec0 = decode_BCD4([bitstream[24], bitstream[23],
@@ -77,9 +79,9 @@ def decode_bitstream(bitstream, count):
     if (bitstream[21] ^ bitstream[22] ^ bitstream[23] ^
             bitstream[24] ^ bitstream[25] ^ bitstream[26] ^
             bitstream[27] ^ bitstream[28] == 0):
-        print("Parity of minutes successful")
+        print("28: Even parity of minutes successful")
     else:
-        print("Parity of minutes failed")
+        print("28: Even parity of minutes failed")
 
     hour_dec0 = decode_BCD4([bitstream[32], bitstream[31],
                              bitstream[30], bitstream[29]])
@@ -88,15 +90,15 @@ def decode_bitstream(bitstream, count):
     # check parity for the hour values
     if (bitstream[29] ^ bitstream[30] ^ bitstream[31] ^ bitstream[32] ^
             bitstream[33] ^ bitstream[34] ^ bitstream[35] == 0):
-        print("Parity of hours successful")
+        print("35: Even parity of hours successful")
     else:
-        print("Parity of hours failed")
+        print("35: Even parity of hours failed")
 
-    print(f"time: {hour_dec10}{hour_dec0}:{min_dec10}{min_dec0}")
+    print(f"21-27 & 29-34: Time: {hour_dec10}{hour_dec0}:{min_dec10}{min_dec0}")
 
     weekday = decode_BCD3([bitstream[44], bitstream[43], bitstream[42]])
 
-    print(f"weekday: {weekdays[weekday-1]}")
+    print(f"42-44: Weekday: {weekdays[weekday-1]}")
 
     day_dec0 = decode_BCD4([bitstream[39], bitstream[38],
                             bitstream[37], bitstream[36]])
@@ -111,7 +113,7 @@ def decode_bitstream(bitstream, count):
     year_dec10 = decode_BCD4([bitstream[57], bitstream[56],
                               bitstream[55], bitstream[54]])
 
-    print(f"Date: {day_dec10}{day_dec0}.{month_dec10}"
+    print(f"36-41 & 45-57: Date: {day_dec10}{day_dec0}.{month_dec10}"
           f"{month_dec0}.{year_dec10}{year_dec0}")
 
     # check parity for the date and weekday values
@@ -121,11 +123,12 @@ def decode_bitstream(bitstream, count):
             bitstream[48] ^ bitstream[49] ^ bitstream[50] ^ bitstream[51] ^
             bitstream[52] ^ bitstream[53] ^ bitstream[54] ^ bitstream[55] ^
             bitstream[56] ^ bitstream[57] ^ bitstream[58] == 0):
-        print("Parity of date and weekdays successful")
-    else:
-        print("Parity of date and weekdays failed")
+        print("58: Even parity of date and weekdays successful")
 
-    print("\n")
+    else:
+        print("58: Even Parity of date and weekdays failed")
+
+    print("======================\n")
 
 
 def consumer():
@@ -141,7 +144,7 @@ def consumer():
         data = consumer_receiver.recv()
         received_msg = data.decode('ascii')[3:]
 
-        print(f"decoded bit at {count}: {received_msg}")
+        print(f"{count:02d}: {received_msg}")
 
         if received_msg == "0":
             bitstream.append(0)
@@ -152,17 +155,13 @@ def consumer():
             count += 1
 
         # derive current time and date from the bitstream
-        elif received_msg == "new minute, 0" and count == 59:
-            bitstream.append(0)
-
+        elif received_msg == "2" and count == 60:
             decode_bitstream(bitstream, count)
 
             bitstream = []
             count = 1
 
-        elif received_msg == "new minute, 1" and count == 59:
-            bitstream.append(1)
-
+        elif received_msg == "2" and count == 60:
             decode_bitstream(bitstream, count)
 
             bitstream = []
@@ -170,9 +169,9 @@ def consumer():
 
         # either too few or to many bits have
         # been received during the decoding step
-        elif (received_msg == "new minute, 0" or
-              received_msg == "new minute, 1" or
-              count > 59):
+        elif (received_msg == "2" or
+              received_msg == "2" or
+              count > 60):
             print("Error: Wrong number of bits at new minute")
             print(f"#Bits: {len(bitstream)}")
 

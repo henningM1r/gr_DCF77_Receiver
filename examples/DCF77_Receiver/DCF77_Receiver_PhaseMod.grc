@@ -1,0 +1,2145 @@
+options:
+  parameters:
+    author: henningM1R
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: DCF77_Receiver_PhaseMod
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: DCF77 Receiver Phase Modulation
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 12.0]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: chip_size
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Chip size
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '70'
+    step: '1'
+    stop: '80'
+    value: '75'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1328, 12.0]
+    rotation: 0
+    state: true
+- name: decimation
+  id: variable
+  parameters:
+    comment: ''
+    value: '4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 12.0]
+    rotation: 0
+    state: true
+- name: freq_DCF77
+  id: variable
+  parameters:
+    comment: ''
+    value: '77500'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [304, 12.0]
+    rotation: 0
+    state: true
+- name: fun_prob
+  id: variable_function_probe
+  parameters:
+    block_id: probe_signal
+    comment: ''
+    function_args: ''
+    function_name: level
+    poll_rate: shift_poll_freq
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [784, 1508.0]
+    rotation: 0
+    state: enabled
+- name: gain1
+  id: variable_qtgui_range
+  parameters:
+    comment: 'default real: 150
+
+      default simulation: 1'
+    gui_hint: ''
+    label: Gain1
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '1'
+    step: '1'
+    stop: '400'
+    value: '200'
+    widget: slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 8.0]
+    rotation: 0
+    state: true
+- name: gain2
+  id: variable_qtgui_range
+  parameters:
+    comment: 'default real: 290
+
+      default simulation: 1'
+    gui_hint: (2,0,1,1)
+    label: Gain2
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '1'
+    step: '0.5'
+    stop: '450'
+    value: '200'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1160, 8.0]
+    rotation: 0
+    state: true
+- name: hi_thres
+  id: variable_qtgui_range
+  parameters:
+    comment: 'Adapt the upper threshold
+
+      so that the one value is provided
+
+      each time the signal is high'
+    gui_hint: (0,0,1,1)
+    label: upper Threshold
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '1'
+    stop: '500'
+    value: '100'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 8.0]
+    rotation: 0
+    state: true
+- name: lo_thres
+  id: variable_qtgui_range
+  parameters:
+    comment: 'Adapt the upper threshold
+
+      so that the one value is provided
+
+      each time the signal is high'
+    gui_hint: (1,0,1,1)
+    label: lower Threshold
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0.5'
+    step: '0.1'
+    stop: '50'
+    value: '2.5'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [824, 8.0]
+    rotation: 0
+    state: true
+- name: phase_shift
+  id: variable
+  parameters:
+    comment: ''
+    value: phase_shift_fct.shift_freq(fun_prob)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [784, 1716.0]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '192000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 12.0]
+    rotation: 0
+    state: enabled
+- name: shift_poll_freq
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: shift_poll_freq
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '100'
+    stop: samp_rate
+    value: '24000'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 1508.0]
+    rotation: 0
+    state: enabled
+- name: shift_step
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: shift_step
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0.00000'
+    step: '0.00001'
+    stop: '0.00150'
+    value: '0.00100'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [480, 1508.0]
+    rotation: 0
+    state: enabled
+- name: variable_low_pass_filter_taps_0
+  id: variable_low_pass_filter_taps
+  parameters:
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: '5000'
+    gain: '1.0'
+    samp_rate: samp_rate
+    width: '1000'
+    win: window.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [432, 676.0]
+    rotation: 0
+    state: enabled
+- name: variable_low_pass_filter_taps_1
+  id: variable_low_pass_filter_taps
+  parameters:
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: '1000'
+    gain: '150.0'
+    samp_rate: samp_rate
+    width: '150'
+    win: window.WIN_BLACKMAN
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 300.0]
+    rotation: 0
+    state: enabled
+- name: analog_simple_squelch_cc_0
+  id: analog_simple_squelch_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: '1'
+    comment: 'filter out low noise
+
+      below given threshold'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    threshold: '-60'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [696, 460.0]
+    rotation: 0
+    state: enabled
+- name: audio_sink_0
+  id: audio_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'for listening to the
+
+      DCF77-signal'
+    device_name: ''
+    num_inputs: '1'
+    ok_to_block: 'True'
+    samp_rate: '48000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [792, 1036.0]
+    rotation: 0
+    state: disabled
+- name: blocks_add_const_vxx_0
+  id: blocks_add_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'down-shift signal
+
+      to zero as central
+
+      phase value'
+    const: '-0.5'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1280, 1260.0]
+    rotation: 0
+    state: true
+- name: blocks_complex_to_arg_0
+  id: blocks_complex_to_arg
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'this exracts the phase
+
+      modulated part (PRPSK)
+
+      of the DCF77 signal'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [656, 1280.0]
+    rotation: 0
+    state: true
+- name: blocks_complex_to_mag_squared_0
+  id: blocks_complex_to_mag_squared
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Compute real-valued signal
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [392, 1128.0]
+    rotation: 0
+    state: enabled
+- name: blocks_message_debug_0
+  id: blocks_message_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    en_uvec: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 2272.0]
+    rotation: 0
+    state: disabled
+- name: blocks_message_debug_0_0
+  id: blocks_message_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    en_uvec: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1040, 2272.0]
+    rotation: 0
+    state: true
+- name: blocks_moving_average_xx_0
+  id: blocks_moving_average_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: "compute long-time\naverage phase:\n* if it is too short, it\n   overcompensates\
+      \ and\n   disturbs the desired \n   the shorttime phases\n* if it is too long,\
+      \ it converges\n   too slowly due to the delay"
+    length: '2500'
+    max_iter: '10000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: 1/2500
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [272, 1740.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'normalize chip
+
+      sequence to
+
+      [-1,+-1]'
+    const: '2'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [232, 2132.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_1
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Amplify signal
+    const: gain2
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1184, 516.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_xx_0
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'weighting parameter for
+
+      corrective phase feedback'
+    const: shift_step
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [528, 1788.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_xx_0
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'mute signal if
+
+      carrier is off'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [896, 1248.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_xx_2
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'mute signal if
+
+      carrier is off
+
+      (to avoid 0
+
+      being shifted
+
+      to -0.5)'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1488, 1128.0]
+    rotation: 0
+    state: true
+- name: blocks_phase_shift_0
+  id: blocks_phase_shift
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'apply phase drift
+
+      correction by shifting
+
+      the phase to the
+
+      opposite direction of
+
+      the current long-time
+
+      average phase towards
+
+      zero'
+    is_radians: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    shift: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 1264.0]
+    rotation: 0
+    state: true
+- name: blocks_threshold_ff_0
+  id: blocks_threshold_ff
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'Decide whether
+
+      the received OOK
+
+      signal is low
+
+      or high'
+    high: '125'
+    init: '1'
+    low: '2.5'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [656, 1108.0]
+    rotation: 0
+    state: true
+- name: blocks_threshold_ff_2
+  id: blocks_threshold_ff
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'detect +1 and -1
+
+      within phase signal'
+    high: '0.2'
+    init: '0'
+    low: '-0.2'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1072, 1244.0]
+    rotation: 0
+    state: enabled
+- name: blocks_var_to_msg_0_0
+  id: blocks_var_to_msg
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'get phase drift correction
+
+      value from probe function'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    msgname: ampl
+    target: phase_shift
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [72, 1284.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "\nimport numpy as np\nfrom gnuradio import gr\nimport pmt\n\n\n\
+      # counted number of +1 samples\n_num_pos = 0\n# counted number of -1 samples\n\
+      _num_neg = 0\n# counted number of zero samples\n_num_zero = 0\n\n# array for\
+      \ each chip symbol per second\n_code = []\n_code = np.array(_code)\n\n\nclass\
+      \ blk(gr.sync_block):\n\n    def __init__(self, samp_rate=48000, chip_size=75):\n\
+      \n        gr.sync_block.__init__(\n            self,\n            name='DCF77\\\
+      nPhase Detector',\n            in_sig=[np.float32],\n            out_sig=[np.float32]\n\
+      \        )\n\n        self.samp_rate = samp_rate\n        self.off_duration\
+      \ = int(self.samp_rate*0.3)\n\n        # from signal inspection: size between\
+      \ approx. 74-78 seems good\n        self.chip_size = chip_size\n\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
+      \n        print(\"Edge Tagger\")\n        print(\"samp_rate:\", self.samp_rate)\n\
+      \        print(\"off_duration:\", self.off_duration)\n\n    def work(self, input_items,\
+      \ output_items):\n        inp = input_items[0]\n        out = output_items[0]\n\
+      \n        out[:] = self.edge_detection(inp)\n\n        return len(out)\n\n \
+      \   def code_append(self, code, num, mode):\n        # estimated number of +1/-1\
+      \ for given chip_size\n        # NOTE: rounding provides much better results\
+      \ than just int\n        _num_bits = int(round(num/self.chip_size))\n\n    \
+      \    if mode == +1:\n            res = np.append(code, np.ones(_num_bits))\n\
+      \        elif mode == -1:\n            res = np.append(code, np.zeros(_num_bits))\n\
+      \        elif mode == 2:\n            res = np.append(code, 2)\n\n        return\
+      \ res\n\n    def transmit_code(self, code):\n        # convert list to a sequence\
+      \ of bits\n        code = code.astype(int).tolist()\n        msg = \"\".join(str(x)\
+      \ for x in code)\n\n        self.message_port_pub(pmt.intern(\"msg_out\"),\n\
+      \                              pmt.intern(f\"{msg}\"))\n\n    def reinit_code(self):\n\
+      \        global _code\n        global _num_pos\n        global _num_neg\n\n\
+      \        # reinitialize code vector\n        _code = []\n        _code = np.array(_code)\n\
+      \n        _num_pos = 0\n        _num_neg = 0\n\n    def edge_detection(self,\
+      \ inp):\n        global _num_pos\n        global _num_neg\n        global _num_zero\n\
+      \        global _code\n\n        out = inp\n        \n        for idx, ch in\
+      \ enumerate(inp):\n            if (ch == +1):\n                _num_pos += 1\n\
+      \            \n            elif (ch == -1):\n                _num_neg += 1\n\
+      \n            else:   # ch == 0\n                _num_pos = 0\n            \
+      \    _num_neg = 0  \n                _num_zero += 1\n\n            # ensure\
+      \ the total break is always 200ms\n            # NOTE: there might be a more\
+      \ elegant solution,\n            # but it works for now.\n            if (_num_zero\
+      \ > 1 and\n                    _num_zero < self.off_duration):\n           \
+      \     _num_pos = 0\n                _num_neg = 0\n                _num_zero\
+      \ += 1\n                out[idx] = 0\n\n            # Detect the minute marker\
+      \ within the phase signal:\n            # The minute marker has a prolonged\
+      \ high OOK signal. In the phase\n            # signal there are two symbols\
+      \ contained with a 200ms break in\n            # between. Thus the break is\
+      \ either a long 1 or long -1 instead of\n            # a (muted) zero. This\
+      \ longer +/-1 symbol trigggers the minute\n            # detector. Note that\
+      \ the very next symbol yet belongs to the\n            # current minute. Further\
+      \ suqbsequent symbols belong to the next\n            # minute as expected!\n\
+      \            if (_num_pos > int(self.off_duration*0.66) or\n               \
+      \     _num_neg > int(self.off_duration*0.66)):\n                key = pmt.intern(\"\
+      e\")\n                value = pmt.intern(\"2\")\n                self.add_item_tag(0,\n\
+      \                    self.nitems_written(0) + idx,\n                    key,\n\
+      \                    value)\n\n                _code = self.code_append(code=_code,\
+      \ num=1, mode=2)\n\n                self.transmit_code(code=_code)\n       \
+      \         self.reinit_code()\n\n            # detect edge from +1 -> -1\n  \
+      \          elif _num_pos > 1 and ch == -1:\n                key = pmt.intern(\"\
+      e\")\n                value = pmt.intern(f\"-1, {_num_pos}\")\n            \
+      \    self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
+      \                    key,\n                    value)\n\n                _code\
+      \ = self.code_append(code=_code, num=_num_pos, mode=+1)\n\n                _num_pos\
+      \ = 0\n                _num_zero = 0\n\n            # detect edge from -1 ->\
+      \ +1\n            elif _num_neg > 1 and ch == +1:\n                key = pmt.intern(\"\
+      e\")\n                value = pmt.intern(f\"+1, {_num_neg}\")\n            \
+      \    self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
+      \                    key,\n                    value)\n\n                _code\
+      \ = self.code_append(code=_code, num=_num_neg, mode=-1)\n\n                _num_neg\
+      \ = 0\n                _num_zero = 0\n\n            # detect edge from 0 ->\
+      \ +1\n            elif (_num_zero > 1 and\n                    _num_zero >=\
+      \ self.off_duration and\n                    ch == +1):\n                key\
+      \ = pmt.intern(\"e\")\n                value = pmt.intern(\"+1\")\n        \
+      \        self.add_item_tag(0,\n                    self.nitems_written(0) +\
+      \ idx,\n                    key,\n                    value)\n\n           \
+      \     _num_neg = 0\n                _num_zero = 0\n\n            # detect edge\
+      \ from 0 -> -1\n            elif (_num_zero > 1 and\n                    _num_zero\
+      \ >= self.off_duration and\n                    ch == -1):\n               \
+      \ key = pmt.intern(\"e\")\n                value = pmt.intern(\"-1\")\n    \
+      \            self.add_item_tag(0,\n                    self.nitems_written(0)\
+      \ + idx,\n                    key,\n                    value)\n\n         \
+      \       _num_pos = 0\n                _num_zero = 0\n\n            # detect\
+      \ edge from -1 -> 0\n            elif _num_zero == 1:\n                key =\
+      \ pmt.intern(\"e\")\n                value = pmt.intern(\"0\")\n           \
+      \     self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
+      \                    key,\n                    value)\n\n                self.transmit_code(code=_code)\n\
+      \                self.reinit_code()\n\n        return out\n\n            \n\n"
+    affinity: ''
+    alias: ''
+    chip_size: chip_size
+    comment: "* append tags\n    0, -1, +1\n* ensure 200ms are\n    muted (=0) during\
+      \ \n    PSN off-time"
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate/decimation
+  states:
+    _io_cache: ('DCF77\nPhase Detector', 'blk', [('samp_rate', '48000'), ('chip_size',
+      '75')], [('0', 'float', 1)], [('0', 'float', 1), ('msg_out', 'message', 1)],
+      '', ['chip_size', 'samp_rate'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [456, 2116.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_1
+  id: epy_block
+  parameters:
+    _source_code: "\nfrom gnuradio import gr \nimport pmt\nimport numpy as np\n\n\n\
+      class msg_block(gr.basic_block):\n\n    def __init__(self):\n        gr.basic_block.__init__(\n\
+      \            self,\n            name=\"Code Sequence \\n Correlator\",\n   \
+      \         in_sig=None,\n            out_sig=None)\n \n        # prepare in and\
+      \ out ports for messages\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
+      \        self.message_port_register_in(pmt.intern('msg_in'))\n        self.set_msg_handler(pmt.intern('msg_in'),\
+      \ self.handle_msg)\n\n        # Both sequences have 256 ones and 256 zeros\n\
+      \        # the spread spectrum codewords for thesymbols 1 and 0\n        # are\
+      \ simply bitwise negated versions of each other.\n        # LFSR generator polynomial:\
+      \ x^9 + x^5 + 1\n        str_known_zero_sequence = \"00000100011000010011100101010110000110\"\
+      \ \\\n                                  \"11110100110111001000101000010101101001\"\
+      \ \\\n                                  \"11111011001001001011011111100100110101\"\
+      \ \\\n                                  \"00110011000000011000110010100011010010\"\
+      \ \\\n                                  \"11111110100010110001110101100101100111\"\
+      \ \\\n                                  \"10001111101110100000110101101101110110\"\
+      \ \\\n                                  \"00001011010111110101010100000010100101\"\
+      \ \\\n                                  \"01111001011101110000001110011101001001\"\
+      \ \\\n                                  \"11101011101010001001000011001110000101\"\
+      \ \\\n                                  \"11101101100110100001110111100001111111\"\
+      \ \\\n                                  \"11000001111011111000101110011001000001\"\
+      \ \\\n                                  \"00101001110110100011110011111001101100\"\
+      \ \\\n                                  \"01010100100011100011011010101110001001\"\
+      \ \\\n                                  \"100010001000000001\"\n\n        str_known_one_sequence\
+      \ = \"11111011100111101100011010101001111001\" \\\n                        \
+      \         \"00001011001000110111010111101010010110\" \\\n                  \
+      \               \"00000100110110110100100000011011001010\" \\\n            \
+      \                     \"11001100111111100111001101011100101101\" \\\n      \
+      \                           \"00000001011101001110001010011010011000\" \\\n\
+      \                                 \"01110000010001011111001010010010001001\"\
+      \ \\\n                                 \"11110100101000001010101011111101011010\"\
+      \ \\\n                                 \"10000110100010001111110001100010110110\"\
+      \ \\\n                                 \"00010100010101110110111100110001111010\"\
+      \ \\\n                                 \"00010010011001011110001000011110000000\"\
+      \ \\\n                                 \"00111110000100000111010001100110111110\"\
+      \ \\\n                                 \"11010110001001011100001100000110010011\"\
+      \ \\\n                                 \"10101011011100011100100101010001110110\"\
+      \ \\\n                                 \"011101110111111110\"\n\n        # converting\
+      \ these string of bits to lists with integers\n        known_zero_sequence =\
+      \ list(map(int, str_known_zero_sequence))\n        known_one_sequence = list(map(int,\
+      \ str_known_one_sequence))\n\n        self.np_knwn_zero_seq = np.array(known_zero_sequence)\n\
+      \        self.np_knwn_one_seq = np.array(known_one_sequence)\n\n        self._min_marker\
+      \ = 0\n\n    def handle_msg(self, msg):\n        # message contains whole spread\
+      \ sequence of a received second\n        msg = pmt.to_python(msg)\n        #print(\"\
+      Message:\", msg)\n\n        recv_sequence = list(map(int, msg))\n        np_recv_seq\
+      \ = np.array(recv_sequence)\n\n        # extend message at front and at back\
+      \ to\n        # have more correlation points in the result\n        # NOTE:\
+      \ this seems to be helpful if some bits\n        #       are duplicated or lost\n\
+      \        np_recv_seq_padded = np.insert(np_recv_seq, 0, np.zeros(10), axis=0)\n\
+      \n        # append zeros before new minute symbol \"2\"\n        if np_recv_seq_padded[-1]\
+      \ == 2:\n            np_recv_seq_padded = np.insert(np_recv_seq_padded,\n  \
+      \                                         -2, np.zeros(10), axis=0)\n      \
+      \  \n        else: # ordinary case \n            np_recv_seq_padded = np.insert(np_recv_seq_padded,\n\
+      \                                           -1, np.zeros(10), axis=0)\n\n  \
+      \      if len(np_recv_seq) > 0:\n            res_zero = np.correlate(np_recv_seq_padded,\
+      \ self.np_knwn_zero_seq)\n            res_one = np.correlate(np_recv_seq_padded,\
+      \ self.np_knwn_one_seq)\n            #print(res_zero)\n            #print(res_one)\n\
+      \n            # NOTE the max-norm provides good results so far\n           \
+      \ norm_zero = max(res_zero)\n            norm_one = max(res_one)\n         \
+      \   #print(\"N0: \", norm_zero)\n            #print(\"N1: \", norm_one)\n\n\
+      \            if norm_zero > norm_one:\n                self.message_port_pub(pmt.intern('msg_out'),\n\
+      \                                      pmt.intern('0'))\n\n            elif\
+      \ norm_zero < norm_one:\n                self.message_port_pub(pmt.intern('msg_out'),\n\
+      \                                      pmt.intern('1'))\n\n            # even\
+      \ if these norms are identical,\n            # an error message might still\
+      \ be useful for the decoder\n            #else:\n            #    self.message_port_pub(pmt.intern('msg_out'),\n\
+      \            #                          pmt.intern('e'))\n\n            if self._min_marker\
+      \ == 1:\n                self.message_port_pub(pmt.intern('msg_out'),\n    \
+      \                                  pmt.intern('2'))\n                # disable\
+      \ minute marker   \n                self._min_marker = 0\n\n            # delay\
+      \ minute symbol for a single symbol\n            if np_recv_seq[-1] == 2:\n\
+      \                self._min_marker = 1\n\n\n"
+    affinity: ''
+    alias: ''
+    comment: 'applied on each
+
+      full chip sequence
+
+      at each second'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('Code Sequence \n Correlator', 'msg_block', [], [('msg_in', 'message',
+      1)], [('msg_out', 'message', 1)], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 2148.0]
+    rotation: 0
+    state: true
+- name: freq_xlating_fir_filter_xxx_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: freq_DCF77
+    comment: 'Demodulation from 77.5 kHz
+
+      down to the base band.'
+    decim: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: variable_low_pass_filter_taps_0
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 580.0]
+    rotation: 0
+    state: disabled
+- name: freq_xlating_fir_filter_xxx_0_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: '0'
+    comment: 'Demodulation from 77.5 kHz
+
+      down to the base band.'
+    decim: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: variable_low_pass_filter_taps_1
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 444.0]
+    rotation: 0
+    state: enabled
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: Windows needs the import of zmq
+    imports: import zmq
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 76.0]
+    rotation: 0
+    state: true
+- name: import_1
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import math
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 76.0]
+    rotation: 0
+    state: true
+- name: network_tcp_source_1
+  id: network_tcp_source
+  parameters:
+    addr: 127.0.0.1
+    affinity: ''
+    alias: ''
+    comment: 'This block takes the DCF77
+
+      signal from a simulated
+
+      Channel at 77.5 kHz.'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    port: '55554'
+    server: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [96, 572.0]
+    rotation: 0
+    state: disabled
+- name: note_0
+  id: note
+  parameters:
+    alias: ''
+    comment: "The official codeword for symbol 0 from the code-polynomial x\u2079\
+      +x\u2075+1 is:\n000001000110000100111001010101100001101111010011011100100010100001010110100\n\
+      111111011001001001011011111100100110101001100110000000110001100101000110100\n\
+      101111111010001011000111010110010110011110001111101110100000110101101101110\n\
+      110000010110101111101010101000000101001010111100101110111000000111001110100\n\
+      100111101011101010001001000#01100111000010111101101100110100001110111100001\n\
+      111111110000011110111110001011100110010000010010100111011010001111001111100\n\
+      110110001010100100011100011011010101110001001100010001000000001\n\nThe opposite\
+      \ codeword for symbol 1 is its bit-wise inverted version\n\nIt has a number\
+      \ of:\n* 256 ones\n* 256 zeros\n\nExcept for the first two bits, it can  be\
+      \ repoduced with the following python script.\n(mabe because the initial state=[0,0,0,0,0,0,0,0,0]\
+      \ is not permitted)\n\n===\nimport numpy as np\nfrom pylfsr import LFSR\n\n\
+      state = [1,0,0,0,0,0,0,0,0]\n\nfpoly = [9,5]\nL = LFSR(fpoly=fpoly, conf='galois',\
+      \ initstate=state) \nL.info()\nL.runKCycle(511) # length of period\nL.info()\n\
+      seq = L.seq\n\n==="
+    note: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2632, 972.0]
+    rotation: 0
+    state: true
+- name: note_1
+  id: note
+  parameters:
+    alias: ''
+    comment: Phase drift compensation block
+    note: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [64, 1548.0]
+    rotation: 0
+    state: enabled
+- name: note_2
+  id: note
+  parameters:
+    alias: ''
+    comment: 'phase modulation has not been
+
+      implemented for the simulated
+
+      DCF77 transmitter yet.
+
+
+      This current receiver setup only
+
+      works with the actual DCF77
+
+      signal from the SDR.'
+    note: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [104, 668.0]
+    rotation: 0
+    state: true
+- name: osmosdr_source_0
+  id: osmosdr_source
+  parameters:
+    affinity: ''
+    alias: ''
+    ant0: ''
+    ant1: ''
+    ant10: ''
+    ant11: ''
+    ant12: ''
+    ant13: ''
+    ant14: ''
+    ant15: ''
+    ant16: ''
+    ant17: ''
+    ant18: ''
+    ant19: ''
+    ant2: ''
+    ant20: ''
+    ant21: ''
+    ant22: ''
+    ant23: ''
+    ant24: ''
+    ant25: ''
+    ant26: ''
+    ant27: ''
+    ant28: ''
+    ant29: ''
+    ant3: ''
+    ant30: ''
+    ant31: ''
+    ant4: ''
+    ant5: ''
+    ant6: ''
+    ant7: ''
+    ant8: ''
+    ant9: ''
+    args: airspyhf=0
+    bb_gain0: '0'
+    bb_gain1: '20'
+    bb_gain10: '20'
+    bb_gain11: '20'
+    bb_gain12: '20'
+    bb_gain13: '20'
+    bb_gain14: '20'
+    bb_gain15: '20'
+    bb_gain16: '20'
+    bb_gain17: '20'
+    bb_gain18: '20'
+    bb_gain19: '20'
+    bb_gain2: '20'
+    bb_gain20: '20'
+    bb_gain21: '20'
+    bb_gain22: '20'
+    bb_gain23: '20'
+    bb_gain24: '20'
+    bb_gain25: '20'
+    bb_gain26: '20'
+    bb_gain27: '20'
+    bb_gain28: '20'
+    bb_gain29: '20'
+    bb_gain3: '20'
+    bb_gain30: '20'
+    bb_gain31: '20'
+    bb_gain4: '20'
+    bb_gain5: '20'
+    bb_gain6: '20'
+    bb_gain7: '20'
+    bb_gain8: '20'
+    bb_gain9: '20'
+    bw0: '4000'
+    bw1: '0'
+    bw10: '0'
+    bw11: '0'
+    bw12: '0'
+    bw13: '0'
+    bw14: '0'
+    bw15: '0'
+    bw16: '0'
+    bw17: '0'
+    bw18: '0'
+    bw19: '0'
+    bw2: '0'
+    bw20: '0'
+    bw21: '0'
+    bw22: '0'
+    bw23: '0'
+    bw24: '0'
+    bw25: '0'
+    bw26: '0'
+    bw27: '0'
+    bw28: '0'
+    bw29: '0'
+    bw3: '0'
+    bw30: '0'
+    bw31: '0'
+    bw4: '0'
+    bw5: '0'
+    bw6: '0'
+    bw7: '0'
+    bw8: '0'
+    bw9: '0'
+    clock_source0: ''
+    clock_source1: ''
+    clock_source2: ''
+    clock_source3: ''
+    clock_source4: ''
+    clock_source5: ''
+    clock_source6: ''
+    clock_source7: ''
+    comment: 'frame is localized on the
+
+      center frequency of the
+
+      DCF77 signal'
+    corr0: '0'
+    corr1: '0'
+    corr10: '0'
+    corr11: '0'
+    corr12: '0'
+    corr13: '0'
+    corr14: '0'
+    corr15: '0'
+    corr16: '0'
+    corr17: '0'
+    corr18: '0'
+    corr19: '0'
+    corr2: '0'
+    corr20: '0'
+    corr21: '0'
+    corr22: '0'
+    corr23: '0'
+    corr24: '0'
+    corr25: '0'
+    corr26: '0'
+    corr27: '0'
+    corr28: '0'
+    corr29: '0'
+    corr3: '0'
+    corr30: '0'
+    corr31: '0'
+    corr4: '0'
+    corr5: '0'
+    corr6: '0'
+    corr7: '0'
+    corr8: '0'
+    corr9: '0'
+    dc_offset_mode0: '0'
+    dc_offset_mode1: '0'
+    dc_offset_mode10: '0'
+    dc_offset_mode11: '0'
+    dc_offset_mode12: '0'
+    dc_offset_mode13: '0'
+    dc_offset_mode14: '0'
+    dc_offset_mode15: '0'
+    dc_offset_mode16: '0'
+    dc_offset_mode17: '0'
+    dc_offset_mode18: '0'
+    dc_offset_mode19: '0'
+    dc_offset_mode2: '0'
+    dc_offset_mode20: '0'
+    dc_offset_mode21: '0'
+    dc_offset_mode22: '0'
+    dc_offset_mode23: '0'
+    dc_offset_mode24: '0'
+    dc_offset_mode25: '0'
+    dc_offset_mode26: '0'
+    dc_offset_mode27: '0'
+    dc_offset_mode28: '0'
+    dc_offset_mode29: '0'
+    dc_offset_mode3: '0'
+    dc_offset_mode30: '0'
+    dc_offset_mode31: '0'
+    dc_offset_mode4: '0'
+    dc_offset_mode5: '0'
+    dc_offset_mode6: '0'
+    dc_offset_mode7: '0'
+    dc_offset_mode8: '0'
+    dc_offset_mode9: '0'
+    freq0: freq_DCF77
+    freq1: 100e6
+    freq10: 100e6
+    freq11: 100e6
+    freq12: 100e6
+    freq13: 100e6
+    freq14: 100e6
+    freq15: 100e6
+    freq16: 100e6
+    freq17: 100e6
+    freq18: 100e6
+    freq19: 100e6
+    freq2: 100e6
+    freq20: 100e6
+    freq21: 100e6
+    freq22: 100e6
+    freq23: 100e6
+    freq24: 100e6
+    freq25: 100e6
+    freq26: 100e6
+    freq27: 100e6
+    freq28: 100e6
+    freq29: 100e6
+    freq3: 100e6
+    freq30: 100e6
+    freq31: 100e6
+    freq4: 100e6
+    freq5: 100e6
+    freq6: 100e6
+    freq7: 100e6
+    freq8: 100e6
+    freq9: 100e6
+    gain0: '30'
+    gain1: '10'
+    gain10: '10'
+    gain11: '10'
+    gain12: '10'
+    gain13: '10'
+    gain14: '10'
+    gain15: '10'
+    gain16: '10'
+    gain17: '10'
+    gain18: '10'
+    gain19: '10'
+    gain2: '10'
+    gain20: '10'
+    gain21: '10'
+    gain22: '10'
+    gain23: '10'
+    gain24: '10'
+    gain25: '10'
+    gain26: '10'
+    gain27: '10'
+    gain28: '10'
+    gain29: '10'
+    gain3: '10'
+    gain30: '10'
+    gain31: '10'
+    gain4: '10'
+    gain5: '10'
+    gain6: '10'
+    gain7: '10'
+    gain8: '10'
+    gain9: '10'
+    gain_mode0: 'False'
+    gain_mode1: 'False'
+    gain_mode10: 'False'
+    gain_mode11: 'False'
+    gain_mode12: 'False'
+    gain_mode13: 'False'
+    gain_mode14: 'False'
+    gain_mode15: 'False'
+    gain_mode16: 'False'
+    gain_mode17: 'False'
+    gain_mode18: 'False'
+    gain_mode19: 'False'
+    gain_mode2: 'False'
+    gain_mode20: 'False'
+    gain_mode21: 'False'
+    gain_mode22: 'False'
+    gain_mode23: 'False'
+    gain_mode24: 'False'
+    gain_mode25: 'False'
+    gain_mode26: 'False'
+    gain_mode27: 'False'
+    gain_mode28: 'False'
+    gain_mode29: 'False'
+    gain_mode3: 'False'
+    gain_mode30: 'False'
+    gain_mode31: 'False'
+    gain_mode4: 'False'
+    gain_mode5: 'False'
+    gain_mode6: 'False'
+    gain_mode7: 'False'
+    gain_mode8: 'False'
+    gain_mode9: 'False'
+    if_gain0: '30'
+    if_gain1: '20'
+    if_gain10: '20'
+    if_gain11: '20'
+    if_gain12: '20'
+    if_gain13: '20'
+    if_gain14: '20'
+    if_gain15: '20'
+    if_gain16: '20'
+    if_gain17: '20'
+    if_gain18: '20'
+    if_gain19: '20'
+    if_gain2: '20'
+    if_gain20: '20'
+    if_gain21: '20'
+    if_gain22: '20'
+    if_gain23: '20'
+    if_gain24: '20'
+    if_gain25: '20'
+    if_gain26: '20'
+    if_gain27: '20'
+    if_gain28: '20'
+    if_gain29: '20'
+    if_gain3: '20'
+    if_gain30: '20'
+    if_gain31: '20'
+    if_gain4: '20'
+    if_gain5: '20'
+    if_gain6: '20'
+    if_gain7: '20'
+    if_gain8: '20'
+    if_gain9: '20'
+    iq_balance_mode0: '0'
+    iq_balance_mode1: '0'
+    iq_balance_mode10: '0'
+    iq_balance_mode11: '0'
+    iq_balance_mode12: '0'
+    iq_balance_mode13: '0'
+    iq_balance_mode14: '0'
+    iq_balance_mode15: '0'
+    iq_balance_mode16: '0'
+    iq_balance_mode17: '0'
+    iq_balance_mode18: '0'
+    iq_balance_mode19: '0'
+    iq_balance_mode2: '0'
+    iq_balance_mode20: '0'
+    iq_balance_mode21: '0'
+    iq_balance_mode22: '0'
+    iq_balance_mode23: '0'
+    iq_balance_mode24: '0'
+    iq_balance_mode25: '0'
+    iq_balance_mode26: '0'
+    iq_balance_mode27: '0'
+    iq_balance_mode28: '0'
+    iq_balance_mode29: '0'
+    iq_balance_mode3: '0'
+    iq_balance_mode30: '0'
+    iq_balance_mode31: '0'
+    iq_balance_mode4: '0'
+    iq_balance_mode5: '0'
+    iq_balance_mode6: '0'
+    iq_balance_mode7: '0'
+    iq_balance_mode8: '0'
+    iq_balance_mode9: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nchan: '1'
+    num_mboards: '1'
+    sample_rate: samp_rate
+    sync: sync
+    time_source0: ''
+    time_source1: ''
+    time_source2: ''
+    time_source3: ''
+    time_source4: ''
+    time_source5: ''
+    time_source6: ''
+    time_source7: ''
+    type: fc32
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [88, 276.0]
+    rotation: 0
+    state: enabled
+- name: phase_shift_fct
+  id: epy_module
+  parameters:
+    alias: ''
+    comment: "phase rotates from pi to -pi\nfor given poll frequency and \ngiven weight\
+      \ to countereffect\nthe phase drift"
+    source_code: "# this module will be imported in the into your flowgraph\n\n\n\
+      import math\n\n\nf1 = -math.pi\nf2 = +math.pi\n\nf = 0\n\n\ndef shift_freq(weighted_trigger):\n\
+      \    global f1, f2, f\n\n    if weighted_trigger:\n        f = f - weighted_trigger\n\
+      \n    if f <= f1:\n        f = f2\n\n    return f\n"
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [784, 1612.0]
+    rotation: 0
+    state: enabled
+- name: probe_signal
+  id: blocks_probe_signal_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'weighted poll signal
+
+      for phase shift correction'
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [784, 1788.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: '2000'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: '77500'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"unfiltered received signal frequency"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 204.0]
+    rotation: 0
+    state: disabled
+- name: qtgui_freq_sink_x_1
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: '2000'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: '77500'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"filtered complex passband signal frequency"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: float
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-180'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 300.0]
+    rotation: 0
+    state: disabled
+- name: qtgui_time_sink_x_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: 'view the noisy input signal
+
+      to set gain and thresholds properly'
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: (3,0,1,1)
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '""'
+    nconnections: '1'
+    size: samp_rate*5
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: hi_thres + 45
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1048, 884.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_x_0_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: ''
+    label1: cur. phase
+    label10: Signal 10
+    label2: avg. phase
+    label3: corrected phase
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: Average Phase
+    nconnections: '2'
+    size: int(3*samp_rate/8)
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.025'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: math.pi+0.25
+    ymin: -math.pi-0.25
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [528, 1668.0]
+    rotation: 0
+    state: disabled
+- name: qtgui_time_sink_x_2
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label1: Signal 1
+    label10: Signal 10
+    label2: Signal 2
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: received complex passband signal
+    nconnections: '1'
+    size: samp_rate*4
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '0.15'
+    ymin: '-0.15'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 396.0]
+    rotation: 0
+    state: true
+- name: qtgui_time_sink_x_2_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label1: corr. Phase
+    label10: Signal 10
+    label2: Chip Sequence
+    label3: acc. phase
+    label4: avg. chips
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: Drift Corrected Phase & PNS
+    nconnections: '2'
+    size: int(samp_rate)
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.025'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: math.pi +0.5
+    ymin: -math.pi-0.5
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [728, 2020.0]
+    rotation: 0
+    state: true
+- name: rational_resampler_xxx_0
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'Apply downsampling to
+
+      reduce computations on
+
+      total number of samples'
+    decim: decimation
+    fbw: '0'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: ''
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [952, 492.0]
+    rotation: 0
+    state: enabled
+- name: rational_resampler_xxx_1
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'for correct timing-display
+
+      the previous down-sampled
+
+      /decimated signal must be
+
+      upsampled/interpolated again'
+    decim: '1'
+    fbw: '0'
+    interp: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: '[]'
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [792, 876.0]
+    rotation: 0
+    state: enabled
+- name: virtual_sink_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1400, 516.0]
+    rotation: 0
+    state: true
+- name: virtual_sink_0_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: 'phase signal is
+
+      muted (to zero)
+
+      when carrier is off'
+    stream_id: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1072, 1156.0]
+    rotation: 0
+    state: true
+- name: virtual_sink_1
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: to detector
+    stream_id: '4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1672, 1140.0]
+    rotation: 0
+    state: true
+- name: virtual_source_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [80, 1124.0]
+    rotation: 0
+    state: true
+- name: virtual_source_1
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [464, 2028.0]
+    rotation: 0
+    state: true
+- name: virtual_source_2
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: from phase signal
+    stream_id: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [64, 1676.0]
+    rotation: 0
+    state: enabled
+- name: virtual_source_3
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: '4'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 2132.0]
+    rotation: 0
+    state: true
+- name: zeromq_push_msg_sink_1
+  id: zeromq_push_msg_sink
+  parameters:
+    address: tcp://127.0.0.1:55555
+    affinity: ''
+    alias: ''
+    bind: 'True'
+    comment: 'provide signal to a ZMQ server
+
+      to futher decode the bits
+
+      to human-readible
+
+      date & time information'
+    timeout: '500'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1016, 2140.0]
+    rotation: 0
+    state: enabled
+
+connections:
+- [analog_simple_squelch_cc_0, '0', qtgui_freq_sink_x_1, '0']
+- [analog_simple_squelch_cc_0, '0', qtgui_time_sink_x_2, '0']
+- [analog_simple_squelch_cc_0, '0', rational_resampler_xxx_0, '0']
+- [blocks_add_const_vxx_0, '0', blocks_multiply_xx_2, '1']
+- [blocks_complex_to_arg_0, '0', blocks_multiply_xx_0, '1']
+- [blocks_complex_to_mag_squared_0, '0', audio_sink_0, '0']
+- [blocks_complex_to_mag_squared_0, '0', blocks_threshold_ff_0, '0']
+- [blocks_complex_to_mag_squared_0, '0', rational_resampler_xxx_1, '0']
+- [blocks_moving_average_xx_0, '0', blocks_multiply_const_xx_0, '0']
+- [blocks_moving_average_xx_0, '0', qtgui_time_sink_x_0_0, '1']
+- [blocks_multiply_const_vxx_0, '0', epy_block_0, '0']
+- [blocks_multiply_const_vxx_1, '0', virtual_sink_0, '0']
+- [blocks_multiply_const_xx_0, '0', probe_signal, '0']
+- [blocks_multiply_xx_0, '0', blocks_threshold_ff_2, '0']
+- [blocks_multiply_xx_0, '0', virtual_sink_0_0, '0']
+- [blocks_multiply_xx_2, '0', virtual_sink_1, '0']
+- [blocks_phase_shift_0, '0', blocks_complex_to_arg_0, '0']
+- [blocks_threshold_ff_0, '0', blocks_multiply_xx_0, '0']
+- [blocks_threshold_ff_0, '0', blocks_multiply_xx_2, '0']
+- [blocks_threshold_ff_2, '0', blocks_add_const_vxx_0, '0']
+- [blocks_var_to_msg_0_0, msgout, blocks_phase_shift_0, shift]
+- [epy_block_0, '0', qtgui_time_sink_x_2_0, '1']
+- [epy_block_0, msg_out, blocks_message_debug_0, print]
+- [epy_block_0, msg_out, epy_block_1, msg_in]
+- [epy_block_1, msg_out, blocks_message_debug_0_0, print]
+- [epy_block_1, msg_out, zeromq_push_msg_sink_1, in]
+- [freq_xlating_fir_filter_xxx_0, '0', analog_simple_squelch_cc_0, '0']
+- [freq_xlating_fir_filter_xxx_0_0, '0', analog_simple_squelch_cc_0, '0']
+- [network_tcp_source_1, '0', freq_xlating_fir_filter_xxx_0, '0']
+- [osmosdr_source_0, '0', freq_xlating_fir_filter_xxx_0_0, '0']
+- [osmosdr_source_0, '0', qtgui_freq_sink_x_0, '0']
+- [rational_resampler_xxx_0, '0', blocks_multiply_const_vxx_1, '0']
+- [rational_resampler_xxx_1, '0', qtgui_time_sink_x_0, '0']
+- [virtual_source_0, '0', blocks_complex_to_mag_squared_0, '0']
+- [virtual_source_0, '0', blocks_phase_shift_0, '0']
+- [virtual_source_1, '0', qtgui_time_sink_x_2_0, '0']
+- [virtual_source_2, '0', blocks_moving_average_xx_0, '0']
+- [virtual_source_2, '0', qtgui_time_sink_x_0_0, '0']
+- [virtual_source_3, '0', blocks_multiply_const_vxx_0, '0']
+
+metadata:
+  file_format: 1

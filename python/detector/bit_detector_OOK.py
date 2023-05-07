@@ -4,17 +4,6 @@ from gnuradio import gr
 import pmt
 
 
-"""
-Bit Detector DCF77
-"""
-
-"""
-Each time this file is saved, GRC will instantiate the first class it finds
-to get ports and parameters of your block. The arguments to __init__  will
-be the parameters. All of them are required to have default values!
-"""
-
-
 # the DCF77 detector is initially out of sync
 _in_sync = 0
 # counted number of one samples
@@ -24,9 +13,8 @@ _num_zeros = 0
 
 
 class blk(gr.sync_block):
-    """Bit Detector DCF77"""
 
-    def __init__(self, scaling=16, sample_rate=192000, tolerance=0.02):
+    def __init__(self, sample_rate=48000, tolerance=0.02):
         gr.sync_block.__init__(
             self,
             name='Bit Detector DCF77',
@@ -35,8 +23,8 @@ class blk(gr.sync_block):
         )
 
         # block paramters
+        # NOTE: use decimated sample rate: samp_rate/decimation
         self.sample_rate = sample_rate
-        self.scaling = scaling
         self.tolerance = tolerance
 
         # messaging port
@@ -44,41 +32,31 @@ class blk(gr.sync_block):
 
         # timing tolerance value, if the sampled frame is
         # slightly shorter/longer hant the defined duration
-        self._tolerance = self.sample_rate/self.scaling*self.tolerance
+        self._tolerance = self.sample_rate*self.tolerance
 
         # 0.1s of zeros for the zero-bit (100ms pause)
-        self._zero_lo = (self.sample_rate/self.scaling*0.1 - self._tolerance)
-        self._zero_hi = (self.sample_rate/self.scaling*0.1 + self._tolerance)
+        self._zero_lo = self.sample_rate*0.1 - self._tolerance
+        self._zero_hi = self.sample_rate*0.1 + self._tolerance
 
         # 0.9s of ones for the zero-bit
-        self._zero_compl_lo = (self.sample_rate/self.scaling*0.9
-                               - self._tolerance)
-        self._zero_compl_hi = (self.sample_rate/self.scaling*0.9
-                               + self._tolerance)
+        self._zero_compl_lo = self.sample_rate*0.9 - self._tolerance
+        self._zero_compl_hi = self.sample_rate*0.9 + self._tolerance
 
         # 0.2s of zeros for the one-bit (200ms pause)
-        self._one_lo = (self.sample_rate/self.scaling*0.2
-                        - self._tolerance)
-        self._one_hi = (self.sample_rate/self.scaling*0.2
-                        + self._tolerance)
+        self._one_lo = self.sample_rate*0.2 - self._tolerance
+        self._one_hi = self.sample_rate*0.2 + self._tolerance
 
         # 0.8s of ones for the one-bit
-        self._one_compl_lo = (self.sample_rate/self.scaling*0.8
-                              - self._tolerance)
-        self._one_compl_hi = (self.sample_rate/self.scaling*0.8
-                              + self._tolerance)
+        self._one_compl_lo = self.sample_rate*0.8 - self._tolerance
+        self._one_compl_hi = self.sample_rate*0.8 + self._tolerance
 
         # 1.9s of ones for the zero-bit at position 58 (with prolonged ones)
-        self._reinit_zero_lo = (self.sample_rate/self.scaling*1.9
-                                - 2*self._tolerance)
-        self._reinit_zero_hi = (self.sample_rate/self.scaling*1.9
-                                + 2*self._tolerance)
+        self._reinit_zero_lo = self.sample_rate*1.9 - 2*self._tolerance
+        self._reinit_zero_hi = self.sample_rate*1.9 + 2*self._tolerance
 
         # 1.8s of ones for the one-bit at position 58 (with prolonged ones)
-        self._reinit_one_lo = (self.sample_rate/self.scaling*1.8
-                               - 2*self._tolerance)
-        self._reinit_one_hi = (self.sample_rate/self.scaling*1.8
-                               + 2*self._tolerance)
+        self._reinit_one_lo = self.sample_rate*1.8 - 2*self._tolerance
+        self._reinit_one_hi = self.sample_rate*1.8 + 2*self._tolerance
 
         print("zero", (self._zero_hi + self._zero_lo)/2)
         print("zero_comp", (self._zero_compl_hi + self._zero_compl_lo)/2)
@@ -91,7 +69,6 @@ class blk(gr.sync_block):
         inp = input_items[0]
         out = output_items[0]
 
-        # the actual detector-magic happens here
         out[:] = self.extract_bits(inp)
 
         # forward input tagged signal
