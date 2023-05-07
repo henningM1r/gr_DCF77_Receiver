@@ -46,7 +46,7 @@ The DCF77 receiver was tested with:
     +  https://www.ptb.de/cms/en/ptb/fachabteilungen/abt4/fb-44/ag-442/dissemination-of-legal-time/dcf77/reach-of-dcf77.html
 + The user might also need some antenna cables and adapters to connect the SDR with the antenna.
 + This project has been successfully tested in:
-    + Ubuntu 22.04.2 LTS
+    + Ubuntu 22.04.2 LTS (recommended)
     + MS Windows 11
 
 

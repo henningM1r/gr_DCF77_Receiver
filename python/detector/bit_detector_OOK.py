@@ -17,7 +17,7 @@ class blk(gr.sync_block):
     def __init__(self, sample_rate=48000, tolerance=0.02):
         gr.sync_block.__init__(
             self,
-            name='Bit Detector DCF77',
+            name='DCF77\nBit Detector',
             in_sig=[np.float32],
             out_sig=[np.float32]
         )
@@ -268,10 +268,13 @@ class blk(gr.sync_block):
                       _num_ones > self._reinit_zero_lo and
                       _num_ones < self._reinit_zero_hi):
 
-                    msg = "new minute, 0"
+                    msg = "0"
                     self.message_port_pub(pmt.intern("msg_out"),
                                           pmt.intern(msg))
 
+                    msg = "2"
+                    self.message_port_pub(pmt.intern("msg_out"),
+                                          pmt.intern(msg))
                     # reset counters to zero
                     _num_ones = 0
                     _num_zeros = 1
@@ -293,7 +296,11 @@ class blk(gr.sync_block):
                       _num_ones > self._reinit_one_lo and
                       _num_ones < self._reinit_one_hi):
 
-                    msg = "new minute, 1"
+                    msg = "1"
+                    self.message_port_pub(pmt.intern("msg_out"),
+                                          pmt.intern(msg))
+
+                    msg = "2"
                     self.message_port_pub(pmt.intern("msg_out"),
                                           pmt.intern(msg))
 
