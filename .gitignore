@@ -1,7 +1,6 @@
 top_block*.py
-examples/DCF77_Transmitter/DCF77_Transmitter.py
-examples/DCF77_Channel/DCF77_Channel.py
-examples/DCF77_Receiver/DCF77_Receiver.py
-examples/DCF77_Receiver/DCF77_Receiver_gr_bit_detector_DCF77.py
-examples/DCF77_Transmitter/DCF77_Transmitter_epy_block_0.py
+examples/DCF77_Channel/*.py
+examples/DCF77_Receiver/*.py
+examples/DCF77_Receiver/*.py
+examples/DCF77_Transmitter/*.py
 *__pycache__

@@ -170,35 +170,18 @@ blocks:
   parameters:
     beta: '6.76'
     comment: ''
-    cutoff_freq: '5000'
+    cutoff_freq: '1000'
     gain: '1.0'
     samp_rate: samp_rate
-    width: '1000'
+    width: '150'
     win: window.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [424, 652.0]
+    coordinate: [616, 468.0]
     rotation: 0
     state: enabled
-- name: variable_low_pass_filter_taps_1
-  id: variable_low_pass_filter_taps
-  parameters:
-    beta: '6.76'
-    comment: ''
-    cutoff_freq: '1000'
-    gain: '150.0'
-    samp_rate: samp_rate
-    width: '150'
-    win: window.WIN_BLACKMAN
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [416, 284.0]
-    rotation: 0
-    state: disabled
 - name: analog_simple_squelch_cc_0
   id: analog_simple_squelch_cc
   parameters:
@@ -215,7 +198,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [696, 436.0]
+    coordinate: [888, 356.0]
     rotation: 0
     state: enabled
 - name: audio_sink_0
@@ -258,11 +241,15 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: 'show the decoded message protocol
+    comment: 'show the decoded
+
+      message protocol
 
       (mostly with 0 and 1)
 
-      just for local debugging purposes'
+      just for local
+
+      debugging purposes'
     en_uvec: 'True'
   states:
     bus_sink: false
@@ -271,6 +258,24 @@ blocks:
     coordinate: [864, 1360.0]
     rotation: 0
     state: enabled
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '150'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 348.0]
+    rotation: 0
+    state: disabled
 - name: blocks_multiply_const_vxx_1
   id: blocks_multiply_const_vxx
   parameters:
@@ -286,7 +291,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1184, 508.0]
+    coordinate: [1368, 420.0]
     rotation: 0
     state: enabled
 - name: blocks_threshold_ff_0
@@ -330,7 +335,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [400, 556.0]
+    coordinate: [608, 620.0]
     rotation: 0
     state: enabled
 - name: freq_xlating_fir_filter_xxx_0_0
@@ -346,13 +351,13 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     samp_rate: samp_rate
-    taps: variable_low_pass_filter_taps_1
+    taps: variable_low_pass_filter_taps_0
     type: ccc
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [400, 428.0]
+    coordinate: [608, 340.0]
     rotation: 0
     state: disabled
 - name: gr_bit_detector_DCF77
@@ -596,7 +601,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [96, 548.0]
+    coordinate: [376, 612.0]
     rotation: 0
     state: enabled
 - name: osmosdr_source_0
@@ -1038,7 +1043,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 180.0]
+    coordinate: [400, 236.0]
     rotation: 0
     state: disabled
 - name: qtgui_freq_sink_x_1
@@ -1119,7 +1124,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 260.0]
+    coordinate: [1136, 204.0]
     rotation: 0
     state: true
 - name: qtgui_time_sink_x_0
@@ -1414,7 +1419,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 372.0]
+    coordinate: [1136, 300.0]
     rotation: 0
     state: true
 - name: rational_resampler_xxx_0
@@ -1438,7 +1443,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 484.0]
+    coordinate: [1136, 396.0]
     rotation: 0
     state: enabled
 - name: rational_resampler_xxx_1
@@ -1475,7 +1480,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1400, 508.0]
+    coordinate: [1584, 420.0]
     rotation: 0
     state: true
 - name: virtual_sink_1
@@ -1547,6 +1552,7 @@ connections:
 - [blocks_complex_to_mag_squared_0, '0', audio_sink_0, '0']
 - [blocks_complex_to_mag_squared_0, '0', rational_resampler_xxx_1, '0']
 - [blocks_complex_to_mag_squared_0, '0', virtual_sink_1, '0']
+- [blocks_multiply_const_vxx_0, '0', freq_xlating_fir_filter_xxx_0_0, '0']
 - [blocks_multiply_const_vxx_1, '0', virtual_sink_0, '0']
 - [blocks_threshold_ff_0, '0', gr_bit_detector_DCF77, '0']
 - [freq_xlating_fir_filter_xxx_0, '0', analog_simple_squelch_cc_0, '0']
@@ -1555,7 +1561,7 @@ connections:
 - [gr_bit_detector_DCF77, msg_out, blocks_message_debug_0, print]
 - [gr_bit_detector_DCF77, msg_out, zeromq_push_msg_sink_1, in]
 - [network_tcp_source_1, '0', freq_xlating_fir_filter_xxx_0, '0']
-- [osmosdr_source_0, '0', freq_xlating_fir_filter_xxx_0_0, '0']
+- [osmosdr_source_0, '0', blocks_multiply_const_vxx_0, '0']
 - [osmosdr_source_0, '0', qtgui_freq_sink_x_0, '0']
 - [rational_resampler_xxx_0, '0', blocks_multiply_const_vxx_1, '0']
 - [rational_resampler_xxx_1, '0', qtgui_time_sink_x_0, '0']

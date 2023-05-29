@@ -51,7 +51,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1328, 12.0]
+    coordinate: [1304, 12.0]
     rotation: 0
     state: true
 - name: decimation
@@ -114,7 +114,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1024, 8.0]
+    coordinate: [1024, 12.0]
     rotation: 0
     state: true
 - name: gain2
@@ -137,7 +137,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1160, 8.0]
+    coordinate: [1160, 12.0]
     rotation: 0
     state: true
 - name: hi_thres
@@ -162,7 +162,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 8.0]
+    coordinate: [624, 12.0]
     rotation: 0
     state: true
 - name: lo_thres
@@ -187,7 +187,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [824, 8.0]
+    coordinate: [816, 12.0]
     rotation: 0
     state: true
 - name: phase_shift
@@ -261,33 +261,16 @@ blocks:
   parameters:
     beta: '6.76'
     comment: ''
-    cutoff_freq: '5000'
+    cutoff_freq: '1000'
     gain: '1.0'
     samp_rate: samp_rate
-    width: '1000'
+    width: '150'
     win: window.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [432, 676.0]
-    rotation: 0
-    state: enabled
-- name: variable_low_pass_filter_taps_1
-  id: variable_low_pass_filter_taps
-  parameters:
-    beta: '6.76'
-    comment: ''
-    cutoff_freq: '1000'
-    gain: '150.0'
-    samp_rate: samp_rate
-    width: '150'
-    win: window.WIN_BLACKMAN
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [416, 300.0]
+    coordinate: [616, 492.0]
     rotation: 0
     state: enabled
 - name: analog_simple_squelch_cc_0
@@ -306,7 +289,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [696, 460.0]
+    coordinate: [920, 380.0]
     rotation: 0
     state: enabled
 - name: audio_sink_0
@@ -458,6 +441,24 @@ blocks:
     coordinate: [232, 2132.0]
     rotation: 0
     state: enabled
+- name: blocks_multiply_const_vxx_0_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '150'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 372.0]
+    rotation: 0
+    state: enabled
 - name: blocks_multiply_const_vxx_1
   id: blocks_multiply_const_vxx
   parameters:
@@ -473,7 +474,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1184, 516.0]
+    coordinate: [1416, 436.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_xx_0
@@ -746,9 +747,9 @@ blocks:
       \ out ports for messages\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
       \        self.message_port_register_in(pmt.intern('msg_in'))\n        self.set_msg_handler(pmt.intern('msg_in'),\
       \ self.handle_msg)\n\n        # Both sequences have 256 ones and 256 zeros\n\
-      \        # the spread spectrum codewords for thesymbols 1 and 0\n        # are\
-      \ simply bitwise negated versions of each other.\n        # LFSR generator polynomial:\
-      \ x^9 + x^5 + 1\n        str_known_zero_sequence = \"00000100011000010011100101010110000110\"\
+      \        # the spread spectrum codewords for the symbols 1 and 0\n        #\
+      \ are simply bitwise negated versions of each other.\n        # LFSR generator\
+      \ polynomial: x^9 + x^5 + 1\n        str_known_zero_sequence = \"00000100011000010011100101010110000110\"\
       \ \\\n                                  \"11110100110111001000101000010101101001\"\
       \ \\\n                                  \"11111011001001001011011111100100110101\"\
       \ \\\n                                  \"00110011000000011000110010100011010010\"\
@@ -761,55 +762,44 @@ blocks:
       \ \\\n                                  \"11000001111011111000101110011001000001\"\
       \ \\\n                                  \"00101001110110100011110011111001101100\"\
       \ \\\n                                  \"01010100100011100011011010101110001001\"\
-      \ \\\n                                  \"100010001000000001\"\n\n        str_known_one_sequence\
-      \ = \"11111011100111101100011010101001111001\" \\\n                        \
-      \         \"00001011001000110111010111101010010110\" \\\n                  \
-      \               \"00000100110110110100100000011011001010\" \\\n            \
-      \                     \"11001100111111100111001101011100101101\" \\\n      \
-      \                           \"00000001011101001110001010011010011000\" \\\n\
-      \                                 \"01110000010001011111001010010010001001\"\
-      \ \\\n                                 \"11110100101000001010101011111101011010\"\
-      \ \\\n                                 \"10000110100010001111110001100010110110\"\
-      \ \\\n                                 \"00010100010101110110111100110001111010\"\
-      \ \\\n                                 \"00010010011001011110001000011110000000\"\
-      \ \\\n                                 \"00111110000100000111010001100110111110\"\
-      \ \\\n                                 \"11010110001001011100001100000110010011\"\
-      \ \\\n                                 \"10101011011100011100100101010001110110\"\
-      \ \\\n                                 \"011101110111111110\"\n\n        # converting\
-      \ these string of bits to lists with integers\n        known_zero_sequence =\
-      \ list(map(int, str_known_zero_sequence))\n        known_one_sequence = list(map(int,\
-      \ str_known_one_sequence))\n\n        self.np_knwn_zero_seq = np.array(known_zero_sequence)\n\
-      \        self.np_knwn_one_seq = np.array(known_one_sequence)\n\n        self._min_marker\
-      \ = 0\n\n    def handle_msg(self, msg):\n        # message contains whole spread\
-      \ sequence of a received second\n        msg = pmt.to_python(msg)\n        #print(\"\
-      Message:\", msg)\n\n        recv_sequence = list(map(int, msg))\n        np_recv_seq\
-      \ = np.array(recv_sequence)\n\n        # extend message at front and at back\
-      \ to\n        # have more correlation points in the result\n        # NOTE:\
-      \ this seems to be helpful if some bits\n        #       are duplicated or lost\n\
-      \        np_recv_seq_padded = np.insert(np_recv_seq, 0, np.zeros(10), axis=0)\n\
-      \n        # append zeros before new minute symbol \"2\"\n        if np_recv_seq_padded[-1]\
-      \ == 2:\n            np_recv_seq_padded = np.insert(np_recv_seq_padded,\n  \
-      \                                         -2, np.zeros(10), axis=0)\n      \
-      \  \n        else: # ordinary case \n            np_recv_seq_padded = np.insert(np_recv_seq_padded,\n\
-      \                                           -1, np.zeros(10), axis=0)\n\n  \
-      \      if len(np_recv_seq) > 0:\n            res_zero = np.correlate(np_recv_seq_padded,\
-      \ self.np_knwn_zero_seq)\n            res_one = np.correlate(np_recv_seq_padded,\
-      \ self.np_knwn_one_seq)\n            #print(res_zero)\n            #print(res_one)\n\
-      \n            # NOTE the max-norm provides good results so far\n           \
-      \ norm_zero = max(res_zero)\n            norm_one = max(res_one)\n         \
-      \   #print(\"N0: \", norm_zero)\n            #print(\"N1: \", norm_one)\n\n\
-      \            if norm_zero > norm_one:\n                self.message_port_pub(pmt.intern('msg_out'),\n\
-      \                                      pmt.intern('0'))\n\n            elif\
-      \ norm_zero < norm_one:\n                self.message_port_pub(pmt.intern('msg_out'),\n\
+      \ \\\n                                  \"100010001000000001\"\n\n        #\
+      \ converting these string of bits to lists with integers\n        known_zero_sequence\
+      \ = list(map(int, str_known_zero_sequence))\n\n        self.np_knwn_zero_seq\
+      \ = np.array(known_zero_sequence)\n\n        # apply a simple bitwise negation\
+      \ of the array\n        self.np_knwn_one_seq = 1 - np.array(known_zero_sequence)\n\
+      \n        self._min_marker = 0\n\n    def handle_msg(self, msg):\n        #\
+      \ message contains whole spread sequence of a received second\n        msg =\
+      \ pmt.to_python(msg)\n        #print(\"Message:\", msg)\n\n        recv_sequence\
+      \ = list(map(int, msg))\n        np_recv_seq = np.array(recv_sequence)\n\n \
+      \       # extend message at front and at back to\n        # have more correlation\
+      \ points in the result\n        # NOTE: this seems to be helpful if some bits\n\
+      \        #       are duplicated or lost\n        np_recv_seq_padded = np.insert(np_recv_seq,\
+      \ 0, np.zeros(10), axis=0)\n\n        # append zeros before new minute symbol\
+      \ \"2\"\n        if np_recv_seq_padded[-1] == 2:\n            np_recv_seq_padded\
+      \ = np.insert(np_recv_seq_padded,\n                                        \
+      \   -2, np.zeros(10), axis=0)\n        \n        else: # ordinary case \n  \
+      \          np_recv_seq_padded = np.insert(np_recv_seq_padded,\n            \
+      \                               -1, np.zeros(10), axis=0)\n\n        if len(np_recv_seq)\
+      \ > 0:\n            res_zero = np.correlate(np_recv_seq_padded, self.np_knwn_zero_seq)\n\
+      \            res_one = np.correlate(np_recv_seq_padded, self.np_knwn_one_seq)\n\
+      \            #print(res_zero)\n            #print(res_one)\n\n            #\
+      \ NOTE the max-norm provides good results so far\n            norm_zero = max(res_zero)\n\
+      \            norm_one = max(res_one)\n            #print(\"N0: \", norm_zero)\n\
+      \            #print(\"N1: \", norm_one)\n\n            # make a decision by\
+      \ comparing the correlation results\n            if norm_zero > norm_one:\n\
+      \                self.message_port_pub(pmt.intern('msg_out'),\n            \
+      \                          pmt.intern('0'))\n\n            elif norm_zero <\
+      \ norm_one:\n                self.message_port_pub(pmt.intern('msg_out'),\n\
       \                                      pmt.intern('1'))\n\n            # even\
       \ if these norms are identical,\n            # an error message might still\
       \ be useful for the decoder\n            #else:\n            #    self.message_port_pub(pmt.intern('msg_out'),\n\
-      \            #                          pmt.intern('e'))\n\n            if self._min_marker\
+      \            #                          pmt.intern('3'))\n\n            if self._min_marker\
       \ == 1:\n                self.message_port_pub(pmt.intern('msg_out'),\n    \
       \                                  pmt.intern('2'))\n                # disable\
       \ minute marker   \n                self._min_marker = 0\n\n            # delay\
-      \ minute symbol for a single symbol\n            if np_recv_seq[-1] == 2:\n\
-      \                self._min_marker = 1\n\n\n"
+      \ minute symbol for yet a single symbol\n            if np_recv_seq[-1] == 2:\n\
+      \                # enable minute marker\n                self._min_marker =\
+      \ 1\n\n"
     affinity: ''
     alias: ''
     comment: 'applied on each
@@ -847,7 +837,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 580.0]
+    coordinate: [616, 636.0]
     rotation: 0
     state: disabled
 - name: freq_xlating_fir_filter_xxx_0_0
@@ -863,13 +853,13 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     samp_rate: samp_rate
-    taps: variable_low_pass_filter_taps_1
+    taps: variable_low_pass_filter_taps_0
     type: ccc
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 444.0]
+    coordinate: [616, 364.0]
     rotation: 0
     state: enabled
 - name: import_0
@@ -919,7 +909,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [96, 572.0]
+    coordinate: [384, 628.0]
     rotation: 0
     state: disabled
 - name: note_0
@@ -953,13 +943,15 @@ blocks:
   id: note
   parameters:
     alias: ''
-    comment: Phase drift compensation block
+    comment: 'Phase drift
+
+      compensation block'
     note: ''
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [64, 1548.0]
+    coordinate: [192, 1508.0]
     rotation: 0
     state: enabled
 - name: note_2
@@ -983,7 +975,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [104, 668.0]
+    coordinate: [392, 724.0]
     rotation: 0
     state: true
 - name: osmosdr_source_0
@@ -1539,7 +1531,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 300.0]
+    coordinate: [1176, 220.0]
     rotation: 0
     state: disabled
 - name: qtgui_time_sink_x_0
@@ -1832,7 +1824,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 396.0]
+    coordinate: [1176, 316.0]
     rotation: 0
     state: true
 - name: qtgui_time_sink_x_2_0
@@ -1953,7 +1945,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 492.0]
+    coordinate: [1176, 412.0]
     rotation: 0
     state: enabled
 - name: rational_resampler_xxx_1
@@ -1992,7 +1984,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1400, 516.0]
+    coordinate: [1624, 436.0]
     rotation: 0
     state: true
 - name: virtual_sink_0_0
@@ -2112,6 +2104,7 @@ connections:
 - [blocks_moving_average_xx_0, '0', blocks_multiply_const_xx_0, '0']
 - [blocks_moving_average_xx_0, '0', qtgui_time_sink_x_0_0, '1']
 - [blocks_multiply_const_vxx_0, '0', epy_block_0, '0']
+- [blocks_multiply_const_vxx_0_0, '0', freq_xlating_fir_filter_xxx_0_0, '0']
 - [blocks_multiply_const_vxx_1, '0', virtual_sink_0, '0']
 - [blocks_multiply_const_xx_0, '0', probe_signal, '0']
 - [blocks_multiply_xx_0, '0', blocks_threshold_ff_2, '0']
@@ -2130,7 +2123,7 @@ connections:
 - [freq_xlating_fir_filter_xxx_0, '0', analog_simple_squelch_cc_0, '0']
 - [freq_xlating_fir_filter_xxx_0_0, '0', analog_simple_squelch_cc_0, '0']
 - [network_tcp_source_1, '0', freq_xlating_fir_filter_xxx_0, '0']
-- [osmosdr_source_0, '0', freq_xlating_fir_filter_xxx_0_0, '0']
+- [osmosdr_source_0, '0', blocks_multiply_const_vxx_0_0, '0']
 - [osmosdr_source_0, '0', qtgui_freq_sink_x_0, '0']
 - [rational_resampler_xxx_0, '0', blocks_multiply_const_vxx_1, '0']
 - [rational_resampler_xxx_1, '0', qtgui_time_sink_x_0, '0']

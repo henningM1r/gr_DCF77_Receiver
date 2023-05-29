@@ -54,6 +54,66 @@ blocks:
     coordinate: [184, 12.0]
     rotation: 0
     state: true
+- name: c
+  id: variable
+  parameters:
+    comment: speed of light
+    value: 3e8
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 12.0]
+    rotation: 0
+    state: true
+- name: fading_freq
+  id: variable_qtgui_range
+  parameters:
+    comment: 'low frequency => slower fades
+
+      high frequency => faster fades'
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: 1e6
+    step: 0.1e6
+    stop: 6e6
+    value: 1.25e6
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [536, 12.0]
+    rotation: 0
+    state: true
+- name: fading_toggle_button
+  id: variable_qtgui_toggle_button_msg
+  parameters:
+    comment: 'enable/disable
+
+      fading effect'
+    gui_hint: ''
+    initPressed: 'False'
+    label: Fading (on/off)
+    outputmsgname: value
+    pressBackgroundColor: green
+    pressFontColor: black
+    pressed: '1'
+    relBackgroundColor: gray
+    relFontColor: black
+    released: '0'
+    type: int
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [576, 428.0]
+    rotation: 0
+    state: true
 - name: freq_DCF77
   id: variable
   parameters:
@@ -78,6 +138,20 @@ blocks:
     coordinate: [320, 12.0]
     rotation: 0
     state: enabled
+- name: v
+  id: variable
+  parameters:
+    comment: 'speed
+
+      (faster than in reality)'
+    value: 1/3.6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [680, 12.0]
+    rotation: 0
+    state: true
 - name: analog_fastnoise_source_x_0
   id: analog_fastnoise_source_x
   parameters:
@@ -95,7 +169,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 404.0]
+    coordinate: [56, 364.0]
     rotation: 0
     state: true
 - name: blocks_add_xx_0
@@ -113,7 +187,50 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [320, 328.0]
+    coordinate: [312, 288.0]
+    rotation: 0
+    state: true
+- name: blocks_selector_0_0
+  id: blocks_selector
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    enabled: 'True'
+    input_index: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    num_outputs: '1'
+    output_index: '0'
+    showports: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [864, 304.0]
+    rotation: 0
+    state: true
+- name: channels_fading_model_0
+  id: channels_fading_model
+  parameters:
+    K: '4.0'
+    LOS: 'False'
+    N: '12'
+    affinity: ''
+    alias: ''
+    comment: ''
+    fDTs: fading_freq * v / c / samp_rate
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    seed: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [464, 332.0]
     rotation: 0
     state: true
 - name: network_tcp_sink_0
@@ -131,7 +248,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [544, 332.0]
+    coordinate: [1120, 356.0]
     rotation: 0
     state: enabled
 - name: network_tcp_source_0
@@ -151,7 +268,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 308.0]
+    coordinate: [88, 268.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -232,7 +349,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [544, 212.0]
+    coordinate: [1120, 236.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0
@@ -329,15 +446,19 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [544, 116.0]
+    coordinate: [1120, 140.0]
     rotation: 0
     state: enabled
 
 connections:
 - [analog_fastnoise_source_x_0, '0', blocks_add_xx_0, '1']
-- [blocks_add_xx_0, '0', network_tcp_sink_0, '0']
-- [blocks_add_xx_0, '0', qtgui_freq_sink_x_0, '0']
-- [blocks_add_xx_0, '0', qtgui_time_sink_x_0, '0']
+- [blocks_add_xx_0, '0', blocks_selector_0_0, '0']
+- [blocks_add_xx_0, '0', channels_fading_model_0, '0']
+- [blocks_selector_0_0, '0', network_tcp_sink_0, '0']
+- [blocks_selector_0_0, '0', qtgui_freq_sink_x_0, '0']
+- [blocks_selector_0_0, '0', qtgui_time_sink_x_0, '0']
+- [channels_fading_model_0, '0', blocks_selector_0_0, '1']
+- [fading_toggle_button, state, blocks_selector_0_0, iindex]
 - [network_tcp_source_0, '0', blocks_add_xx_0, '0']
 
 metadata:

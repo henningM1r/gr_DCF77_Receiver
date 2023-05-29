@@ -9,6 +9,7 @@ This is a basic DCF77 receiver for GNURadio, containing:
 + a simulated DCF77 transmitter
 + a simulated DCF77 channel (AWGN)
 
+__DCF77__ (D: Germany, C: carrier wave, F: Frankfurt, 77: 77.5 kHz) is the __German time signal__ in Mainflingen.
 
 ### Overview
 The __flowgraphs__ are provided in the `examples` folder:
