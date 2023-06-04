@@ -51,7 +51,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1304, 12.0]
+    coordinate: [1296, 12.0]
     rotation: 0
     state: true
 - name: decimation
@@ -107,8 +107,8 @@ blocks:
     rangeType: float
     start: '1'
     step: '1'
-    stop: '400'
-    value: '200'
+    stop: '30'
+    value: '10.5'
     widget: slider
   states:
     bus_sink: false
@@ -130,8 +130,8 @@ blocks:
     rangeType: float
     start: '1'
     step: '0.5'
-    stop: '450'
-    value: '200'
+    stop: '30'
+    value: '25'
     widget: counter_slider
   states:
     bus_sink: false
@@ -156,7 +156,7 @@ blocks:
     start: '0'
     step: '1'
     stop: '500'
-    value: '100'
+    value: '80'
     widget: counter_slider
   states:
     bus_sink: false
@@ -168,11 +168,11 @@ blocks:
 - name: lo_thres
   id: variable_qtgui_range
   parameters:
-    comment: 'Adapt the upper threshold
+    comment: 'Adapt the lower threshold
 
       so that the one value is provided
 
-      each time the signal is high'
+      each time the signal is low'
     gui_hint: (1,0,1,1)
     label: lower Threshold
     min_len: '200'
@@ -187,7 +187,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [816, 12.0]
+    coordinate: [824, 12.0]
     rotation: 0
     state: true
 - name: phase_shift
@@ -270,7 +270,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [616, 492.0]
+    coordinate: [632, 492.0]
     rotation: 0
     state: enabled
 - name: analog_simple_squelch_cc_0
@@ -289,7 +289,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [920, 380.0]
+    coordinate: [1088, 380.0]
     rotation: 0
     state: enabled
 - name: audio_sink_0
@@ -458,7 +458,7 @@ blocks:
     bus_structure: null
     coordinate: [408, 372.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_multiply_const_vxx_1
   id: blocks_multiply_const_vxx
   parameters:
@@ -474,7 +474,25 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1416, 436.0]
+    coordinate: [896, 388.0]
+    rotation: 0
+    state: disabled
+- name: blocks_multiply_const_vxx_1_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: Amplify signal
+    const: gain1
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1536, 436.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_xx_0
@@ -680,44 +698,44 @@ blocks:
       \ high OOK signal. In the phase\n            # signal there are two symbols\
       \ contained with a 200ms break in\n            # between. Thus the break is\
       \ either a long 1 or long -1 instead of\n            # a (muted) zero. This\
-      \ longer +/-1 symbol trigggers the minute\n            # detector. Note that\
+      \ longer +/-1 symbol triggers the minute\n            # detector. Note that\
       \ the very next symbol yet belongs to the\n            # current minute. Further\
-      \ suqbsequent symbols belong to the next\n            # minute as expected!\n\
+      \ subsequent symbols belong to the next\n            # minute as expected!\n\
       \            if (_num_pos > int(self.off_duration*0.66) or\n               \
       \     _num_neg > int(self.off_duration*0.66)):\n                key = pmt.intern(\"\
-      e\")\n                value = pmt.intern(\"2\")\n                self.add_item_tag(0,\n\
+      \")\n                value = pmt.intern(\"2\")\n                self.add_item_tag(0,\n\
       \                    self.nitems_written(0) + idx,\n                    key,\n\
       \                    value)\n\n                _code = self.code_append(code=_code,\
       \ num=1, mode=2)\n\n                self.transmit_code(code=_code)\n       \
       \         self.reinit_code()\n\n            # detect edge from +1 -> -1\n  \
       \          elif _num_pos > 1 and ch == -1:\n                key = pmt.intern(\"\
-      e\")\n                value = pmt.intern(f\"-1, {_num_pos}\")\n            \
-      \    self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
+      \")\n                value = pmt.intern(f\"-1,{_num_pos}\")\n              \
+      \  self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
       \                    key,\n                    value)\n\n                _code\
       \ = self.code_append(code=_code, num=_num_pos, mode=+1)\n\n                _num_pos\
       \ = 0\n                _num_zero = 0\n\n            # detect edge from -1 ->\
       \ +1\n            elif _num_neg > 1 and ch == +1:\n                key = pmt.intern(\"\
-      e\")\n                value = pmt.intern(f\"+1, {_num_neg}\")\n            \
-      \    self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
+      \")\n                value = pmt.intern(f\"+1,{_num_neg}\")\n              \
+      \  self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
       \                    key,\n                    value)\n\n                _code\
       \ = self.code_append(code=_code, num=_num_neg, mode=-1)\n\n                _num_neg\
       \ = 0\n                _num_zero = 0\n\n            # detect edge from 0 ->\
       \ +1\n            elif (_num_zero > 1 and\n                    _num_zero >=\
       \ self.off_duration and\n                    ch == +1):\n                key\
-      \ = pmt.intern(\"e\")\n                value = pmt.intern(\"+1\")\n        \
-      \        self.add_item_tag(0,\n                    self.nitems_written(0) +\
-      \ idx,\n                    key,\n                    value)\n\n           \
-      \     _num_neg = 0\n                _num_zero = 0\n\n            # detect edge\
-      \ from 0 -> -1\n            elif (_num_zero > 1 and\n                    _num_zero\
-      \ >= self.off_duration and\n                    ch == -1):\n               \
-      \ key = pmt.intern(\"e\")\n                value = pmt.intern(\"-1\")\n    \
-      \            self.add_item_tag(0,\n                    self.nitems_written(0)\
-      \ + idx,\n                    key,\n                    value)\n\n         \
-      \       _num_pos = 0\n                _num_zero = 0\n\n            # detect\
-      \ edge from -1 -> 0\n            elif _num_zero == 1:\n                key =\
-      \ pmt.intern(\"e\")\n                value = pmt.intern(\"0\")\n           \
-      \     self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
-      \                    key,\n                    value)\n\n                self.transmit_code(code=_code)\n\
+      \ = pmt.intern(\"\")\n                value = pmt.intern(\"+1\")\n         \
+      \       self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
+      \                    key,\n                    value)\n\n                _num_neg\
+      \ = 0\n                _num_zero = 0\n\n            # detect edge from 0 ->\
+      \ -1\n            elif (_num_zero > 1 and\n                    _num_zero >=\
+      \ self.off_duration and\n                    ch == -1):\n                key\
+      \ = pmt.intern(\"\")\n                value = pmt.intern(\"-1\")\n         \
+      \       self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
+      \                    key,\n                    value)\n\n                _num_pos\
+      \ = 0\n                _num_zero = 0\n\n            # detect edge from -1 ->\
+      \ 0\n            elif _num_zero == 1:\n                key = pmt.intern(\"\"\
+      )\n                value = pmt.intern(\"0\")\n                self.add_item_tag(0,\n\
+      \                    self.nitems_written(0) + idx,\n                    key,\n\
+      \                    value)\n\n                self.transmit_code(code=_code)\n\
       \                self.reinit_code()\n\n        return out\n\n            \n\n"
     affinity: ''
     alias: ''
@@ -837,9 +855,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [616, 636.0]
+    coordinate: [624, 636.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: freq_xlating_fir_filter_xxx_0_0
   id: freq_xlating_fir_filter_xxx
   parameters:
@@ -859,9 +877,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [616, 364.0]
+    coordinate: [624, 364.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: import_0
   id: import
   parameters:
@@ -898,7 +916,11 @@ blocks:
 
       signal from a simulated
 
-      Channel at 77.5 kHz.'
+      Channel at 77.5 kHz.
+
+      (both amplitude and phase
+
+      modulated)'
     maxoutbuf: '0'
     minoutbuf: '0'
     port: '55554'
@@ -909,9 +931,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [384, 628.0]
+    coordinate: [392, 628.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: note_0
   id: note
   parameters:
@@ -925,12 +947,9 @@ blocks:
       111111110000011110111110001011100110010000010010100111011010001111001111100\n\
       110110001010100100011100011011010101110001001100010001000000001\n\nThe opposite\
       \ codeword for symbol 1 is its bit-wise inverted version\n\nIt has a number\
-      \ of:\n* 256 ones\n* 256 zeros\n\nExcept for the first two bits, it can  be\
-      \ repoduced with the following python script.\n(maybe because the initial state=[0,0,0,0,0,0,0,0,0]\
-      \ is not permitted)\n\n===\nimport numpy as np\nfrom pylfsr import LFSR\n\n\
-      state = [1,0,0,0,0,0,0,0,0]\n\nfpoly = [9,5]\nL = LFSR(fpoly=fpoly, conf='galois',\
-      \ initstate=state) \nL.info()\nL.runKCycle(511) # length of period\nL.info()\n\
-      seq = L.seq\n\n==="
+      \ of:\n* 256 ones\n* 256 zeros\n\nExcept for the first two bits and the last\
+      \ 2 bits, it can  be repoduced with the following python script.\n(maybe because\
+      \ the initial state=[0,0,0,0,0,0,0,0,0] is not permitted)"
     note: ''
   states:
     bus_sink: false
@@ -954,30 +973,6 @@ blocks:
     coordinate: [192, 1508.0]
     rotation: 0
     state: enabled
-- name: note_2
-  id: note
-  parameters:
-    alias: ''
-    comment: 'phase modulation has not been
-
-      implemented for the simulated
-
-      DCF77 transmitter yet.
-
-
-      This current receiver setup only
-
-      works with the actual DCF77
-
-      signal from the SDR.'
-    note: ''
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [392, 724.0]
-    rotation: 0
-    state: true
 - name: osmosdr_source_0
   id: osmosdr_source
   parameters:
@@ -1338,7 +1333,7 @@ blocks:
     bus_structure: null
     coordinate: [88, 276.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: phase_shift_fct
   id: epy_module
   parameters:
@@ -1450,7 +1445,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 204.0]
+    coordinate: [408, 244.0]
     rotation: 0
     state: disabled
 - name: qtgui_freq_sink_x_1
@@ -1531,7 +1526,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1176, 220.0]
+    coordinate: [1304, 220.0]
     rotation: 0
     state: disabled
 - name: qtgui_time_sink_x_0
@@ -1623,7 +1618,7 @@ blocks:
     width8: '1'
     width9: '1'
     ylabel: Amplitude
-    ymax: hi_thres + 45
+    ymax: hi_thres + 80
     ymin: '-1'
     yunit: '""'
   states:
@@ -1805,7 +1800,7 @@ blocks:
     tr_slope: qtgui.TRIG_SLOPE_POS
     tr_tag: '""'
     type: complex
-    update_time: '0.10'
+    update_time: '0.025'
     width1: '1'
     width10: '1'
     width2: '1'
@@ -1817,14 +1812,14 @@ blocks:
     width8: '1'
     width9: '1'
     ylabel: Amplitude
-    ymax: '0.15'
-    ymin: '-0.15'
+    ymax: '2'
+    ymin: '-2'
     yunit: '""'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1176, 316.0]
+    coordinate: [1304, 316.0]
     rotation: 0
     state: true
 - name: qtgui_time_sink_x_2_0
@@ -1945,7 +1940,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1176, 412.0]
+    coordinate: [1304, 412.0]
     rotation: 0
     state: enabled
 - name: rational_resampler_xxx_1
@@ -1984,7 +1979,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1624, 436.0]
+    coordinate: [1744, 436.0]
     rotation: 0
     state: true
 - name: virtual_sink_0_0
@@ -2076,9 +2071,9 @@ blocks:
     affinity: ''
     alias: ''
     bind: 'True'
-    comment: 'provide signal to a ZMQ server
+    comment: 'provide signal to a ZMQ-server
 
-      to futher decode the bits
+      to further decode the bits
 
       to human-readible
 
@@ -2105,7 +2100,8 @@ connections:
 - [blocks_moving_average_xx_0, '0', qtgui_time_sink_x_0_0, '1']
 - [blocks_multiply_const_vxx_0, '0', epy_block_0, '0']
 - [blocks_multiply_const_vxx_0_0, '0', freq_xlating_fir_filter_xxx_0_0, '0']
-- [blocks_multiply_const_vxx_1, '0', virtual_sink_0, '0']
+- [blocks_multiply_const_vxx_1, '0', analog_simple_squelch_cc_0, '0']
+- [blocks_multiply_const_vxx_1_0, '0', virtual_sink_0, '0']
 - [blocks_multiply_const_xx_0, '0', probe_signal, '0']
 - [blocks_multiply_xx_0, '0', blocks_threshold_ff_2, '0']
 - [blocks_multiply_xx_0, '0', virtual_sink_0_0, '0']
@@ -2121,11 +2117,11 @@ connections:
 - [epy_block_1, msg_out, blocks_message_debug_0_0, print]
 - [epy_block_1, msg_out, zeromq_push_msg_sink_1, in]
 - [freq_xlating_fir_filter_xxx_0, '0', analog_simple_squelch_cc_0, '0']
-- [freq_xlating_fir_filter_xxx_0_0, '0', analog_simple_squelch_cc_0, '0']
+- [freq_xlating_fir_filter_xxx_0_0, '0', blocks_multiply_const_vxx_1, '0']
 - [network_tcp_source_1, '0', freq_xlating_fir_filter_xxx_0, '0']
 - [osmosdr_source_0, '0', blocks_multiply_const_vxx_0_0, '0']
 - [osmosdr_source_0, '0', qtgui_freq_sink_x_0, '0']
-- [rational_resampler_xxx_0, '0', blocks_multiply_const_vxx_1, '0']
+- [rational_resampler_xxx_0, '0', blocks_multiply_const_vxx_1_0, '0']
 - [rational_resampler_xxx_1, '0', qtgui_time_sink_x_0, '0']
 - [virtual_source_0, '0', blocks_complex_to_mag_squared_0, '0']
 - [virtual_source_0, '0', blocks_phase_shift_0, '0']

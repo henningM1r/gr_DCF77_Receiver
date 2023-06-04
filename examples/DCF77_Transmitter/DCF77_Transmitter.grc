@@ -33,6 +33,30 @@ options:
     state: enabled
 
 blocks:
+- name: chip_size
+  id: variable
+  parameters:
+    comment: ''
+    value: '25'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [616, 4.0]
+    rotation: 0
+    state: true
+- name: decimation
+  id: variable
+  parameters:
+    comment: ''
+    value: '12'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 4.0]
+    rotation: 0
+    state: true
 - name: freq_DCF77
   id: variable
   parameters:
@@ -42,28 +66,22 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [424, 12.0]
+    coordinate: [280, 4.0]
     rotation: 0
     state: true
-- name: gain
-  id: variable_qtgui_range
+- name: minute_tag
+  id: variable_tag_object
   parameters:
     comment: ''
-    gui_hint: (0,0)
-    label: Gain
-    min_len: '200'
-    orient: QtCore.Qt.Horizontal
-    rangeType: float
-    start: '0.01'
-    step: '0.01'
-    stop: '3'
-    value: '0.072'
-    widget: counter_slider
+    key: pmt.intern("key")
+    offset: '60'
+    src: pmt.intern("src")
+    value: pmt.intern("min")
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [192, 8.0]
+    coordinate: [80, 164.0]
     rotation: 0
     state: true
 - name: samp_rate
@@ -75,26 +93,50 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 12.0]
+    coordinate: [184, 4.0]
     rotation: 0
     state: enabled
-- name: analog_const_source_x_0
-  id: analog_const_source_x
+- name: DCF77_code
+  id: epy_module
   parameters:
-    affinity: ''
     alias: ''
     comment: ''
-    const: '0'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: float
+    source_code: "# this module will be imported in the into your flowgraph\n\nsequence_0\
+      \ = [-1,-1,-1,-1,-1,+1,-1,-1,-1,+1,+1,-1,-1,-1,-1,+1,-1,-1,+1,+1,+1,-1,-1,+1,-1,+1,-1,+1,-1,+1,+1,-1,-1,-1,-1,+1,+1,-1,\
+      \ \\\n              +1,+1,+1,+1,-1,+1,-1,-1,+1,+1,-1,+1,+1,+1,-1,-1,+1,-1,-1,-1,+1,-1,+1,-1,-1,-1,-1,+1,-1,+1,-1,+1,+1,-1,+1,-1,-1,+1,\
+      \ \\\n              +1,+1,+1,+1,+1,-1,+1,+1,-1,-1,+1,-1,-1,+1,-1,-1,+1,-1,+1,+1,-1,+1,+1,+1,+1,+1,+1,-1,-1,+1,-1,-1,+1,+1,-1,+1,-1,+1,\
+      \ \\\n              -1,-1,+1,+1,-1,-1,+1,+1,-1,-1,-1,-1,-1,-1,-1,+1,+1,-1,-1,-1,+1,+1,-1,-1,+1,-1,+1,-1,-1,-1,+1,+1,-1,+1,-1,-1,+1,-1,\
+      \ \\\n              +1,+1,+1,+1,+1,+1,+1,-1,+1,-1,-1,-1,+1,-1,+1,+1,-1,-1,-1,+1,+1,+1,-1,+1,-1,+1,+1,-1,-1,+1,-1,+1,+1,-1,-1,+1,+1,+1,\
+      \ \\\n              +1,-1,-1,-1,+1,+1,+1,+1,+1,-1,+1,+1,+1,-1,+1,-1,-1,-1,-1,-1,+1,+1,-1,+1,-1,+1,+1,-1,+1,+1,-1,+1,+1,+1,-1,+1,+1,-1,\
+      \ \\\n              -1,-1,-1,-1,+1,-1,+1,+1,-1,+1,-1,+1,+1,+1,+1,+1,-1,+1,-1,+1,-1,+1,-1,+1,-1,-1,-1,-1,-1,-1,+1,-1,+1,-1,-1,+1,-1,+1,\
+      \ \\\n              -1,+1,+1,+1,+1,-1,-1,+1,-1,+1,+1,+1,-1,+1,+1,+1,-1,-1,-1,-1,-1,-1,+1,+1,+1,-1,-1,+1,+1,+1,-1,+1,-1,-1,+1,-1,-1,+1,\
+      \ \\\n              +1,+1,+1,-1,+1,-1,+1,+1,+1,-1,+1,-1,+1,-1,-1,-1,+1,-1,-1,+1,-1,-1,-1,-1,+1,+1,-1,-1,+1,+1,+1,-1,-1,-1,-1,+1,-1,+1,\
+      \ \\\n              +1,+1,+1,-1,+1,+1,-1,+1,+1,-1,-1,+1,+1,-1,+1,-1,-1,-1,-1,+1,+1,+1,-1,+1,+1,+1,+1,-1,-1,-1,-1,+1,+1,+1,+1,+1,+1,+1,\
+      \ \\\n              +1,+1,-1,-1,-1,-1,-1,+1,+1,+1,+1,-1,+1,+1,+1,+1,+1,-1,-1,-1,+1,-1,+1,+1,+1,-1,-1,+1,+1,-1,-1,+1,-1,-1,-1,-1,-1,+1,\
+      \ \\\n              -1,-1,+1,-1,+1,-1,-1,+1,+1,+1,-1,+1,+1,-1,+1,-1,-1,-1,+1,+1,+1,+1,-1,-1,+1,+1,+1,+1,+1,-1,-1,+1,+1,-1,+1,+1,-1,-1,\
+      \ \\\n              -1,+1,-1,+1,-1,+1,-1,-1,+1,-1,-1,-1,+1,+1,+1,-1,-1,-1,+1,+1,-1,+1,+1,-1,+1,-1,+1,-1,+1,+1,+1,-1,-1,-1,+1,-1,-1,+1,\
+      \ \\\n              +1,-1,-1,-1,+1,-1,-1,-1,+1,-1,-1,-1,-1,-1,-1,-1,-1,+1]\n\
+      \nsequence_1 = [+1,+1,+1,+1,+1,-1,+1,+1,+1,-1,-1,+1,+1,+1,+1,-1,+1,+1,-1,-1,-1,+1,+1,-1,+1,-1,+1,-1,+1,-1,-1,+1,+1,+1,+1,-1,-1,+1,\
+      \ \\\n              -1,-1,-1,-1,+1,-1,+1,+1,-1,-1,+1,-1,-1,-1,+1,+1,-1,+1,+1,+1,-1,+1,-1,+1,+1,+1,+1,-1,+1,-1,+1,-1,-1,+1,-1,+1,+1,-1,\
+      \ \\\n              -1,-1,-1,-1,-1,+1,-1,-1,+1,+1,-1,+1,+1,-1,+1,+1,-1,+1,-1,-1,+1,-1,-1,-1,-1,-1,-1,+1,+1,-1,+1,+1,-1,-1,+1,-1,+1,-1,\
+      \ \\\n              +1,+1,-1,-1,+1,+1,-1,-1,+1,+1,+1,+1,+1,+1,+1,-1,-1,+1,+1,+1,-1,-1,+1,+1,-1,+1,-1,+1,+1,+1,-1,-1,+1,-1,+1,+1,-1,+1,\
+      \ \\\n              -1,-1,-1,-1,-1,-1,-1,+1,-1,+1,+1,+1,-1,+1,-1,-1,+1,+1,+1,-1,-1,-1,+1,-1,+1,-1,-1,+1,+1,-1,+1,-1,-1,+1,+1,-1,-1,-1,\
+      \ \\\n              -1,+1,+1,+1,-1,-1,-1,-1,-1,+1,-1,-1,-1,+1,-1,+1,+1,+1,+1,+1,-1,-1,+1,-1,+1,-1,-1,+1,-1,-1,+1,-1,-1,-1,+1,-1,-1,+1,\
+      \ \\\n              +1,+1,+1,+1,-1,+1,-1,-1,+1,-1,+1,-1,-1,-1,-1,-1,+1,-1,+1,-1,+1,-1,+1,-1,+1,+1,+1,+1,+1,+1,-1,+1,-1,+1,+1,-1,+1,-1,\
+      \ \\\n              +1,-1,-1,-1,-1,+1,+1,-1,+1,-1,-1,-1,+1,-1,-1,-1,+1,+1,+1,+1,+1,+1,-1,-1,-1,+1,+1,-1,-1,-1,+1,-1,+1,+1,-1,+1,+1,-1,\
+      \ \\\n              -1,-1,-1,+1,-1,+1,-1,-1,-1,+1,-1,+1,-1,+1,+1,+1,-1,+1,+1,-1,+1,+1,+1,+1,-1,-1,+1,+1,-1,-1,-1,+1,+1,+1,+1,-1,+1,-1,\
+      \ \\\n              -1,-1,-1,+1,-1,-1,+1,-1,-1,+1,+1,-1,-1,+1,-1,+1,+1,+1,+1,-1,-1,-1,+1,-1,-1,-1,-1,+1,+1,+1,+1,-1,-1,-1,-1,-1,-1,-1,\
+      \ \\\n              -1,-1,+1,+1,+1,+1,+1,-1,-1,-1,-1,+1,-1,-1,-1,-1,-1,+1,+1,+1,-1,+1,-1,-1,-1,+1,+1,-1,-1,+1,+1,-1,+1,+1,+1,+1,+1,-1,\
+      \ \\\n              +1,+1,-1,+1,-1,+1,+1,-1,-1,-1,+1,-1,-1,+1,-1,+1,+1,+1,-1,-1,-1,-1,+1,+1,-1,-1,-1,-1,-1,+1,+1,-1,-1,+1,-1,-1,+1,+1,\
+      \ \\\n              +1,-1,+1,-1,+1,-1,+1,+1,-1,+1,+1,+1,-1,-1,-1,+1,+1,+1,-1,-1,+1,-1,-1,+1,-1,+1,-1,+1,-1,-1,-1,+1,+1,+1,-1,+1,+1,-1,\
+      \ \\\n              -1,+1,+1,+1,-1,+1,+1,+1,-1,+1,+1,+1,+1,+1,+1,+1,+1,-1]\n"
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1144, 396.0]
+    coordinate: [80, 1004.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: analog_sig_source_x_2
   id: analog_sig_source_x
   parameters:
@@ -116,10 +158,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1384, 156.0]
+    coordinate: [192, 1236.0]
     rotation: 0
     state: true
-- name: blocks_add_xx_0
+- name: blocks_add_xx_1
   id: blocks_add_xx
   parameters:
     affinity: ''
@@ -128,66 +170,69 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [688, 1304.0]
+    rotation: 0
+    state: enabled
+- name: blocks_magphase_to_complex_0
+  id: blocks_magphase_to_complex
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1432, 696.0]
+    rotation: 0
+    state: true
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '0.5'
+    maxoutbuf: '0'
+    minoutbuf: '0'
     type: float
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [704, 232.0]
+    coordinate: [1192, 908.0]
     rotation: 0
-    state: enabled
-- name: blocks_char_to_float_0
-  id: blocks_char_to_float
+    state: true
+- name: blocks_multiply_const_vxx_1
+  id: blocks_multiply_const_vxx
   parameters:
     affinity: ''
     alias: ''
-    comment: 'converts byte values
+    comment: 'bit-flipped waveform
 
-      to float value'
+      for 1
+
+      (phase modulation)'
+    const: '-1'
     maxoutbuf: '0'
     minoutbuf: '0'
-    scale: '1'
+    type: short
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [288, 348.0]
-    rotation: 0
-    state: enabled
-- name: blocks_float_to_complex_0
-  id: blocks_float_to_complex
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1400, 336.0]
-    rotation: 0
-    state: enabled
-- name: blocks_multiply_const_xx_0
-  id: blocks_multiply_const_xx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    const: gain
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: float
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1128, 332.0]
+    coordinate: [312, 956.0]
     rotation: 0
     state: true
 - name: blocks_multiply_xx_0
@@ -205,83 +250,225 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1664, 320.0]
+    coordinate: [456, 1368.0]
     rotation: 0
     state: true
+- name: blocks_null_sink_0
+  id: blocks_null_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_sink: '[[0,],]'
+    comment: ''
+    num_inputs: '1'
+    type: short
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [992, 960.0]
+    rotation: 0
+    state: enabled
+- name: blocks_null_sink_0_0
+  id: blocks_null_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_sink: '[[0,],]'
+    comment: ''
+    num_inputs: '1'
+    type: short
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 472.0]
+    rotation: 0
+    state: enabled
 - name: blocks_repeat_0
   id: blocks_repeat
   parameters:
     affinity: ''
     alias: ''
-    comment: 'each bit streches a number
-
-      of "samp_rate" samples,
-
-      i.e. fill one full second'
-    interp: samp_rate
+    comment: ''
+    interp: chip_size
     maxoutbuf: '0'
     minoutbuf: '0'
-    type: float
+    type: short
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [480, 348.0]
+    coordinate: [552, 908.0]
+    rotation: 0
+    state: true
+- name: blocks_repeat_0_0
+  id: blocks_repeat
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'each bit stretches a number
+
+      of "samp_rate" samples,
+
+      i.e. fill one full second'
+    interp: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [232, 1396.0]
     rotation: 0
     state: enabled
-- name: blocks_tags_strobe_0_0_1
+- name: blocks_repeat_0_1
+  id: blocks_repeat
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    interp: chip_size
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: short
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [552, 956.0]
+    rotation: 0
+    state: true
+- name: blocks_repeat_0_1_0
+  id: blocks_repeat
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    interp: chip_size
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: short
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [552, 1004.0]
+    rotation: 0
+    state: enabled
+- name: blocks_repeat_1
+  id: blocks_repeat
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'repeat time bits
+
+      over full frame
+
+      of second'
+    interp: int(samp_rate/decimation)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: short
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [528, 764.0]
+    rotation: 0
+    state: enabled
+- name: blocks_repeat_1_0
+  id: blocks_repeat
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'repeat time bits
+
+      over full frame
+
+      of second'
+    interp: int(samp_rate/decimation)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: short
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [488, 292.0]
+    rotation: 0
+    state: enabled
+- name: blocks_short_to_float_0
+  id: blocks_short_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: '1'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [992, 908.0]
+    rotation: 0
+    state: enabled
+- name: blocks_short_to_float_0_0
+  id: blocks_short_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: '1'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 420.0]
+    rotation: 0
+    state: enabled
+- name: blocks_tags_strobe_0_0_1_0
   id: blocks_tags_strobe
   parameters:
     affinity: ''
     alias: ''
     comment: set a tag each second
-    key: pmt.intern("Second")
+    key: pmt.intern("S")
     maxoutbuf: '0'
     minoutbuf: '0'
     nsamps: samp_rate
-    type: float
-    value: pmt.intern("second")
+    type: complex
+    value: pmt.intern("sec")
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [456, 212.0]
+    coordinate: [432, 1244.0]
     rotation: 0
     state: enabled
-- name: blocks_vector_source_x_0
-  id: blocks_vector_source_x
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: 'test signal without a
-
-      specific DCF77 encoding'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    repeat: 'True'
-    tags: '[]'
-    type: byte
-    vector: (1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0)
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [24, 212.0]
-    rotation: 0
-    state: disabled
-- name: blocks_vector_source_x_0_0
+- name: blocks_vector_source_x_0_0_0
   id: blocks_vector_source_x
   parameters:
     affinity: ''
     alias: ''
     comment: 'example DCF77 encoded
 
-      bit-stream (with random
-
-      weather data bits)
+      bit-stream (for phase modulation)
 
       full length: must be 60 elements,
 
@@ -290,146 +477,278 @@ blocks:
     minoutbuf: '0'
     repeat: 'True'
     tags: '[]'
-    type: byte
+    type: short
+    vector: (1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,0,1,0,1,0,1,0,1,1,1,0,1,0,0,1,0,0,0,1,0,0,1,1,1,1,0,0,0,1,1,0,0,0,1,0,0,1,2)
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [56, 748.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_0_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'waveform for 0
+
+      (phase modulation)'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: short
+    vector: list(int(0.2*samp_rate/(decimation*chip_size))*[0]) + list(DCF77_code.sequence_0)
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [56, 892.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_0_0_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'waveform for 2 (new minute)
+
+      (phase modulation)'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: short
+    vector: list(int(0.2*samp_rate/(decimation*chip_size))*[-1]) + list(DCF77_code.sequence_0)
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 1044.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_0_0_0_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'waveform for 2 (new minute)
+
+      (amplitude modulation)'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: short
+    vector: list(int(samp_rate/decimation)*[1])
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [488, 604.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_0_0_0_1_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'waveform for 1
+
+      (amplitude modulation)'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: short
+    vector: list(int(0.2*samp_rate/decimation)*[0]) + list((int(0.8*samp_rate/decimation))*[1])
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [488, 492.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_0_0_0_2
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'waveform for 0
+
+      (amplitude modulation)'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: short
+    vector: list(int(0.1*samp_rate/decimation)*[0]) + list((int(0.9*samp_rate/decimation))*[1])
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [488, 380.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_0_0_1
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'example DCF77 encoded
+
+      bit-stream (for OOK)
+
+      (with random weather
+
+      data bits)
+
+      full length: must be
+
+      60 elements, the last
+
+      element must be a 2'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[minute_tag]'
+    type: short
     vector: (0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,1,1,0,1,0,1,0,1,0,1,1,1,0,1,0,0,1,0,0,0,1,0,0,1,1,1,1,0,0,0,1,1,0,0,0,1,0,0,1,2)
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [24, 332.0]
+    coordinate: [48, 276.0]
     rotation: 0
     state: enabled
-- name: epy_block_0
+- name: epy_block_0_0
   id: epy_block
   parameters:
-    _source_code: "\nimport numpy as np\nfrom gnuradio import gr\nimport pmt\n\n\n\
-      # counted number of zero samples\n_num_zeros = 0\n\n# counted number of one\
-      \ samples\n_num_ones = 0\n\n# counted number of two samples\n_num_twos = 0\n\
-      \n# counted number of seconds\n_num_secs = 0\n\n\nclass blk(gr.sync_block):\n\
-      \n    def __init__(self, scaling=1, samp_rate=768000):\n        gr.sync_block.__init__(\n\
-      \            self,\n            name='DCF77-Signalling',\n            in_sig=[np.float32],\n\
-      \            out_sig=[np.float32]\n        )\n\n        # block parameters\n\
-      \        self.scaling = scaling\n        self.sample_rate = samp_rate\n\n  \
-      \      # messaging port\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
-      \n        # 0.1s of zeros for the zero-bit (100ms pause)\n        self._zero\
-      \ = int(self.sample_rate/self.scaling*0.1)\n\n        # 0.9s of ones for the\
-      \ zero-bit\n        self._zero_compl = int(self.sample_rate/self.scaling*0.9)\n\
-      \n        # 0.2s of zeros for the one-bit (200ms pause)\n        self._one =\
-      \ int(self.sample_rate/self.scaling*0.2)\n\n        # 0.8s of ones for the one-bit\n\
-      \        self._one_compl = int(self.sample_rate/self.scaling*0.8)\n\n      \
-      \  # 1.9s of ones for the zero-bit at position 58 (with prolonged ones)\n  \
-      \      self._reinit_zero = int(self.sample_rate/self.scaling*1.9)\n\n      \
-      \  # 1.8s of ones for the one-bit at position 58 (with prolonged ones)\n   \
-      \     self._reinit_one = int(self.sample_rate/self.scaling*1.8)\n\n        print(\"\
-      zero:\", self._zero)\n        print(\"zero_compl:\", self._zero_compl)\n   \
-      \     print(\"one:\", self._one)\n        print(\"one_compl:\", self._one_compl)\n\
-      \        print(\"reinit_zero:\", self._reinit_zero)\n        print(\"reinit_one:\"\
-      , self._reinit_one)\n\n    def work(self, input_items, output_items):\n    \
-      \    inp = input_items[0]\n        out = output_items[0]\n\n        # tags =\
-      \ self.get_tags_in_window(0, 0, len(inp))\n\n        out[:] = self.bits_to_base_band_signal(inp)\n\
-      \n        # forward input tagged signal\n        return len(output_items[0])\n\
-      \n    def bits_to_base_band_signal(self, inp):\n        global _num_zeros\n\
-      \        global _num_ones\n        global _num_twos\n        global _num_secs\n\
-      \n        # The total number of samples does not change from input to output\n\
-      \        # just the value might change\n        out = inp\n\n        # tags\
-      \ = self.get_tags_in_window(0, 0, len(inp))\n\n        # Process the individual\
-      \ (finite length) stream block currently\n        # received. Either a frame\
-      \ (sample_rate) full of ones, or a frame\n        # full of zeros is received.\n\
-      \        for idx, ch in enumerate(inp):\n            # 1 is default, especially\
-      \ for the 59th second\n            out[idx] = 1\n\n            if _num_secs\
-      \ > 59:\n                _num_secs = 0\n\n            # receiving frame of zeros\n\
-      \            if (ch == 0):\n                _num_zeros += 1\n              \
-      \  _num_ones = 0\n                _num_twos = 0\n\n                # if the\
-      \ number of zeros is below 0.1s of the frame\n                if (_num_zeros\
-      \ < self._zero and\n                        _num_secs < 59):\n             \
-      \       # set the output to \"1\" for the current sample\n                 \
-      \   out[idx] = 0\n\n                # if the number of zeros is equal 0.1s of\
-      \ the frame\n                elif (_num_zeros == self._zero and\n          \
-      \            _num_secs < 59):\n                    # set output to \"0\" for\
-      \ the current sample\n                    out[idx] = 0\n\n                 \
-      \   # set tag for this 100ms pause\n                    key = pmt.intern(\"\
-      0\")\n                    value = pmt.intern(\"100ms\")\n                  \
-      \  self.add_item_tag(0,\n                                      self.nitems_written(0)\
-      \ + idx,\n                                      key,\n                     \
-      \                 value)\n\n                # if the number of zeros is above\
-      \ 0.1s of the frame\n                elif (_num_zeros > self._zero and\n   \
-      \                   _num_secs < 59):\n                    # set output to \"\
-      1\" for the current sample\n                    out[idx] = 1\n\n           \
-      \     # full second from a full frame of zeros\n                if _num_zeros\
-      \ >= self.sample_rate:\n                    _num_zeros = 0\n               \
-      \     _num_ones = 0\n                    _num_twos = 0\n                   \
-      \ _num_secs += 1\n\n                    if _num_secs < 59:\n               \
-      \         # set tag for full second\n                        key = pmt.intern(\"\
-      sec\")\n                        value = pmt.intern(\"0\")\n                \
-      \        self.add_item_tag(0,\n                                          self.nitems_written(0)\
-      \ + idx,\n                                          key,\n                 \
-      \                         value)\n\n                    print(f\"{_num_secs:02d}:\
-      \ 0\")\n\n            # receiving frame of ones\n            elif (ch == 1):\n\
-      \                _num_ones += 1\n                _num_zeros = 0\n          \
-      \      _num_twos = 0\n\n                # if the number of ones is below 0.2s\
-      \ of the frame\n                if (_num_ones < self._one and\n            \
-      \            _num_secs < 59):\n                    # set the output to \"0\"\
-      \ for the current sample\n                    out[idx] = 0\n\n             \
-      \   # if the number of ones is equal 0.2s of the frame\n                elif\
-      \ (_num_ones == self._one and\n                      _num_secs < 59):\n    \
-      \                # set output to \"0\" for the current sample\n            \
-      \        out[idx] = 0\n                    # set tag for this 200ms pause\n\
-      \                    key = pmt.intern(\"1\")\n                    value = pmt.intern(\"\
-      200ms\")\n                    self.add_item_tag(0,\n                       \
-      \               self.nitems_written(0) + idx,\n                            \
-      \          key,\n                                      value)\n\n          \
-      \      # if the number of ones is above 0.2s of the frame\n                elif\
-      \ (_num_ones > self._one and _num_secs < 59):\n                    # set output\
-      \ to \"1\" for the current sample\n                    out[idx] = 1\n\n    \
-      \            # full second from a full frame of ones\n                if _num_ones\
-      \ >= self.sample_rate:\n                    _num_ones = 0\n                \
-      \    _num_zeros = 0\n                    _num_twos = 0\n                   \
-      \ _num_secs += 1\n\n                    if _num_secs < 59:\n               \
-      \         # set tag for full second\n                        key = pmt.intern(\"\
-      sec\")\n                        value = pmt.intern(\"1\")\n                \
-      \        self.add_item_tag(0,\n                                          self.nitems_written(0)\
-      \ + idx,\n                                          key,\n                 \
-      \                         value)\n\n                    print(f\"{_num_secs:02d}:\
-      \ 1\")\n\n            # receiving frame of twos (=> 59th second)\n         \
-      \   elif (ch == 2):\n                _num_zeros = 0\n                _num_ones\
-      \ = 0\n\n                if _num_twos == 0:\n                    _num_secs +=\
-      \ 1\n                    _num_twos += 1\n\n                    out[idx] = 1\n\
-      \n                    print(f\"{_num_secs:02d}: _\")\n\n                elif\
-      \ _num_twos >= 1 and _num_twos < self.sample_rate:\n                    _num_twos\
-      \ += 1\n\n                    out[idx] = 1\n\n                elif _num_twos\
-      \ >= self.sample_rate:\n                    _num_twos = 0\n\n              \
-      \      out[idx] = 1\n\n        # return (float) signal block\n        return\
-      \ out\n"
+    _source_code: "\nimport numpy as np\nfrom gnuradio import gr\n\n\nclass blk(gr.sync_block):\n\
+      \n    def __init__(self):\n        gr.sync_block.__init__(\n            self,\n\
+      \            name='Synchronous\\nWaveform Selector',\n            in_sig=[np.short,\
+      \     # selector\n                    np.short,     # input signal for symbol\
+      \ zero\n                    np.short,     # input signal for symbol one\n  \
+      \                  np.short],    # input signal for symbol two\n           \
+      \ out_sig=[np.short,    # output signal\n                     np.short]    #\
+      \ forward selector\n        )\n\n    def work(self, input_items, output_items):\n\
+      \        inp0 = input_items[0]   # selector value\n        inp1 = input_items[1]\
+      \   # input signal for symbol zero\n        inp2 = input_items[2]   # input\
+      \ signal for symbol one\n        inp3 = input_items[3]   # input signal for\
+      \ symbol two\n\n        # only as initialization value for output signal\n \
+      \       output_items[0][:] = inp3\n\n        # forward the selector value\n\
+      \        output_items[1][:] = inp0\n\n        # synchronously select the input\
+      \ signal to forward it to the output\n        output_items[0][:] = self.selsym_to_bbsig(inp0,\
+      \ inp1, inp2, inp3)\n\n        return len(output_items[0])\n\n    # selected\
+      \ symbol to baseband signal\n    def selsym_to_bbsig(self, inp0, inp1, inp2,\
+      \ inp3):\n        out = inp0\n\n        for idx, ch in enumerate(inp0):\n  \
+      \          # forward waveform for symbol zero\n            if (ch == 0):\n \
+      \               out[idx] = inp1[idx]\n\n            # forward waveform for symbol\
+      \ one\n            elif (ch == 1):\n                out[idx] = inp2[idx]\n\n\
+      \            # forward waveform for symbol two\n            elif (ch == 2):\n\
+      \                out[idx] = inp3[idx]\n\n        return out\n"
     affinity: ''
-    alias: ''
-    comment: "* encode bits to signals\n* each bit has a total signal\n   length of\
-      \ \"samp_rate\"\n* convert 0 to:\n 100ms low (0) , 900ms high (1)\n* convert\
-      \ 1 to:\n200ms low (0),  800ms high (1)\n*convert 2 to:\nTBD"
+    alias: Synchronous_Waveform_Selector_2
+    comment: 'selects the phase-
+
+      waveform to the
+
+      corresponding
+
+      symbol 0, 1 or 2'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samp_rate: samp_rate
-    scaling: '1'
   states:
-    _io_cache: ('DCF77-Signalling', 'blk', [('scaling', '1'), ('samp_rate', '768000')],
-      [('0', 'float', 1)], [('0', 'float', 1), ('msg_out', 'message', 1)], '', ['scaling'])
+    _io_cache: ('Synchronous\nWaveform Selector', 'blk', [], [('0', 'short', 1), ('1',
+      'short', 1), ('2', 'short', 1), ('3', 'short', 1)], [('0', 'short', 1), ('1',
+      'short', 1)], '', [])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792, 336.0]
+    coordinate: [760, 880.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_0_0_0
+  id: epy_block
+  parameters:
+    _source_code: "\nimport numpy as np\nfrom gnuradio import gr\n\n\nclass blk(gr.sync_block):\n\
+      \n    def __init__(self):\n        gr.sync_block.__init__(\n            self,\n\
+      \            name='Synchronous\\nWaveform Selector',\n            in_sig=[np.short,\
+      \     # selector\n                    np.short,     # input signal for symbol\
+      \ zero\n                    np.short,     # input signal for symbol one\n  \
+      \                  np.short],    # input signal for symbol two\n           \
+      \ out_sig=[np.short,    # output signal\n                     np.short]    #\
+      \ forward selector\n        )\n\n    def work(self, input_items, output_items):\n\
+      \        inp0 = input_items[0]   # selector value\n        inp1 = input_items[1]\
+      \   # input signal for symbol zero\n        inp2 = input_items[2]   # input\
+      \ signal for symbol one\n        inp3 = input_items[3]   # input signal for\
+      \ symbol two\n\n        # only as initialization value for output signal\n \
+      \       output_items[0][:] = inp3\n\n        # forward the selector value\n\
+      \        output_items[1][:] = inp0\n\n        # synchronously select the input\
+      \ signal to forward it to the output\n        output_items[0][:] = self.selsym_to_bbsig(inp0,\
+      \ inp1, inp2, inp3)\n\n        return len(output_items[0])\n\n    # selected\
+      \ symbol to baseband signal\n    def selsym_to_bbsig(self, inp0, inp1, inp2,\
+      \ inp3):\n        out = inp0\n\n        for idx, ch in enumerate(inp0):\n  \
+      \          # forward waveform for symbol zero\n            if (ch == 0):\n \
+      \               out[idx] = inp1[idx]\n\n            # forward waveform for symbol\
+      \ one\n            elif (ch == 1):\n                out[idx] = inp2[idx]\n\n\
+      \            # forward waveform for symbol two\n            elif (ch == 2):\n\
+      \                out[idx] = inp3[idx]\n\n        return out\n"
+    affinity: ''
+    alias: Synchronous_Waveform_Selector_1
+    comment: 'selects the OOK-
+
+      waveform to the
+
+      corresponding
+
+      symbol 0, 1 or 2'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('Synchronous\nWaveform Selector', 'blk', [], [('0', 'short', 1), ('1',
+      'short', 1), ('2', 'short', 1), ('3', 'short', 1)], [('0', 'short', 1), ('1',
+      'short', 1)], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 392.0]
     rotation: 0
     state: enabled
 - name: import_0
   id: import
   parameters:
     alias: ''
-    comment: Windows needs the import of zmq
+    comment: 'Windows needs the
+
+      import of zmq'
     imports: import zmq
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [520, 12.0]
+    coordinate: [376, 52.0]
+    rotation: 0
+    state: true
+- name: import_2
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import math
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [376, 4.0]
     rotation: 0
     state: true
 - name: network_tcp_sink_0
@@ -447,22 +766,37 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1864, 324.0]
+    coordinate: [1088, 1372.0]
     rotation: 0
     state: enabled
 - name: note_0
   id: note
   parameters:
     alias: ''
-    comment: 'to include phase
+    comment: 'DCF77 OOK
 
-      modulation part'
+      amplitude
+
+      modulation'
     note: ''
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792, 564.0]
+    coordinate: [744, 268.0]
+    rotation: 0
+    state: true
+- name: note_0_0
+  id: note
+  parameters:
+    alias: ''
+    comment: "DCF77 \nphase\nmodulation"
+    note: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 764.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0
@@ -543,9 +877,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1864, 132.0]
+    coordinate: [624, 1428.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: qtgui_time_sink_x_0
   id: qtgui_time_sink_x
   parameters:
@@ -633,111 +967,14 @@ blocks:
     width8: '1'
     width9: '1'
     ylabel: Amplitude
-    ymax: '0.1'
-    ymin: '-0.1'
+    ymax: '1.5'
+    ymin: '-1.5'
     yunit: '""'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1864, 228.0]
-    rotation: 0
-    state: enabled
-- name: qtgui_time_sink_x_0_0
-  id: qtgui_time_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    alpha1: '1.0'
-    alpha10: '1.0'
-    alpha2: '1.0'
-    alpha3: '1.0'
-    alpha4: '1.0'
-    alpha5: '1.0'
-    alpha6: '1.0'
-    alpha7: '1.0'
-    alpha8: '1.0'
-    alpha9: '1.0'
-    autoscale: 'False'
-    axislabels: 'True'
-    color1: blue
-    color10: dark blue
-    color2: red
-    color3: green
-    color4: black
-    color5: cyan
-    color6: magenta
-    color7: yellow
-    color8: dark red
-    color9: dark green
-    comment: ''
-    ctrlpanel: 'False'
-    entags: 'True'
-    grid: 'False'
-    gui_hint: (1,0)
-    label1: Signal 1
-    label10: Signal 10
-    label2: Signal 2
-    label3: Signal 3
-    label4: Signal 4
-    label5: Signal 5
-    label6: Signal 6
-    label7: Signal 7
-    label8: Signal 8
-    label9: Signal 9
-    legend: 'True'
-    marker1: '-1'
-    marker10: '-1'
-    marker2: '-1'
-    marker3: '-1'
-    marker4: '-1'
-    marker5: '-1'
-    marker6: '-1'
-    marker7: '-1'
-    marker8: '-1'
-    marker9: '-1'
-    name: DCF77_symbols
-    nconnections: '1'
-    size: samp_rate*4
-    srate: samp_rate
-    stemplot: 'False'
-    style1: '1'
-    style10: '1'
-    style2: '1'
-    style3: '1'
-    style4: '1'
-    style5: '1'
-    style6: '1'
-    style7: '1'
-    style8: '1'
-    style9: '1'
-    tr_chan: '0'
-    tr_delay: '0'
-    tr_level: '0.0'
-    tr_mode: qtgui.TRIG_MODE_FREE
-    tr_slope: qtgui.TRIG_SLOPE_POS
-    tr_tag: '""'
-    type: float
-    update_time: '0.10'
-    width1: '1'
-    width10: '1'
-    width2: '1'
-    width3: '1'
-    width4: '1'
-    width5: '1'
-    width6: '1'
-    width7: '1'
-    width8: '1'
-    width9: '1'
-    ylabel: Amplitude
-    ymax: '2.5'
-    ymin: '-0.5'
-    yunit: '""'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [840, 220.0]
+    coordinate: [848, 1292.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0_0_0
@@ -772,9 +1009,9 @@ blocks:
     entags: 'True'
     grid: 'False'
     gui_hint: (2,0)
-    label1: Signal 1
+    label1: Magnitude
     label10: Signal 10
-    label2: Signal 2
+    label2: Phase
     label3: Signal 3
     label4: Signal 4
     label5: Signal 5
@@ -794,9 +1031,9 @@ blocks:
     marker8: '-1'
     marker9: '-1'
     name: Baseband_DCF77_signal
-    nconnections: '1'
-    size: samp_rate*4
-    srate: samp_rate
+    nconnections: '2'
+    size: int(4*samp_rate/decimation)
+    srate: int(samp_rate/decimation)
     stemplot: 'False'
     style1: '1'
     style10: '1'
@@ -834,9 +1071,35 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 212.0]
+    coordinate: [1432, 572.0]
     rotation: 0
     state: enabled
+- name: virtual_sink_0
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1744, 708.0]
+    rotation: 0
+    state: true
+- name: virtual_source_0
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 1396.0]
+    rotation: 0
+    state: true
 - name: zeromq_sub_source_0
   id: zeromq_sub_source
   parameters:
@@ -845,41 +1108,62 @@ blocks:
     alias: ''
     comment: 'sends bits from DCF77 Encoder
 
-      1 symbol per second'
+      1 symbol per second
+
+
+      (not implemented for
+
+      phase-modulation yet)'
     hwm: '-1'
     key: ''
     maxoutbuf: '0'
     minoutbuf: '0'
     pass_tags: 'False'
     timeout: '100'
-    type: byte
+    type: short
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [24, 484.0]
+    coordinate: [48, 460.0]
     rotation: 0
     state: disabled
 
 connections:
-- [analog_const_source_x_0, '0', blocks_float_to_complex_0, '1']
 - [analog_sig_source_x_2, '0', blocks_multiply_xx_0, '0']
-- [blocks_add_xx_0, '0', qtgui_time_sink_x_0_0, '0']
-- [blocks_char_to_float_0, '0', blocks_repeat_0, '0']
-- [blocks_float_to_complex_0, '0', blocks_multiply_xx_0, '1']
-- [blocks_multiply_const_xx_0, '0', blocks_float_to_complex_0, '0']
+- [blocks_add_xx_1, '0', qtgui_time_sink_x_0, '0']
+- [blocks_magphase_to_complex_0, '0', virtual_sink_0, '0']
+- [blocks_multiply_const_vxx_0, '0', blocks_magphase_to_complex_0, '1']
+- [blocks_multiply_const_vxx_0, '0', qtgui_time_sink_x_0_0_0, '1']
+- [blocks_multiply_const_vxx_1, '0', blocks_repeat_0_1, '0']
+- [blocks_multiply_xx_0, '0', blocks_add_xx_1, '1']
 - [blocks_multiply_xx_0, '0', network_tcp_sink_0, '0']
 - [blocks_multiply_xx_0, '0', qtgui_freq_sink_x_0, '0']
-- [blocks_multiply_xx_0, '0', qtgui_time_sink_x_0, '0']
-- [blocks_repeat_0, '0', blocks_add_xx_0, '1']
-- [blocks_repeat_0, '0', epy_block_0, '0']
-- [blocks_tags_strobe_0_0_1, '0', blocks_add_xx_0, '0']
-- [blocks_vector_source_x_0, '0', blocks_char_to_float_0, '0']
-- [blocks_vector_source_x_0_0, '0', blocks_char_to_float_0, '0']
-- [epy_block_0, '0', blocks_multiply_const_xx_0, '0']
-- [epy_block_0, '0', qtgui_time_sink_x_0_0_0, '0']
-- [zeromq_sub_source_0, '0', blocks_char_to_float_0, '0']
+- [blocks_repeat_0, '0', epy_block_0_0, '1']
+- [blocks_repeat_0_0, '0', blocks_multiply_xx_0, '1']
+- [blocks_repeat_0_1, '0', epy_block_0_0, '2']
+- [blocks_repeat_0_1_0, '0', epy_block_0_0, '3']
+- [blocks_repeat_1, '0', epy_block_0_0, '0']
+- [blocks_repeat_1_0, '0', epy_block_0_0_0, '0']
+- [blocks_short_to_float_0, '0', blocks_multiply_const_vxx_0, '0']
+- [blocks_short_to_float_0_0, '0', blocks_magphase_to_complex_0, '0']
+- [blocks_short_to_float_0_0, '0', qtgui_time_sink_x_0_0_0, '0']
+- [blocks_tags_strobe_0_0_1_0, '0', blocks_add_xx_1, '0']
+- [blocks_vector_source_x_0_0_0, '0', blocks_repeat_1, '0']
+- [blocks_vector_source_x_0_0_0_0, '0', blocks_multiply_const_vxx_1, '0']
+- [blocks_vector_source_x_0_0_0_0, '0', blocks_repeat_0, '0']
+- [blocks_vector_source_x_0_0_0_0_0, '0', blocks_repeat_0_1_0, '0']
+- [blocks_vector_source_x_0_0_0_0_0_0, '0', epy_block_0_0_0, '3']
+- [blocks_vector_source_x_0_0_0_0_1_0, '0', epy_block_0_0_0, '2']
+- [blocks_vector_source_x_0_0_0_0_2, '0', epy_block_0_0_0, '1']
+- [blocks_vector_source_x_0_0_0_1, '0', blocks_repeat_1_0, '0']
+- [epy_block_0_0, '0', blocks_short_to_float_0, '0']
+- [epy_block_0_0, '1', blocks_null_sink_0, '0']
+- [epy_block_0_0_0, '0', blocks_short_to_float_0_0, '0']
+- [epy_block_0_0_0, '1', blocks_null_sink_0_0, '0']
+- [virtual_source_0, '0', blocks_repeat_0_0, '0']
+- [zeromq_sub_source_0, '0', blocks_repeat_1_0, '0']
 
 metadata:
   file_format: 1

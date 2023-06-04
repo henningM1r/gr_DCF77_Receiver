@@ -42,10 +42,10 @@ blocks:
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: float
-    start: '0.0001'
-    step: '0.0001'
-    stop: '0.025'
-    value: '0.015'
+    start: '0.01'
+    step: '0.01'
+    stop: '3'
+    value: '1.0'
     widget: counter_slider
   states:
     bus_sink: false
@@ -92,7 +92,7 @@ blocks:
 - name: fading_toggle_button
   id: variable_qtgui_toggle_button_msg
   parameters:
-    comment: 'enable/disable
+    comment: 'enable/disable slow
 
       fading effect'
     gui_hint: ''
@@ -427,7 +427,7 @@ blocks:
     tr_slope: qtgui.TRIG_SLOPE_POS
     tr_tag: '""'
     type: complex
-    update_time: '0.10'
+    update_time: '0.025'
     width1: '1'
     width10: '1'
     width2: '1'
@@ -439,8 +439,8 @@ blocks:
     width8: '1'
     width9: '1'
     ylabel: Amplitude
-    ymax: '1'
-    ymin: '-1'
+    ymax: '4.5'
+    ymin: '-4.5'
     yunit: '""'
   states:
     bus_sink: false
