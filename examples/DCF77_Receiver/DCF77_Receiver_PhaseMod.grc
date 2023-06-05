@@ -270,7 +270,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [632, 492.0]
+    coordinate: [640, 492.0]
     rotation: 0
     state: enabled
 - name: analog_simple_squelch_cc_0

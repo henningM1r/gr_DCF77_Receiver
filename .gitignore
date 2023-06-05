@@ -3,4 +3,7 @@ examples/DCF77_Channel/*.py
 examples/DCF77_Receiver/*.py
 examples/DCF77_Receiver/*.py
 examples/DCF77_Transmitter/*.py
+.coverage
 *__pycache__
+.idea/
+/tests/.coverage

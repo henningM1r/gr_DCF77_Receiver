@@ -42,7 +42,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [616, 4.0]
+    coordinate: [568, 4.0]
     rotation: 0
     state: true
 - name: decimation
@@ -54,7 +54,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [520, 4.0]
+    coordinate: [472, 4.0]
     rotation: 0
     state: true
 - name: freq_DCF77
@@ -478,7 +478,7 @@ blocks:
     repeat: 'True'
     tags: '[]'
     type: short
-    vector: (1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,0,1,0,1,0,1,0,1,1,1,0,1,0,0,1,0,0,0,1,0,0,1,1,1,1,0,0,0,1,1,0,0,0,1,0,0,1,2)
+    vector: '[1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,0,1,0,1,0,1,0,1,1,1,0,1,0,0,1,0,0,0,1,0,0,1,1,1,1,0,0,0,1,1,0,0,0,1,0,0,1,0,2]'
     vlen: '1'
   states:
     bus_sink: false
