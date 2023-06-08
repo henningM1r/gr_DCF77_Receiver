@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<block>
+    <param>
+    <name>DCF77 Bit Detector</name>
+    <key>DCF77BitDetector</key>
+    <type>float</type>
+  </param>
+
+  <sink>
+    <name>snk_sig</name>
+    <type>float</type>
+  </sink>
+
+  <sink>
+    <name>snk_msg</name>
+    <type>string</type>
+  </sink>
+
+  <source>
+    <name>src_sig</name>
+    <type>float</type>
+  </source>
+</block>

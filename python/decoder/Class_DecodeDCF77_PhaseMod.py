@@ -26,6 +26,7 @@ class Class_DecodeDCF77_PhaseMod():
 
     def decode_bitstream(self, bitstream):
         output = ""
+
         count = len(bitstream)
 
         if count != 60:
@@ -93,13 +94,28 @@ class Class_DecodeDCF77_PhaseMod():
                                      bitstream[30], bitstream[29]], 4)
         hour_dec10 = self.decode_BCD([bitstream[34], bitstream[33]], 2)
 
-        # check parity for the hour values
-        if (bitstream[29] ^ bitstream[30] ^ bitstream[31] ^ bitstream[32] ^
-                bitstream[33] ^ bitstream[34] ^ bitstream[35] == 0):
-            output += "35: Even parity of hours successful\n"
-
+        if hour_dec10 == 2 and hour_dec0 > 3:
+            output += "Error: Hours are greater than 23!\n"
+            hour_dec0 = "?"
+            hour_dec10 = "?"
+        elif (hour_dec0 > 9 and hour_dec10 <= 2):
+            output += "Error: 1*digit of hour is > 9!\n"
+            hour_dec0 = "?"
+        elif (hour_dec10 > 2 and hour_dec0 <= 9):
+            output += "Error: 10*digit of hour is > 2!\n"
+            hour_dec10 = "?"
+        elif (hour_dec10 > 2 and hour_dec0 > 9):
+            output += "Error: 1*digit of hour is > 9!\n"
+            output += "Error: 10*digit of hour is > 2!\n"
+            hour_dec0 = "?"
+            hour_dec10 = "?"
         else:
-            output += "35: Even parity of hours failed\n"
+            # check parity for the hour values
+            if (bitstream[29] ^ bitstream[30] ^ bitstream[31] ^ bitstream[32] ^
+                    bitstream[33] ^ bitstream[34] ^ bitstream[35] == 0):
+                output += "35: Even parity of hours successful\n"
+            else:
+                output += "35: Even parity of hours failed\n"
 
         output += f"21-27 & 29-34: Time: {hour_dec10}{hour_dec0}:{min_dec10}{min_dec0}h\n"
 

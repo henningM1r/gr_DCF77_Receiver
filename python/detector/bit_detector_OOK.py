@@ -12,7 +12,7 @@ _num_ones = 0
 _num_zeros = 0
 
 
-class blk(gr.sync_block):
+class DCF77_BitDetector_blk(gr.sync_block):
 
     def __init__(self, sample_rate=48000, tolerance=0.02):
         gr.sync_block.__init__(
@@ -72,7 +72,7 @@ class blk(gr.sync_block):
         out[:] = self.extract_bits(inp)
 
         # forward input tagged signal
-        return len(output_items[0])
+        return len(out)
 
     def extract_bits(self, inp):
         global _in_sync
@@ -91,14 +91,15 @@ class blk(gr.sync_block):
             else:   # ch == 0
                 _num_zeros += 1
 
-            # first step of synchronization, as soon as an edge
+            # first step of synchronization,
+            # as soon as an edge
             # from zero to one is detected
             if (_in_sync == 0 and ch == 0):
                 _in_sync = -1
                 _num_zeros = 1
                 _num_ones = 0
 
-                key = pmt.intern("edge")
+                key = pmt.intern("")
                 value = pmt.intern(f"0 => -1 {_num_zeros}, {_num_ones}")
                 self.add_item_tag(0,
                                   self.nitems_written(0) + idx,
@@ -108,6 +109,7 @@ class blk(gr.sync_block):
             # do not (yet) synchronize if there
             # is no edge from zero to one yet
             elif (_in_sync == 0 and ch == 1):
+                # thus keep _in_sync_ = 0
                 pass
 
             # second step of synchronization succeeds,
@@ -124,7 +126,7 @@ class blk(gr.sync_block):
                 _num_zeros = 0
                 _num_ones = 1
 
-                key = pmt.intern("edge")
+                key = pmt.intern("")
                 value = pmt.intern(f"-1 => -2  {_num_zeros}, {_num_ones}")
                 self.add_item_tag(0,
                                   self.nitems_written(0) + idx,
@@ -137,7 +139,7 @@ class blk(gr.sync_block):
                      _num_zeros > self._one_hi)):
                 _in_sync = 0
 
-                key = pmt.intern("edge")
+                key = pmt.intern("")
                 value = pmt.intern(f"ERR: -1 => 0: {_num_zeros}, {_num_ones}")
                 self.add_item_tag(0,
                                   self.nitems_written(0) + idx,
@@ -165,7 +167,7 @@ class blk(gr.sync_block):
                 _num_zeros = 1
                 _num_ones = 0
 
-                key = pmt.intern("edge")
+                key = pmt.intern("")
                 value = pmt.intern("-2 => 1")
                 self.add_item_tag(0,
                                   self.nitems_written(0) + idx,
@@ -182,7 +184,7 @@ class blk(gr.sync_block):
                 _num_zeros = 1
                 _num_ones = 0
 
-                key = pmt.intern("edge")
+                key = pmt.intern("")
                 value = pmt.intern(f"ERR: -2 => -1: {_num_zeros}, {_num_ones}")
                 self.add_item_tag(0,
                                   self.nitems_written(0) + idx,
@@ -204,7 +206,7 @@ class blk(gr.sync_block):
                 _in_sync = 2
                 _num_ones = 1
 
-                key = pmt.intern("edge")
+                key = pmt.intern("")
                 value = pmt.intern(f"1 => 2 {_num_zeros}, {_num_ones}")
                 self.add_item_tag(0,
                                   self.nitems_written(0) + idx,
@@ -227,13 +229,14 @@ class blk(gr.sync_block):
 
                     _in_sync = 1
 
-                    key = pmt.intern("edge")
+                    key = pmt.intern("")
                     value = pmt.intern("2 => 1: BIT ZERO")
                     self.add_item_tag(0,
                                       self.nitems_written(0) + idx,
                                       key,
                                       value)
 
+                    # detected 0 bit
                     self.message_port_pub(pmt.intern("msg_out"),
                                           pmt.intern("0"))
 
@@ -250,13 +253,14 @@ class blk(gr.sync_block):
 
                     _in_sync = 1
 
-                    key = pmt.intern("edge")
+                    key = pmt.intern("")
                     value = pmt.intern("2 => 1: BIT ONE")
                     self.add_item_tag(0,
                                       self.nitems_written(0) + idx,
                                       key,
                                       value)
 
+                    # detected 0 bit 
                     self.message_port_pub(pmt.intern("msg_out"),
                                           pmt.intern("1"))
 
@@ -268,10 +272,12 @@ class blk(gr.sync_block):
                       _num_ones > self._reinit_zero_lo and
                       _num_ones < self._reinit_zero_hi):
 
+                    # detected 0 bit
                     msg = "0"
                     self.message_port_pub(pmt.intern("msg_out"),
                                           pmt.intern(msg))
 
+                    # detected new minute
                     msg = "2"
                     self.message_port_pub(pmt.intern("msg_out"),
                                           pmt.intern(msg))
@@ -281,7 +287,7 @@ class blk(gr.sync_block):
 
                     _in_sync = 1
 
-                    key = pmt.intern("edge")
+                    key = pmt.intern("")
                     value = pmt.intern("2 => 1: NEW MIN")
                     self.add_item_tag(0,
                                       self.nitems_written(0) + idx,
@@ -296,10 +302,12 @@ class blk(gr.sync_block):
                       _num_ones > self._reinit_one_lo and
                       _num_ones < self._reinit_one_hi):
 
+                    # detected one bit
                     msg = "1"
                     self.message_port_pub(pmt.intern("msg_out"),
                                           pmt.intern(msg))
 
+                    # detected new minute
                     msg = "2"
                     self.message_port_pub(pmt.intern("msg_out"),
                                           pmt.intern(msg))
@@ -310,7 +318,7 @@ class blk(gr.sync_block):
 
                     _in_sync = 1
 
-                    key = pmt.intern("edge")
+                    key = pmt.intern("")
                     value = pmt.intern("2 => 1: NEW MIN")
                     self.add_item_tag(0,
                                       self.nitems_written(0) + idx,
@@ -337,7 +345,7 @@ class blk(gr.sync_block):
             _num_ones = 0
             _num_zeros = 1
 
-            key = pmt.intern("edge")
+            key = pmt.intern("")
             value = pmt.intern("2 => -1: ERROR")
             self.add_item_tag(0,
                               self.nitems_written(0) + idx,
