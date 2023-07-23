@@ -128,9 +128,11 @@ class Test_Class_DecodeDCF77_PhaseMod(unittest.TestCase):
                                      name='Thread-consumer')
         t_decoder.start()
 
-        bitstream = [1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,0,1,
-                     0,1,0,1,0,1,1,1,0,1,0,0,1,0,0,0,1,0,0,1,1,1,1,0,
-                     0,0,1,1,0,0,0,1,0,0,1,0,2]
+        bitstream = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
+                     0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1,
+                     0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0,
+                     0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1,
+                     0, 0, 0, 1, 0, 0, 1, 0, 2]
         self._mock_send_stream(stream=bitstream, offset=0)
         self._mock_send_msg("___EOT")
 
@@ -223,5 +225,5 @@ class Test_Class_DecodeDCF77_PhaseMod(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    testInstance = Test_Class_DecodeDCF77_OOK()
+    testInstance = Test_Class_DecodeDCF77_PhaseMod()
     unittest.main()

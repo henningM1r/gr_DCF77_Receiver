@@ -101,7 +101,7 @@ Optionally, you can:
 + Run Receiver with: `python3 DCF77_Receiver_PhaseMod.py`
     + It should be run in the 3rd step.
     + A GUI should appear.
-+ T4: (compare above) go to ```/examples/DCF77_Receiver/```
++ T4: (compare above) go to ```/python/```
 + Run the decoder with: `python3 DecodeDCF77_PhaseMod.py`
     + It should be run in the 4th step.
     + The terminal should provide received bits continuously, and a time & date message each minute.
@@ -112,7 +112,7 @@ Details on the parameters of the Phase Modulation receiver are described further
 
 ##### DCF77 On-Off-Keying (OOK) with SDR
 + Set up your SDR with your computer.
-+ Ensure that the raw DCF77 signal reception at 77.5 kHz is good enough, e.g. using gqrx or another signal analysis tool. It should reach at least at approximately -75dB or better.
++ Ensure that the raw DCF77 signal reception at 77.5 kHz is good enough, e.g. using gqrx, SDR# or another signal analysis tool. It should reach at least at approximately -75dB or better.
 + To start the DCF77 receiver, open the flowchart in `/examples/DCF77_Receiver/DCF77_receiver_OOK.grc` with GNU Radio Companion
     + Deactivate/hide the source (and related blocks) from the simulation provided by TCP.
     + Activate/unhide the osmocom source (and related blocks).

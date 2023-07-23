@@ -1,7 +1,9 @@
 
 import sys
 sys.path.append('..')
-from examples.DCF77_Receiver import DCF77_Receiver_OOK_gr_bit_detector_DCF77 as DCF77_BitDetector_OOK
+from examples.DCF77_Receiver \
+    import DCF77_Receiver_OOK_gr_bit_detector_DCF77 \
+    as DCF77_BitDetector_OOK
 import numpy
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
@@ -19,7 +21,6 @@ class test_gr_bitDetector(gr_unittest.TestCase):
 
         src_sig = blocks.vector_source_f(vin2, False)
         snk_sig = blocks.vector_sink_f(1)
-        snk_msg = blocks.message_debug()
 
         # NOTE the test_block must be instantiated and run once
         #      before a subroutines is called manually
@@ -38,7 +39,6 @@ class test_gr_bitDetector(gr_unittest.TestCase):
 
         self.tb = None
 
-    """
     def test_gr_bitDetector_default(self):
         # construct a valid binary input signal
         vin = numpy.zeros(10)
@@ -48,7 +48,9 @@ class test_gr_bitDetector(gr_unittest.TestCase):
         src_sig = blocks.vector_source_f(vin, False)
 
         # block to test
-        test_block = DCF77_BitDetector_OOK.DCF77_BitDetector_blk(sample_rate=48000, tolerance=0.02)
+        test_block = (DCF77_BitDetector_OOK.
+                      DCF77_BitDetector_blk(sample_rate=48000,
+                                            tolerance=0.02))
 
         # signal and message sinks
         snk_sig = blocks.vector_sink_f(1)
@@ -56,10 +58,11 @@ class test_gr_bitDetector(gr_unittest.TestCase):
 
         self.tb.connect(src_sig, (test_block, 0))
         self.tb.connect((test_block, 0), snk_sig)
-        self.tb.msg_connect((test_block, 'msg_out'), (snk_msg, 'print'))
+        self.tb.msg_connect((test_block, 'msg_out'),
+                            (snk_msg, 'print'))
         self.tb.run()
 
-        ## check default parameters of block
+        # check default parameters of block
         # check default sample_rate
         objective = 48000
         result = test_block.sample_rate
@@ -107,7 +110,7 @@ class test_gr_bitDetector(gr_unittest.TestCase):
         vin = numpy.zeros(4800)
         vin = numpy.append(vin, numpy.ones(43200))
 
-        ## 0-symbol
+        # 0-symbol
         vin = numpy.append(vin, numpy.zeros(4800))
         vin = numpy.append(vin, numpy.ones(43200))
         vin = vin.tolist()
@@ -116,7 +119,8 @@ class test_gr_bitDetector(gr_unittest.TestCase):
         src_sig = blocks.vector_source_f(vin, False)
 
         # block to test
-        test_block = DCF77_BitDetector_OOK.DCF77_BitDetector_blk(sample_rate=48000, tolerance=0.02)
+        test_block = (DCF77_BitDetector_OOK.
+                      DCF77_BitDetector_blk(sample_rate=48000, tolerance=0.02))
 
         # signal and message sinks
         snk_sig = blocks.vector_sink_f(1)
@@ -124,19 +128,18 @@ class test_gr_bitDetector(gr_unittest.TestCase):
 
         self.tb.connect(src_sig, (test_block, 0))
         self.tb.connect((test_block, 0), snk_sig)
-        self.tb.msg_connect((test_block, 'msg_out'), (snk_msg, 'print'))
+        self.tb.msg_connect((test_block, 'msg_out'),
+                            (snk_msg, 'print'))
 
-        #self.tb.run()
         self.tb.start()
-        #self.waitFor(lambda: snk_msg.num_messages() >= 1, timeout=2.0, poll_interval=0.01)
         self.tb.stop()
         self.tb.wait()
 
-        # check signal output
-        #vout = numpy.zeros(4800).tolist()
-        #objective = vout
-        #result = snk_sig.data()
-        #self.assertEqual(objective, result)
+        # TODO check signal output
+        # vout = numpy.zeros(4800).tolist()
+        # objective = vout
+        # result = snk_sig.data()
+        # self.assertEqual(objective, result)
 
         # check message output
         objective = 0
@@ -149,7 +152,7 @@ class test_gr_bitDetector(gr_unittest.TestCase):
         vin = numpy.zeros(1)
         vin = numpy.append(vin, numpy.ones(43200))
 
-        ## 1-symbol
+        # 1-symbol
         vin = numpy.append(vin, numpy.zeros(9600))
         vin = numpy.append(vin, numpy.ones(38400))
 
@@ -159,7 +162,9 @@ class test_gr_bitDetector(gr_unittest.TestCase):
         src_sig = blocks.vector_source_f(vin, False)
 
         # block to test
-        test_block = DCF77_BitDetector_OOK.DCF77_BitDetector_blk(sample_rate=48000, tolerance=0.02)
+        test_block = (DCF77_BitDetector_OOK.
+                      DCF77_BitDetector_blk(sample_rate=48000,
+                                            tolerance=0.02))
 
         # signal and message sinks
         snk_sig = blocks.vector_sink_f(1)
@@ -170,21 +175,20 @@ class test_gr_bitDetector(gr_unittest.TestCase):
         self.tb.msg_connect((test_block, 'msg_out'), (snk_msg, 'print'))
 
         self.tb.start()
-        #self.waitFor(lambda: snk_msg.num_messages() == 1, timeout=1.0, poll_interval=0.01)
         self.tb.stop()
         self.tb.wait()
 
-        # check signal output
-        #vout = numpy.zeros(4800).tolist()
-        #objective = vout
-        #result = snk_sig.data()
-        #self.assertEqual(objective, result)
+        # TODO check signal output
+        # vout = numpy.zeros(4800).tolist()
+        # objective = vout
+        # result = snk_sig.data()
+        # self.assertEqual(objective, result)
 
-        # check message output
-        #objective = "0"
-        #result = snk_msg.get_message(0)
-        #self.assertEqual(objective, result)
-"""
+        # TODO check message output
+        # objective = "0"
+        # result = snk_msg.get_message(0)
+        # self.assertEqual(objective, result)
+
     def test_gr_work(self):
         self.setUp_Block()
 
@@ -195,9 +199,11 @@ class test_gr_bitDetector(gr_unittest.TestCase):
         vin2 = vin.tolist()
 
         vout = [vin.copy().tolist()]
-        result = self.test_block.work(input_items=[vin2.copy()], output_items=vout)
+        result = self.test_block.work(input_items=[vin2.copy()],
+                                      output_items=vout)
         self.tb.stop()
 
+        # TODO objective, result and assertion missing
         del self.test_block
         self.tearDown()
 
@@ -572,25 +578,26 @@ class test_gr_bitDetector(gr_unittest.TestCase):
 
         del self.test_block
 
+
 if __name__ == '__main__':
-    gr_unittest.run(test_gr_bitDetector.test_gr_bitDetector_default, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_bitDetector_0, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_bitDetector_1, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_work, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s0, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_sm1, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_sm2_0, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_sm2_1, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s1_0, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s1_1, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s1_0neg, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s1_1neg, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s2_0, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s2_1, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_bit_0, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_bit_1, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_NewMin_0, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_NewMin_1, "test_gr_BitDetector_OOK.xml")
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_lost_0, "test_gr_BitDetector_OOK.xml")
+    gr_unittest.run(test_gr_bitDetector.test_gr_bitDetector_default)
+    gr_unittest.run(test_gr_bitDetector.test_gr_bitDetector_0)
+    gr_unittest.run(test_gr_bitDetector.test_gr_bitDetector_1)
+    gr_unittest.run(test_gr_bitDetector.test_gr_work)
+    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s0)
+    gr_unittest.run(test_gr_bitDetector.test_gr_sync_sm1)
+    gr_unittest.run(test_gr_bitDetector.test_gr_sync_sm2_0)
+    gr_unittest.run(test_gr_bitDetector.test_gr_sync_sm2_1)
+    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s1_0)
+    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s1_1)
+    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s1_0neg)
+    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s1_1neg)
+    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s2_0)
+    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s2_1)
+    gr_unittest.run(test_gr_bitDetector.test_gr_bit_0)
+    gr_unittest.run(test_gr_bitDetector.test_gr_bit_1)
+    gr_unittest.run(test_gr_bitDetector.test_gr_NewMin_0)
+    gr_unittest.run(test_gr_bitDetector.test_gr_NewMin_1)
+    gr_unittest.run(test_gr_bitDetector.test_gr_sync_lost_0)
 
     # TBD test_gr_sync_lost_sm2

@@ -576,7 +576,7 @@ blocks:
       * decodes new minute if 1,8 or 1,9sec one'
     maxoutbuf: '0'
     minoutbuf: '0'
-    sample_rate: samp_rate/decimation
+    sample_rate: int(samp_rate/decimation)
     tolerance: '0.02'
   states:
     _io_cache: ('DCF77\nBit Detector', 'DCF77_BitDetector_blk', [('sample_rate', '48000'),
