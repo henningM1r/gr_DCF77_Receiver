@@ -28,7 +28,7 @@ class Class_DecodeDCF77_OOK():
         output = ""
 
         if bit == 1:
-            output += "00: Start-bit is 1 instead of 0!\n"
+            output += "00: ERROR: Start-bit is 1 instead of 0!\n"
         elif bit == 0:
             output += f"00: Start-bit is 0.\n"
         elif bit == 3:

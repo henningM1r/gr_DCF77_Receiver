@@ -74,7 +74,7 @@ class Test_Class_DecodeDCF77_OOK(unittest.TestCase):
         # positive test - wrong start bit
         bit = 1
         result = self.my_decoder.decode_startbit(bit)
-        objective = "00: Start-bit is 1 instead of 0!\n"
+        objective = "00: ERROR: Start-bit is 1 instead of 0!\n"
         self.assertEqual(objective, result)
 
     def test_decode_clock_change(self):
