@@ -9,7 +9,7 @@ from gnuradio import gr, gr_unittest
 from gnuradio import blocks
 
 
-class test_gr_bitDetector(gr_unittest.TestCase):
+class test_gr_bitDetector_OOK(gr_unittest.TestCase):
 
     def setUp(self):
         self.tb = gr.top_block()
@@ -580,24 +580,24 @@ class test_gr_bitDetector(gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(test_gr_bitDetector.test_gr_bitDetector_default)
-    gr_unittest.run(test_gr_bitDetector.test_gr_bitDetector_0)
-    gr_unittest.run(test_gr_bitDetector.test_gr_bitDetector_1)
-    gr_unittest.run(test_gr_bitDetector.test_gr_work)
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s0)
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_sm1)
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_sm2_0)
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_sm2_1)
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s1_0)
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s1_1)
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s1_0neg)
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s1_1neg)
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s2_0)
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_s2_1)
-    gr_unittest.run(test_gr_bitDetector.test_gr_bit_0)
-    gr_unittest.run(test_gr_bitDetector.test_gr_bit_1)
-    gr_unittest.run(test_gr_bitDetector.test_gr_NewMin_0)
-    gr_unittest.run(test_gr_bitDetector.test_gr_NewMin_1)
-    gr_unittest.run(test_gr_bitDetector.test_gr_sync_lost_0)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_bitDetector_default)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_bitDetector_0)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_bitDetector_1)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_work)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_sync_s0)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_sync_sm1)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_sync_sm2_0)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_sync_sm2_1)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_sync_s1_0)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_sync_s1_1)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_sync_s1_0neg)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_sync_s1_1neg)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_sync_s2_0)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_sync_s2_1)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_bit_0)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_bit_1)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_NewMin_0)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_NewMin_1)
+    gr_unittest.run(test_gr_bitDetector_OOK.test_gr_sync_lost_0)
 
     # TBD test_gr_sync_lost_sm2
