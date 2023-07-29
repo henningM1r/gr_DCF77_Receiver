@@ -36,16 +36,18 @@ blocks:
 - name: chip_size
   id: variable_qtgui_range
   parameters:
-    comment: ''
+    comment: 'NOTE:
+
+      depends on decimation!'
     gui_hint: ''
     label: Chip size
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: int
-    start: '70'
+    start: '20'
     step: '1'
-    stop: '80'
-    value: '75'
+    stop: '30'
+    value: '25'
     widget: counter_slider
   states:
     bus_sink: false
@@ -58,7 +60,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '4'
+    value: '12'
   states:
     bus_sink: false
     bus_source: false
@@ -78,22 +80,6 @@ blocks:
     coordinate: [304, 12.0]
     rotation: 0
     state: true
-- name: fun_prob
-  id: variable_function_probe
-  parameters:
-    block_id: probe_signal
-    comment: ''
-    function_args: ''
-    function_name: level
-    poll_rate: shift_poll_freq
-    value: '0'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [784, 1508.0]
-    rotation: 0
-    state: enabled
 - name: gain1
   id: variable_qtgui_range
   parameters:
@@ -130,7 +116,7 @@ blocks:
     rangeType: float
     start: '1'
     step: '0.5'
-    stop: '30'
+    stop: '35'
     value: '25'
     widget: counter_slider
   states:
@@ -156,7 +142,7 @@ blocks:
     start: '0'
     step: '1'
     stop: '500'
-    value: '80'
+    value: '100'
     widget: counter_slider
   states:
     bus_sink: false
@@ -190,16 +176,37 @@ blocks:
     coordinate: [824, 12.0]
     rotation: 0
     state: true
-- name: phase_shift
-  id: variable
+- name: pll_bw
+  id: variable_qtgui_range
   parameters:
     comment: ''
-    value: phase_shift_fct.shift_freq(fun_prob)
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '1'
+    step: '0.5'
+    stop: '15'
+    value: '1'
+    widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [784, 1716.0]
+    coordinate: [1544, 300.0]
+    rotation: 0
+    state: enabled
+- name: pll_limit
+  id: variable
+  parameters:
+    comment: ''
+    value: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1664, 300.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -212,48 +219,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [200, 12.0]
-    rotation: 0
-    state: enabled
-- name: shift_poll_freq
-  id: variable_qtgui_range
-  parameters:
-    comment: ''
-    gui_hint: ''
-    label: shift_poll_freq
-    min_len: '200'
-    orient: QtCore.Qt.Horizontal
-    rangeType: float
-    start: '0'
-    step: '100'
-    stop: samp_rate
-    value: '24000'
-    widget: counter_slider
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [624, 1508.0]
-    rotation: 0
-    state: enabled
-- name: shift_step
-  id: variable_qtgui_range
-  parameters:
-    comment: ''
-    gui_hint: ''
-    label: shift_step
-    min_len: '200'
-    orient: QtCore.Qt.Horizontal
-    rangeType: float
-    start: '0.00000'
-    step: '0.00001'
-    stop: '0.00350'
-    value: '0.00250'
-    widget: counter_slider
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [480, 1508.0]
     rotation: 0
     state: enabled
 - name: variable_low_pass_filter_taps_0
@@ -271,6 +236,24 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [640, 492.0]
+    rotation: 0
+    state: enabled
+- name: analog_pll_carriertracking_cc_0
+  id: analog_pll_carriertracking_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: phase  drift compensation
+    max_freq: 2*math.pi*pll_limit/samp_rate
+    maxoutbuf: '0'
+    min_freq: -2*math.pi*pll_limit/samp_rate
+    minoutbuf: '0'
+    w: 2*math.pi*pll_bw/samp_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1544, 420.0]
     rotation: 0
     state: enabled
 - name: analog_simple_squelch_cc_0
@@ -308,7 +291,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792, 1036.0]
+    coordinate: [536, 996.0]
     rotation: 0
     state: disabled
 - name: blocks_add_const_vxx_0
@@ -330,7 +313,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1280, 1260.0]
+    coordinate: [1360, 1212.0]
     rotation: 0
     state: true
 - name: blocks_complex_to_arg_0
@@ -350,7 +333,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [656, 1280.0]
+    coordinate: [296, 1232.0]
     rotation: 0
     state: true
 - name: blocks_complex_to_mag_squared_0
@@ -366,7 +349,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [392, 1128.0]
+    coordinate: [296, 1080.0]
     rotation: 0
     state: enabled
 - name: blocks_message_debug_0
@@ -380,7 +363,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [760, 2272.0]
+    coordinate: [800, 1672.0]
     rotation: 0
     state: disabled
 - name: blocks_message_debug_0_0
@@ -394,29 +377,37 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1040, 2272.0]
+    coordinate: [1080, 1672.0]
     rotation: 0
     state: true
-- name: blocks_moving_average_xx_0
+- name: blocks_moving_average_xx_1
   id: blocks_moving_average_xx
   parameters:
     affinity: ''
     alias: ''
-    comment: "compute long-time\naverage phase:\n* if it is too short, it\n   overcompensates\
-      \ and\n   disturbs the desired \n   the shorttime phases\n* if it is too long,\
-      \ it converges\n   too slowly due to the delay"
-    length: '2500'
-    max_iter: '10000'
+    comment: 'to smooth out
+
+      undesired spikes
+
+      from the OOK
+
+      decider for more
+
+      resilience against
+
+      interference'
+    length: '5'
+    max_iter: '100'
     maxoutbuf: '0'
     minoutbuf: '0'
-    scale: 1/2500
+    scale: 1/5
     type: float
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [272, 1740.0]
+    coordinate: [536, 1052.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0
@@ -438,7 +429,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [232, 2132.0]
+    coordinate: [272, 1532.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0_0
@@ -492,18 +483,16 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1536, 436.0]
+    coordinate: [1816, 436.0]
     rotation: 0
     state: enabled
-- name: blocks_multiply_const_xx_0
-  id: blocks_multiply_const_xx
+- name: blocks_multiply_const_vxx_2
+  id: blocks_multiply_const_vxx
   parameters:
     affinity: ''
     alias: ''
-    comment: 'weighting parameter for
-
-      corrective phase feedback'
-    const: shift_step
+    comment: ''
+    const: '200'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: float
@@ -512,9 +501,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [528, 1788.0]
+    coordinate: [1192, 900.0]
     rotation: 0
-    state: enabled
+    state: true
 - name: blocks_multiply_xx_0
   id: blocks_multiply_xx
   parameters:
@@ -532,7 +521,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [896, 1248.0]
+    coordinate: [976, 1200.0]
     rotation: 0
     state: true
 - name: blocks_multiply_xx_2
@@ -558,36 +547,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1488, 1128.0]
-    rotation: 0
-    state: true
-- name: blocks_phase_shift_0
-  id: blocks_phase_shift
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: 'apply phase drift
-
-      correction by shifting
-
-      the phase to the
-
-      opposite direction of
-
-      the current long-time
-
-      average phase towards
-
-      zero'
-    is_radians: 'True'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    shift: '0'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [416, 1264.0]
+    coordinate: [1568, 1080.0]
     rotation: 0
     state: true
 - name: blocks_threshold_ff_0
@@ -611,7 +571,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [656, 1108.0]
+    coordinate: [768, 1060.0]
     rotation: 0
     state: true
 - name: blocks_threshold_ff_2
@@ -631,26 +591,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1072, 1244.0]
-    rotation: 0
-    state: enabled
-- name: blocks_var_to_msg_0_0
-  id: blocks_var_to_msg
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: 'get phase drift correction
-
-      value from probe function'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    msgname: ampl
-    target: phase_shift
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [72, 1284.0]
+    coordinate: [1152, 1196.0]
     rotation: 0
     state: enabled
 - name: epy_block_0
@@ -660,13 +601,14 @@ blocks:
       # counted number of +1 samples\n_num_pos = 0\n# counted number of -1 samples\n\
       _num_neg = 0\n# counted number of zero samples\n_num_zero = 0\n\n# array for\
       \ each chip symbol per second\n_code = []\n_code = np.array(_code)\n\n\nclass\
-      \ blk(gr.sync_block):\n\n    def __init__(self, samp_rate=48000, chip_size=75):\n\
-      \n        gr.sync_block.__init__(\n            self,\n            name='DCF77\\\
-      nPhase Detector',\n            in_sig=[np.float32],\n            out_sig=[np.float32]\n\
-      \        )\n\n        self.samp_rate = samp_rate\n        self.off_duration\
-      \ = int(self.samp_rate*0.3)\n\n        # from signal inspection: size between\
-      \ approx. 74-78 seems good\n        self.chip_size = chip_size\n\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
-      \n        print(\"Edge Tagger\")\n        print(\"samp_rate:\", self.samp_rate)\n\
+      \ DCF77_BitDetector_blk(gr.sync_block):\n\n    def __init__(self, sample_rate=48000,\
+      \ chip_size=75):\n\n        gr.sync_block.__init__(\n            self,\n   \
+      \         name='DCF77\\nPhase Detector',\n            in_sig=[np.float32],\n\
+      \            out_sig=[np.float32]\n        )\n\n        self.sample_rate = sample_rate\n\
+      \        self.off_duration = int(self.sample_rate*0.3)\n\n        # from signal\
+      \ inspection: size between approx. 74-78 seems good\n        self.chip_size\
+      \ = chip_size\n\n        self.message_port_register_out(pmt.intern('msg_out'))\n\
+      \n        print(\"Edge Tagger\")\n        print(\"sample_rate:\", self.sample_rate)\n\
       \        print(\"off_duration:\", self.off_duration)\n\n    def work(self, input_items,\
       \ output_items):\n        inp = input_items[0]\n        out = output_items[0]\n\
       \n        out[:] = self.edge_detection(inp)\n\n        return len(out)\n\n \
@@ -680,79 +622,80 @@ blocks:
       \ of bits\n        code = code.astype(int).tolist()\n        msg = \"\".join(str(x)\
       \ for x in code)\n\n        self.message_port_pub(pmt.intern(\"msg_out\"),\n\
       \                              pmt.intern(f\"{msg}\"))\n\n    def reinit_code(self):\n\
-      \        global _code\n        global _num_pos\n        global _num_neg\n\n\
-      \        # reinitialize code vector\n        _code = []\n        _code = np.array(_code)\n\
-      \n        _num_pos = 0\n        _num_neg = 0\n\n    def edge_detection(self,\
-      \ inp):\n        global _num_pos\n        global _num_neg\n        global _num_zero\n\
-      \        global _code\n\n        out = inp\n        \n        for idx, ch in\
-      \ enumerate(inp):\n            if (ch == +1):\n                _num_pos += 1\n\
-      \            \n            elif (ch == -1):\n                _num_neg += 1\n\
-      \n            else:   # ch == 0\n                _num_pos = 0\n            \
-      \    _num_neg = 0  \n                _num_zero += 1\n\n            # ensure\
-      \ the total break is always 200ms\n            # NOTE: there might be a more\
-      \ elegant solution,\n            # but it works for now.\n            if (_num_zero\
-      \ > 1 and\n                    _num_zero < self.off_duration):\n           \
-      \     _num_pos = 0\n                _num_neg = 0\n                _num_zero\
-      \ += 1\n                out[idx] = 0\n\n            # Detect the minute marker\
-      \ within the phase signal:\n            # The minute marker has a prolonged\
-      \ high OOK signal. In the phase\n            # signal there are two symbols\
-      \ contained with a 200ms break in\n            # between. Thus the break is\
-      \ either a long 1 or long -1 instead of\n            # a (muted) zero. This\
-      \ longer +/-1 symbol triggers the minute\n            # detector. Note that\
-      \ the very next symbol yet belongs to the\n            # current minute. Further\
-      \ subsequent symbols belong to the next\n            # minute as expected!\n\
-      \            if (_num_pos > int(self.off_duration*0.66) or\n               \
-      \     _num_neg > int(self.off_duration*0.66)):\n                key = pmt.intern(\"\
-      \")\n                value = pmt.intern(\"2\")\n                self.add_item_tag(0,\n\
+      \        global _code\n        global _num_pos\n        global _num_neg\n  \
+      \      global _num_zero\n\n        # reinitialize code vector\n        _code\
+      \ = []\n        _code = np.array(_code)\n\n        _num_pos = 0\n        _num_neg\
+      \ = 0\n        _num_zero = 0\n\n    def edge_detection(self, inp):\n       \
+      \ global _num_pos\n        global _num_neg\n        global _num_zero\n     \
+      \   global _code\n\n        out = inp\n        \n        for idx, ch in enumerate(inp):\n\
+      \            if (ch == +1):\n                _num_pos += 1\n            \n \
+      \           elif (ch == -1):\n                _num_neg += 1\n\n            else:\
+      \   # ch == 0\n                _num_pos = 0\n                _num_neg = 0  \n\
+      \                _num_zero += 1\n\n            # ensure the total break is always\
+      \ 200ms\n            # NOTE: there might be a more elegant solution,\n     \
+      \       # but it works for now.\n            if (_num_zero > 1 and\n       \
+      \             _num_zero < self.off_duration):\n                _num_pos = 0\n\
+      \                _num_neg = 0\n                _num_zero += 1\n            \
+      \    out[idx] = 0\n\n            # Detect the minute marker within the phase\
+      \ signal:\n            # The minute marker has a prolonged high OOK signal.\
+      \ In the phase\n            # signal there are two symbols contained with a\
+      \ 200ms break in\n            # between. Thus the break is either a long 1 or\
+      \ a long -1 instead\n            # of a (muted) zero. This longer +/-1 symbol\
+      \ triggers the minute\n            # detector. Note that the very next symbol\
+      \ yet belongs to the\n            # current minute. Further subsequent symbols\
+      \ belong to the next\n            # minute as expected!\n            if (_num_pos\
+      \ > int(self.off_duration*0.66) or\n                    _num_neg > int(self.off_duration*0.66)):\n\
+      \                key = pmt.intern(\"\")\n                value = pmt.intern(\"\
+      2\")\n                self.add_item_tag(0,\n                    self.nitems_written(0)\
+      \ + idx,\n                    key,\n                    value)\n\n         \
+      \       _code = self.code_append(code=_code, num=1, mode=2)\n\n            \
+      \    self.transmit_code(code=_code)\n                self.reinit_code()\n\n\
+      \            # detect edge from +1 -> -1\n            elif _num_pos > 1 and\
+      \ ch == -1:\n                key = pmt.intern(\"\")\n                value =\
+      \ pmt.intern(f\"-1,{_num_pos}\")\n                self.add_item_tag(0,\n   \
+      \                 self.nitems_written(0) + idx,\n                    key,\n\
+      \                    value)\n\n                _code = self.code_append(code=_code,\
+      \ num=_num_pos, mode=+1)\n\n                _num_pos = 0\n                _num_zero\
+      \ = 0\n\n            # detect edge from -1 -> +1\n            elif _num_neg\
+      \ > 1 and ch == +1:\n                key = pmt.intern(\"\")\n              \
+      \  value = pmt.intern(f\"+1,{_num_neg}\")\n                self.add_item_tag(0,\n\
       \                    self.nitems_written(0) + idx,\n                    key,\n\
       \                    value)\n\n                _code = self.code_append(code=_code,\
-      \ num=1, mode=2)\n\n                self.transmit_code(code=_code)\n       \
-      \         self.reinit_code()\n\n            # detect edge from +1 -> -1\n  \
-      \          elif _num_pos > 1 and ch == -1:\n                key = pmt.intern(\"\
-      \")\n                value = pmt.intern(f\"-1,{_num_pos}\")\n              \
-      \  self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
-      \                    key,\n                    value)\n\n                _code\
-      \ = self.code_append(code=_code, num=_num_pos, mode=+1)\n\n                _num_pos\
-      \ = 0\n                _num_zero = 0\n\n            # detect edge from -1 ->\
-      \ +1\n            elif _num_neg > 1 and ch == +1:\n                key = pmt.intern(\"\
-      \")\n                value = pmt.intern(f\"+1,{_num_neg}\")\n              \
-      \  self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
-      \                    key,\n                    value)\n\n                _code\
-      \ = self.code_append(code=_code, num=_num_neg, mode=-1)\n\n                _num_neg\
-      \ = 0\n                _num_zero = 0\n\n            # detect edge from 0 ->\
-      \ +1\n            elif (_num_zero > 1 and\n                    _num_zero >=\
-      \ self.off_duration and\n                    ch == +1):\n                key\
-      \ = pmt.intern(\"\")\n                value = pmt.intern(\"+1\")\n         \
-      \       self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
-      \                    key,\n                    value)\n\n                _num_neg\
-      \ = 0\n                _num_zero = 0\n\n            # detect edge from 0 ->\
-      \ -1\n            elif (_num_zero > 1 and\n                    _num_zero >=\
-      \ self.off_duration and\n                    ch == -1):\n                key\
-      \ = pmt.intern(\"\")\n                value = pmt.intern(\"-1\")\n         \
-      \       self.add_item_tag(0,\n                    self.nitems_written(0) + idx,\n\
-      \                    key,\n                    value)\n\n                _num_pos\
-      \ = 0\n                _num_zero = 0\n\n            # detect edge from -1 ->\
-      \ 0\n            elif _num_zero == 1:\n                key = pmt.intern(\"\"\
-      )\n                value = pmt.intern(\"0\")\n                self.add_item_tag(0,\n\
+      \ num=_num_neg, mode=-1)\n\n                _num_neg = 0\n                _num_zero\
+      \ = 0\n\n            # detect edge from 0 -> +1\n            elif (_num_zero\
+      \ > 1 and\n                    _num_zero >= self.off_duration and\n        \
+      \            ch == +1):\n                key = pmt.intern(\"\")\n          \
+      \      value = pmt.intern(\"+1\")\n                self.add_item_tag(0,\n  \
+      \                  self.nitems_written(0) + idx,\n                    key,\n\
+      \                    value)\n\n                _num_neg = 0\n              \
+      \  _num_zero = 0\n\n            # detect edge from 0 -> -1\n            elif\
+      \ (_num_zero > 1 and\n                    _num_zero >= self.off_duration and\n\
+      \                    ch == -1):\n                key = pmt.intern(\"\")\n  \
+      \              value = pmt.intern(\"-1\")\n                self.add_item_tag(0,\n\
       \                    self.nitems_written(0) + idx,\n                    key,\n\
-      \                    value)\n\n                self.transmit_code(code=_code)\n\
-      \                self.reinit_code()\n\n        return out\n\n            \n\n"
+      \                    value)\n\n                _num_pos = 0\n              \
+      \  _num_zero = 0\n\n            # detect edge from -1 -> 0\n            elif\
+      \ _num_zero == 1:\n                key = pmt.intern(\"\")\n                value\
+      \ = pmt.intern(\"0\")\n                self.add_item_tag(0,\n              \
+      \      self.nitems_written(0) + idx,\n                    key,\n           \
+      \         value)\n\n                self.transmit_code(code=_code)\n       \
+      \         self.reinit_code()\n\n        return out\n\n            \n\n"
     affinity: ''
-    alias: ''
+    alias: DCF77_Phase_Detector
     chip_size: chip_size
     comment: "* append tags\n    0, -1, +1\n* ensure 200ms are\n    muted (=0) during\
       \ \n    PSN off-time"
     maxoutbuf: '0'
     minoutbuf: '0'
-    samp_rate: samp_rate/decimation
+    sample_rate: int(samp_rate/decimation)
   states:
-    _io_cache: ('DCF77\nPhase Detector', 'blk', [('samp_rate', '48000'), ('chip_size',
-      '75')], [('0', 'float', 1)], [('0', 'float', 1), ('msg_out', 'message', 1)],
-      '', ['chip_size', 'samp_rate'])
+    _io_cache: ('DCF77\nPhase Detector', 'DCF77_BitDetector_blk', [('sample_rate',
+      '48000'), ('chip_size', '75')], [('0', 'float', 1)], [('0', 'float', 1), ('msg_out',
+      'message', 1)], '', ['chip_size', 'sample_rate'])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [456, 2116.0]
+    coordinate: [496, 1516.0]
     rotation: 0
     state: enabled
 - name: epy_block_1
@@ -833,7 +776,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [760, 2148.0]
+    coordinate: [800, 1548.0]
     rotation: 0
     state: true
 - name: freq_xlating_fir_filter_xxx_0
@@ -955,24 +898,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1288, 2004.0]
+    coordinate: [1328, 1404.0]
     rotation: 0
     state: true
-- name: note_1
-  id: note
-  parameters:
-    alias: ''
-    comment: 'Phase drift
-
-      compensation block'
-    note: ''
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [192, 1508.0]
-    rotation: 0
-    state: enabled
 - name: osmosdr_source_0
   id: osmosdr_source
   parameters:
@@ -1334,39 +1262,6 @@ blocks:
     coordinate: [88, 276.0]
     rotation: 0
     state: disabled
-- name: phase_shift_fct
-  id: epy_module
-  parameters:
-    alias: ''
-    comment: "phase rotates from pi to -pi\nfor given poll frequency and \ngiven weight\
-      \ to countereffect\nthe phase drift"
-    source_code: "# this module will be imported in the into your flowgraph\n\n\n\
-      import math\n\n\nf1 = -math.pi\nf2 = +math.pi\n\nf = 0\n\n\ndef shift_freq(weighted_trigger):\n\
-      \    global f1, f2, f\n\n    if weighted_trigger:\n        f = f - weighted_trigger\n\
-      \n    if f <= f1:\n        f = f2\n\n    return f\n"
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [784, 1612.0]
-    rotation: 0
-    state: enabled
-- name: probe_signal
-  id: blocks_probe_signal_x
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: 'weighted poll signal
-
-      for phase shift correction'
-    type: float
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [784, 1788.0]
-    rotation: 0
-    state: enabled
 - name: qtgui_freq_sink_x_0
   id: qtgui_freq_sink_x
   parameters:
@@ -1585,8 +1480,8 @@ blocks:
     marker8: '-1'
     marker9: '-1'
     name: '""'
-    nconnections: '1'
-    size: samp_rate*5
+    nconnections: '2'
+    size: samp_rate*2
     srate: samp_rate
     stemplot: 'False'
     style1: '1'
@@ -1625,106 +1520,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1048, 884.0]
+    coordinate: [1408, 868.0]
     rotation: 0
     state: enabled
-- name: qtgui_time_sink_x_0_0
-  id: qtgui_time_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    alpha1: '1.0'
-    alpha10: '1.0'
-    alpha2: '1.0'
-    alpha3: '1.0'
-    alpha4: '1.0'
-    alpha5: '1.0'
-    alpha6: '1.0'
-    alpha7: '1.0'
-    alpha8: '1.0'
-    alpha9: '1.0'
-    autoscale: 'False'
-    axislabels: 'True'
-    color1: blue
-    color10: dark blue
-    color2: red
-    color3: green
-    color4: black
-    color5: cyan
-    color6: magenta
-    color7: yellow
-    color8: dark red
-    color9: dark green
-    comment: ''
-    ctrlpanel: 'False'
-    entags: 'True'
-    grid: 'True'
-    gui_hint: ''
-    label1: cur. phase
-    label10: Signal 10
-    label2: avg. phase
-    label3: corrected phase
-    label4: Signal 4
-    label5: Signal 5
-    label6: Signal 6
-    label7: Signal 7
-    label8: Signal 8
-    label9: Signal 9
-    legend: 'True'
-    marker1: '-1'
-    marker10: '-1'
-    marker2: '-1'
-    marker3: '-1'
-    marker4: '-1'
-    marker5: '-1'
-    marker6: '-1'
-    marker7: '-1'
-    marker8: '-1'
-    marker9: '-1'
-    name: Average Phase
-    nconnections: '2'
-    size: int(3*samp_rate/8)
-    srate: samp_rate
-    stemplot: 'False'
-    style1: '1'
-    style10: '1'
-    style2: '1'
-    style3: '1'
-    style4: '1'
-    style5: '1'
-    style6: '1'
-    style7: '1'
-    style8: '1'
-    style9: '1'
-    tr_chan: '0'
-    tr_delay: '0'
-    tr_level: '0.0'
-    tr_mode: qtgui.TRIG_MODE_FREE
-    tr_slope: qtgui.TRIG_SLOPE_POS
-    tr_tag: '""'
-    type: float
-    update_time: '0.025'
-    width1: '1'
-    width10: '1'
-    width2: '1'
-    width3: '1'
-    width4: '1'
-    width5: '1'
-    width6: '1'
-    width7: '1'
-    width8: '1'
-    width9: '1'
-    ylabel: Amplitude
-    ymax: math.pi+0.25
-    ymin: -math.pi-0.25
-    yunit: '""'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [528, 1668.0]
-    rotation: 0
-    state: disabled
 - name: qtgui_time_sink_x_2
   id: qtgui_time_sink_x
   parameters:
@@ -1780,7 +1578,7 @@ blocks:
     marker9: '-1'
     name: received complex passband signal
     nconnections: '1'
-    size: samp_rate*4
+    size: samp_rate*3
     srate: samp_rate
     stemplot: 'False'
     style1: '1'
@@ -1877,7 +1675,7 @@ blocks:
     marker9: '-1'
     name: Drift Corrected Phase & PNS
     nconnections: '2'
-    size: int(samp_rate)
+    size: int(samp_rate/6)
     srate: samp_rate
     stemplot: 'False'
     style1: '1'
@@ -1916,7 +1714,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [728, 2020.0]
+    coordinate: [744, 1420.0]
     rotation: 0
     state: true
 - name: rational_resampler_xxx_0
@@ -1966,7 +1764,33 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792, 876.0]
+    coordinate: [536, 844.0]
+    rotation: 0
+    state: enabled
+- name: rational_resampler_xxx_1_0
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'for correct timing-display
+
+      the previous down-sampled
+
+      /decimated signal must be
+
+      upsampled/interpolated again'
+    decim: '1'
+    fbw: '0'
+    interp: decimation
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: '[]'
+    type: fff
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [968, 924.0]
     rotation: 0
     state: enabled
 - name: virtual_sink_0
@@ -1979,7 +1803,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1744, 436.0]
+    coordinate: [2024, 436.0]
     rotation: 0
     state: true
 - name: virtual_sink_0_0
@@ -1996,7 +1820,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1072, 1156.0]
+    coordinate: [1152, 1108.0]
     rotation: 0
     state: true
 - name: virtual_sink_1
@@ -2009,7 +1833,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1672, 1140.0]
+    coordinate: [1752, 1092.0]
     rotation: 0
     state: true
 - name: virtual_source_0
@@ -2022,7 +1846,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [80, 1124.0]
+    coordinate: [80, 1076.0]
     rotation: 0
     state: true
 - name: virtual_source_1
@@ -2035,22 +1859,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [464, 2028.0]
+    coordinate: [504, 1428.0]
     rotation: 0
     state: true
-- name: virtual_source_2
-  id: virtual_source
-  parameters:
-    alias: ''
-    comment: from phase signal
-    stream_id: '2'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [64, 1676.0]
-    rotation: 0
-    state: enabled
 - name: virtual_source_3
   id: virtual_source
   parameters:
@@ -2061,7 +1872,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 2132.0]
+    coordinate: [72, 1532.0]
     rotation: 0
     state: true
 - name: zeromq_push_msg_sink_1
@@ -2083,34 +1894,33 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1016, 2140.0]
+    coordinate: [1056, 1540.0]
     rotation: 0
     state: enabled
 
 connections:
+- [analog_pll_carriertracking_cc_0, '0', blocks_multiply_const_vxx_1_0, '0']
 - [analog_simple_squelch_cc_0, '0', qtgui_freq_sink_x_1, '0']
 - [analog_simple_squelch_cc_0, '0', qtgui_time_sink_x_2, '0']
 - [analog_simple_squelch_cc_0, '0', rational_resampler_xxx_0, '0']
 - [blocks_add_const_vxx_0, '0', blocks_multiply_xx_2, '1']
 - [blocks_complex_to_arg_0, '0', blocks_multiply_xx_0, '1']
 - [blocks_complex_to_mag_squared_0, '0', audio_sink_0, '0']
-- [blocks_complex_to_mag_squared_0, '0', blocks_threshold_ff_0, '0']
+- [blocks_complex_to_mag_squared_0, '0', blocks_moving_average_xx_1, '0']
 - [blocks_complex_to_mag_squared_0, '0', rational_resampler_xxx_1, '0']
-- [blocks_moving_average_xx_0, '0', blocks_multiply_const_xx_0, '0']
-- [blocks_moving_average_xx_0, '0', qtgui_time_sink_x_0_0, '1']
+- [blocks_moving_average_xx_1, '0', blocks_threshold_ff_0, '0']
 - [blocks_multiply_const_vxx_0, '0', epy_block_0, '0']
 - [blocks_multiply_const_vxx_0_0, '0', freq_xlating_fir_filter_xxx_0_0, '0']
 - [blocks_multiply_const_vxx_1, '0', analog_simple_squelch_cc_0, '0']
 - [blocks_multiply_const_vxx_1_0, '0', virtual_sink_0, '0']
-- [blocks_multiply_const_xx_0, '0', probe_signal, '0']
+- [blocks_multiply_const_vxx_2, '0', qtgui_time_sink_x_0, '1']
 - [blocks_multiply_xx_0, '0', blocks_threshold_ff_2, '0']
 - [blocks_multiply_xx_0, '0', virtual_sink_0_0, '0']
 - [blocks_multiply_xx_2, '0', virtual_sink_1, '0']
-- [blocks_phase_shift_0, '0', blocks_complex_to_arg_0, '0']
 - [blocks_threshold_ff_0, '0', blocks_multiply_xx_0, '0']
 - [blocks_threshold_ff_0, '0', blocks_multiply_xx_2, '0']
+- [blocks_threshold_ff_0, '0', rational_resampler_xxx_1_0, '0']
 - [blocks_threshold_ff_2, '0', blocks_add_const_vxx_0, '0']
-- [blocks_var_to_msg_0_0, msgout, blocks_phase_shift_0, shift]
 - [epy_block_0, '0', qtgui_time_sink_x_2_0, '1']
 - [epy_block_0, msg_out, blocks_message_debug_0, print]
 - [epy_block_0, msg_out, epy_block_1, msg_in]
@@ -2121,13 +1931,12 @@ connections:
 - [network_tcp_source_1, '0', freq_xlating_fir_filter_xxx_0, '0']
 - [osmosdr_source_0, '0', blocks_multiply_const_vxx_0_0, '0']
 - [osmosdr_source_0, '0', qtgui_freq_sink_x_0, '0']
-- [rational_resampler_xxx_0, '0', blocks_multiply_const_vxx_1_0, '0']
+- [rational_resampler_xxx_0, '0', analog_pll_carriertracking_cc_0, '0']
 - [rational_resampler_xxx_1, '0', qtgui_time_sink_x_0, '0']
+- [rational_resampler_xxx_1_0, '0', blocks_multiply_const_vxx_2, '0']
+- [virtual_source_0, '0', blocks_complex_to_arg_0, '0']
 - [virtual_source_0, '0', blocks_complex_to_mag_squared_0, '0']
-- [virtual_source_0, '0', blocks_phase_shift_0, '0']
 - [virtual_source_1, '0', qtgui_time_sink_x_2_0, '0']
-- [virtual_source_2, '0', blocks_moving_average_xx_0, '0']
-- [virtual_source_2, '0', qtgui_time_sink_x_0_0, '0']
 - [virtual_source_3, '0', blocks_multiply_const_vxx_0, '0']
 
 metadata:

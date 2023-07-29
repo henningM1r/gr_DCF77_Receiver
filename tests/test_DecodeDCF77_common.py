@@ -526,5 +526,6 @@ class Test_Class_DecodeDCF77_common(unittest.TestCase):
             # positive test - minute mark bit valid (1)
             bit = 1
             result = self.my_decoder.decode_minute_mark(bit)
-            objective = "59: ERROR: Minute mark of DCF77 phase modulation failed, it is not 0.\n"
+            objective = "59: ERROR: Minute mark of DCF77 phase " + \
+                        "modulation failed, it is not 0.\n"
             self.assertEqual(objective, result)
