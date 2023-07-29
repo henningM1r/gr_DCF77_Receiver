@@ -63,6 +63,31 @@ class Test_Class_DecodeDCF77_common(unittest.TestCase):
         objective = "?"
         self.assertEqual(objective, result)
 
+    def test_decode_fixed_pm_bits(self):
+        bits = [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0]
+        result = self.my_decoder.decode_fixed_PM_bits(bits)
+        objective = "01-09: 9 times 1-bits in DCF77 phase modulation.\n" + \
+                    "10-14: 5 times 0-bits in DCF77 phase modulation.\n"
+        self.assertEqual(objective, result)
+
+        bits = [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0]
+        result = self.my_decoder.decode_fixed_PM_bits(bits)
+        objective = "01-09: ERROR: faulty bit(s) detected.\n" + \
+                    "10-14: 5 times 0-bits in DCF77 phase modulation.\n"
+        self.assertEqual(objective, result)
+
+        bits = [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1]
+        result = self.my_decoder.decode_fixed_PM_bits(bits)
+        objective = "01-09: 9 times 1-bits in DCF77 phase modulation.\n" + \
+                    "10-14: ERROR: faulty bit(s) detected.\n"
+        self.assertEqual(objective, result)
+
+        bits = [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 3]
+        result = self.my_decoder.decode_fixed_PM_bits(bits)
+        objective = "01-09: 9 times 1-bits in DCF77 phase modulation.\n" + \
+                    "10-14: ERROR: faulty bit(s) detected.\n"
+        self.assertEqual(objective, result)
+
     def test_decode_clock_change(self):
         # positive test - no clock change
         bit = 0
@@ -74,6 +99,12 @@ class Test_Class_DecodeDCF77_common(unittest.TestCase):
         bit = 1
         result = self.my_decoder.decode_clock_change(bit)
         objective = "16: Clock change.\n"
+        self.assertEqual(objective, result)
+
+        # positive test - clock change
+        bit = 3
+        result = self.my_decoder.decode_clock_change(bit)
+        objective = "16: ERROR: Clock change contains an error.\n"
         self.assertEqual(objective, result)
 
     def test_decode_summertime(self):
@@ -516,16 +547,16 @@ class Test_Class_DecodeDCF77_common(unittest.TestCase):
                     "58: ERROR: Even parity of date and weekdays is ?.\n"
         self.assertEqual(objective, result)
 
-        def test_decode_minute_mark(self):
-            # positive test - minute mark bit valid (0)
-            bit = 0
-            result = self.my_decoder.decode_minute_mark(bit)
-            objective = "59: Minute mark of DCF77 phase modulation is 0.\n"
-            self.assertEqual(objective, result)
+    def test_decode_minute_mark(self):
+        # positive test - minute mark bit valid (0)
+        bit = 0
+        result = self.my_decoder.decode_minute_mark(bit)
+        objective = "59: Minute mark of DCF77 phase modulation is 0.\n"
+        self.assertEqual(objective, result)
 
-            # positive test - minute mark bit valid (1)
-            bit = 1
-            result = self.my_decoder.decode_minute_mark(bit)
-            objective = "59: ERROR: Minute mark of DCF77 phase " + \
-                        "modulation failed, it is not 0.\n"
-            self.assertEqual(objective, result)
+        # positive test - minute mark bit valid (1)
+        bit = 1
+        result = self.my_decoder.decode_minute_mark(bit)
+        objective = "59: ERROR: Minute mark of DCF77 phase " + \
+                    "modulation failed, it is not 0.\n"
+        self.assertEqual(objective, result)

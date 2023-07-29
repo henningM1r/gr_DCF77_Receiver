@@ -30,6 +30,12 @@ class Test_Class_DecodeDCF77_OOK(unittest.TestCase):
         objective = "00: ERROR: Start-bit is 1 instead of 0!\n"
         self.assertEqual(objective, result)
 
+        # positive test - wrong start bit
+        bit = 3
+        result = self.my_decoder.decode_startbit(bit)
+        objective = "00: ERROR: Start-bit is ?.\n"
+        self.assertEqual(objective, result)
+
     def test_decode_bitstream(self):
         # positive test - too many bits
         bitstream = [0]*60

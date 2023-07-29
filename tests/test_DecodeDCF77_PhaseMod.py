@@ -30,6 +30,12 @@ class Test_Class_DecodeDCF77_PhaseMod(unittest.TestCase):
         objective = "00: Start-bit is 1.\n"
         self.assertEqual(objective, result)
 
+        # positive test - wrong start bit
+        bit = 3
+        result = self.my_decoder.decode_startbit(bit)
+        objective = "00: ERROR: Start-bit is ?.\n"
+        self.assertEqual(objective, result)
+
     def test_decode_bitstream(self):
         # negative test - too many bits
         bitstream = [1] + [0]*60

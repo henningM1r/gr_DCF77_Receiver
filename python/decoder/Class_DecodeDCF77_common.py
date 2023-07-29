@@ -33,12 +33,12 @@ class Class_DecodeDCF77_common(ABC):
         output = ""
 
         # instead of weather bits, there are 9 fixed 1-bits and 5 fixed 0-bits
-        if (bits[0:9] == np.ones(9)).all():
+        if bits[0:9] == list(np.ones(9)):
             output += "01-09: 9 times 1-bits in DCF77 phase modulation.\n"
         else:
             output += "01-09: ERROR: faulty bit(s) detected.\n"
 
-        if (bits[9:14] == np.zeros(5)).all():
+        if bits[9:14] == list(np.zeros(5)):
             output += "10-14: 5 times 0-bits in DCF77 phase modulation.\n"
         else:
             output += "10-14: ERROR: faulty bit(s) detected.\n"
@@ -328,7 +328,6 @@ class Class_DecodeDCF77_common(ABC):
 
         if bit == 0:
             output += "59: Minute mark of DCF77 phase modulation is 0.\n"
-
         else:
             output += "59: ERROR: Minute mark of DCF77 phase modulation failed, it is not 0.\n"
 
