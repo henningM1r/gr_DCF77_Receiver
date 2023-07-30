@@ -1,5 +1,7 @@
 
 import sys
+import time
+
 import numpy as np
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
@@ -38,6 +40,7 @@ class test_gr_bitDetector_PhaseMod(gr_unittest.TestCase):
                             (self.snk_msg, 'msg_in'))
 
         self.tb.run()
+        self.test_block.reinit_code()
 
     def tearDown(self):
         # return to initial state
@@ -97,33 +100,40 @@ class test_gr_bitDetector_PhaseMod(gr_unittest.TestCase):
         self.test_block.transmit_code(code)
 
         self.tb.start()
+        time.sleep(0.1)
         self.tb.stop()
         self.tb.wait()
 
         objective = pmt.intern("1")
-        result = self.snk_msg.cur_msg
+        result = self.snk_msg.get_msg()
         self.assertEqual(objective, result)
+
+        self.test_block.reinit_code()
 
         code = np.array([0])
         self.test_block.transmit_code(code)
 
         self.tb.start()
+        time.sleep(0.1)
         self.tb.stop()
         self.tb.wait()
 
         objective = pmt.intern("0")
-        result = self.snk_msg.cur_msg
+        result = self.snk_msg.get_msg()
         self.assertEqual(objective, result)
+
+        self.test_block.reinit_code()
 
         code = np.array([1, 0, 1, 1, 0, 0, 1])
         self.test_block.transmit_code(code)
 
         self.tb.start()
+        time.sleep(0.1)
         self.tb.stop()
         self.tb.wait()
 
         objective = pmt.intern("1011001")
-        result = self.snk_msg.cur_msg
+        result = self.snk_msg.get_msg()
         self.assertEqual(objective, result)
 
         del self.test_block
@@ -169,11 +179,12 @@ class test_gr_bitDetector_PhaseMod(gr_unittest.TestCase):
         self.test_block.edge_detection(vin2)
 
         self.tb.start()
+        time.sleep(0.1)
         self.tb.stop()
         self.tb.wait()
 
         objective = pmt.intern("1")
-        result = self.snk_msg.cur_msg
+        result = self.snk_msg.get_msg()
         self.assertEqual(objective, result)
 
         objective = []
@@ -188,9 +199,11 @@ class test_gr_bitDetector_PhaseMod(gr_unittest.TestCase):
         result = DCF77_BitDetector_PhaseMod._num_neg
         self.assertEqual(objective, result)
 
-        objective = 0
+        objective = 1
         result = DCF77_BitDetector_PhaseMod._num_zero
         self.assertEqual(objective, result)
+
+        self.test_block.reinit_code()
 
         # 2x 1-symbol
         vin = np.ones(150)
@@ -201,11 +214,12 @@ class test_gr_bitDetector_PhaseMod(gr_unittest.TestCase):
         self.test_block.edge_detection(vin2)
 
         self.tb.start()
+        time.sleep(0.1)
         self.tb.stop()
         self.tb.wait()
 
         objective = pmt.intern("11")
-        result = self.snk_msg.cur_msg
+        result = self.snk_msg.get_msg()
         self.assertEqual(objective, result)
 
         objective = []
@@ -220,7 +234,7 @@ class test_gr_bitDetector_PhaseMod(gr_unittest.TestCase):
         result = DCF77_BitDetector_PhaseMod._num_neg
         self.assertEqual(objective, result)
 
-        objective = 0
+        objective = 1
         result = DCF77_BitDetector_PhaseMod._num_zero
         self.assertEqual(objective, result)
 
@@ -239,11 +253,12 @@ class test_gr_bitDetector_PhaseMod(gr_unittest.TestCase):
         self.test_block.edge_detection(vin2)
 
         self.tb.start()
+        time.sleep(0.1)
         self.tb.stop()
         self.tb.wait()
 
         objective = pmt.intern("0")
-        result = self.snk_msg.cur_msg
+        result = self.snk_msg.get_msg()
         self.assertEqual(objective, result)
 
         objective = []
@@ -258,9 +273,11 @@ class test_gr_bitDetector_PhaseMod(gr_unittest.TestCase):
         result = DCF77_BitDetector_PhaseMod._num_neg
         self.assertEqual(objective, result)
 
-        objective = 0
+        objective = 1
         result = DCF77_BitDetector_PhaseMod._num_zero
         self.assertEqual(objective, result)
+
+        self.test_block.reinit_code()
 
         # 2x 0-symbol
         vin = -np.ones(150)
@@ -271,11 +288,12 @@ class test_gr_bitDetector_PhaseMod(gr_unittest.TestCase):
         self.test_block.edge_detection(vin2)
 
         self.tb.start()
+        time.sleep(0.1)
         self.tb.stop()
         self.tb.wait()
 
         objective = pmt.intern("00")
-        result = self.snk_msg.cur_msg
+        result = self.snk_msg.get_msg()
         self.assertEqual(objective, result)
 
         objective = []
@@ -290,30 +308,118 @@ class test_gr_bitDetector_PhaseMod(gr_unittest.TestCase):
         result = DCF77_BitDetector_PhaseMod._num_neg
         self.assertEqual(objective, result)
 
-        objective = 0
+        objective = 1
         result = DCF77_BitDetector_PhaseMod._num_zero
         self.assertEqual(objective, result)
 
         del self.test_block
         self.tearDown()
 
-    """
-    def test_gr_bitDetector_2(self):
-        # TODO implement
-        pass
-
     def test_gr_bitDetector_zp1(self):
-        # TODO implement
-        pass
+        self.setUp_Block()
+
+        # 0-symbol
+        vin = np.zeros(14400)
+        vin = np.append(vin, np.ones(1))
+        vin = np.append(vin, np.zeros(1))
+        vin2 = vin.tolist()
+
+        self.test_block.edge_detection(vin2)
+
+        self.tb.start()
+        time.sleep(0.1)
+        self.tb.stop()
+        self.tb.wait()
+
+        objective = pmt.intern("")
+        result = self.snk_msg.get_msg()
+        self.assertEqual(objective, result)
+
+        objective = 0
+        result = DCF77_BitDetector_PhaseMod._num_pos
+        self.assertEqual(objective, result)
+
+        objective = 0
+        result = DCF77_BitDetector_PhaseMod._num_neg
+        self.assertEqual(objective, result)
+
+        objective = 1
+        result = DCF77_BitDetector_PhaseMod._num_zero
+        self.assertEqual(objective, result)
+
+        del self.test_block
+        self.tearDown()
 
     def test_gr_bitDetector_zm1(self):
-        # TODO implement
-        pass
+        self.setUp_Block()
 
-    def test_gr_bitDetector_break(self):
-        # TODO implement
-        pass
-    """
+        # 0-symbol
+        vin = np.zeros(14400)
+        vin = np.append(vin, -np.ones(1))
+        vin = np.append(vin, np.zeros(1))
+        vin2 = vin.tolist()
+
+        self.test_block.edge_detection(vin2)
+
+        self.tb.start()
+        time.sleep(0.1)
+        self.tb.stop()
+        self.tb.wait()
+
+        objective = pmt.intern("")
+        result = self.snk_msg.get_msg()
+        self.assertEqual(objective, result)
+
+        objective = 0
+        result = DCF77_BitDetector_PhaseMod._num_pos
+        self.assertEqual(objective, result)
+
+        objective = 0
+        result = DCF77_BitDetector_PhaseMod._num_neg
+        self.assertEqual(objective, result)
+
+        objective = 1
+        result = DCF77_BitDetector_PhaseMod._num_zero
+        self.assertEqual(objective, result)
+
+        del self.test_block
+        self.tearDown()
+
+    def test_gr_bitDetector_2(self):
+        self.setUp_Block()
+
+        vin = np.ones(9504)
+        vin2 = vin.tolist()
+
+        self.test_block.edge_detection(vin2)
+
+        self.tb.start()
+        time.sleep(0.1)
+        self.tb.stop()
+        self.tb.wait()
+
+        objective = pmt.intern("2")
+        result = self.snk_msg.get_msg()
+        self.assertEqual(objective, result)
+
+        self.test_block.reinit_code()
+
+        vin = -np.ones(9504)
+        vin2 = vin.tolist()
+
+        self.test_block.edge_detection(vin2)
+
+        self.tb.start()
+        time.sleep(0.1)
+        self.tb.stop()
+        self.tb.wait()
+
+        objective = pmt.intern("2")
+        result = self.snk_msg.get_msg()
+        self.assertEqual(objective, result)
+
+        del self.test_block
+        self.tearDown()
 
 
 if __name__ == '__main__':
@@ -323,3 +429,6 @@ if __name__ == '__main__':
     gr_unittest.run(test_gr_bitDetector_PhaseMod.test_reinit_code())
     gr_unittest.run(test_gr_bitDetector_PhaseMod.test_edge_detection_p1())
     gr_unittest.run(test_gr_bitDetector_PhaseMod.test_edge_detection_m1())
+    gr_unittest.run(test_gr_bitDetector_PhaseMod.test_gr_bitDetector_zp1())
+    gr_unittest.run(test_gr_bitDetector_PhaseMod.test_gr_bitDetector_zm1())
+    gr_unittest.run(test_gr_bitDetector_PhaseMod.test_gr_bitDetector_2())

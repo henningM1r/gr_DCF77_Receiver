@@ -630,30 +630,29 @@ blocks:
       \   global _code\n\n        out = inp\n        \n        for idx, ch in enumerate(inp):\n\
       \            if (ch == +1):\n                _num_pos += 1\n            \n \
       \           elif (ch == -1):\n                _num_neg += 1\n\n            else:\
-      \   # ch == 0\n                _num_pos = 0\n                _num_neg = 0  \n\
-      \                _num_zero += 1\n\n            # ensure the total break is always\
-      \ 200ms\n            # NOTE: there might be a more elegant solution,\n     \
-      \       # but it works for now.\n            if (_num_zero > 1 and\n       \
-      \             _num_zero < self.off_duration):\n                _num_pos = 0\n\
-      \                _num_neg = 0\n                _num_zero += 1\n            \
-      \    out[idx] = 0\n\n            # Detect the minute marker within the phase\
-      \ signal:\n            # The minute marker has a prolonged high OOK signal.\
-      \ In the phase\n            # signal there are two symbols contained with a\
-      \ 200ms break in\n            # between. Thus the break is either a long 1 or\
-      \ a long -1 instead\n            # of a (muted) zero. This longer +/-1 symbol\
-      \ triggers the minute\n            # detector. Note that the very next symbol\
-      \ yet belongs to the\n            # current minute. Further subsequent symbols\
-      \ belong to the next\n            # minute as expected!\n            if (_num_pos\
-      \ > int(self.off_duration*0.66) or\n                    _num_neg > int(self.off_duration*0.66)):\n\
-      \                key = pmt.intern(\"\")\n                value = pmt.intern(\"\
-      2\")\n                self.add_item_tag(0,\n                    self.nitems_written(0)\
-      \ + idx,\n                    key,\n                    value)\n\n         \
-      \       _code = self.code_append(code=_code, num=1, mode=2)\n\n            \
-      \    self.transmit_code(code=_code)\n                self.reinit_code()\n\n\
-      \            # detect edge from +1 -> -1\n            elif _num_pos > 1 and\
-      \ ch == -1:\n                key = pmt.intern(\"\")\n                value =\
-      \ pmt.intern(f\"-1,{_num_pos}\")\n                self.add_item_tag(0,\n   \
-      \                 self.nitems_written(0) + idx,\n                    key,\n\
+      \   # ch == 0\n                _num_zero += 1\n\n            # ensure the total\
+      \ break is always 200ms\n            # NOTE: there might be a more elegant solution,\n\
+      \            # but it works for now.\n            if (_num_zero > 1 and\n  \
+      \                  _num_zero < self.off_duration):\n                _num_pos\
+      \ = 0\n                _num_neg = 0\n                out[idx] = 0\n\n      \
+      \      # Detect the minute marker within the phase signal:\n            # The\
+      \ minute marker has a prolonged high OOK signal. In the phase\n            #\
+      \ signal there are two symbols contained with a 200ms break in\n           \
+      \ # between. Thus, the break is either a long 1 or a long -1 instead\n     \
+      \       # of a (muted) zero. This longer +/-1 symbol triggers the minute\n \
+      \           # detector. Note that the very next symbol yet belongs to the\n\
+      \            # current minute. Further subsequent symbols belong to the next\n\
+      \            # minute as expected!\n            duration_2 = int(self.off_duration*0.66)\n\
+      \            if (_num_pos >= duration_2 or\n                    _num_neg >=\
+      \ duration_2):\n                key = pmt.intern(\"\")\n                value\
+      \ = pmt.intern(\"2\")\n                self.add_item_tag(0,\n              \
+      \      self.nitems_written(0) + idx,\n                    key,\n           \
+      \         value)\n\n                _code = self.code_append(code=_code, num=1,\
+      \ mode=2)\n\n                self.transmit_code(code=_code)\n              \
+      \  self.reinit_code()\n\n            # detect edge from +1 -> -1\n         \
+      \   elif _num_pos > 1 and ch == -1:\n                key = pmt.intern(\"\")\n\
+      \                value = pmt.intern(f\"-1,{_num_pos}\")\n                self.add_item_tag(0,\n\
+      \                    self.nitems_written(0) + idx,\n                    key,\n\
       \                    value)\n\n                _code = self.code_append(code=_code,\
       \ num=_num_pos, mode=+1)\n\n                _num_pos = 0\n                _num_zero\
       \ = 0\n\n            # detect edge from -1 -> +1\n            elif _num_neg\
@@ -678,8 +677,10 @@ blocks:
       \ _num_zero == 1:\n                key = pmt.intern(\"\")\n                value\
       \ = pmt.intern(\"0\")\n                self.add_item_tag(0,\n              \
       \      self.nitems_written(0) + idx,\n                    key,\n           \
-      \         value)\n\n                self.transmit_code(code=_code)\n       \
-      \         self.reinit_code()\n\n        return out\n\n            \n\n"
+      \         value)\n\n                self.transmit_code(code=_code)\n\n     \
+      \           # reinitialize code vector (except _num_zero)\n                _code\
+      \ = []\n                _code = np.array(_code)\n\n                _num_pos\
+      \ = 0\n                _num_neg = 0\n\n        return out\n\n"
     affinity: ''
     alias: DCF77_Phase_Detector
     chip_size: chip_size

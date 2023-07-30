@@ -18,5 +18,7 @@ class msg_receiver_test_block(gr.basic_block):
         self.cur_msg = None
 
     def handle_msg(self, msg):
-        #print("msg:", msg)
         self.cur_msg = msg
+
+    def get_msg(self):
+        return self.cur_msg
