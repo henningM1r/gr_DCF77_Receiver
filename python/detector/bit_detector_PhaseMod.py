@@ -88,17 +88,17 @@ class blk(gr.sync_block):
         global _code
 
         out = inp
-        
+
         for idx, ch in enumerate(inp):
             if (ch == +1):
                 _num_pos += 1
-            
+
             elif (ch == -1):
                 _num_neg += 1
 
             else:   # ch == 0
                 _num_pos = 0
-                _num_neg = 0  
+                _num_neg = 0
                 _num_zero += 1
 
             # ensure the total break is always 200ms
@@ -124,9 +124,9 @@ class blk(gr.sync_block):
                 key = pmt.intern("e")
                 value = pmt.intern("2")
                 self.add_item_tag(0,
-                    self.nitems_written(0) + idx,
-                    key,
-                    value)
+                                  self.nitems_written(0) + idx,
+                                  key,
+                                  value)
 
                 _code = self.code_append(code=_code, num=1, mode=2)
 
@@ -138,9 +138,9 @@ class blk(gr.sync_block):
                 key = pmt.intern("e")
                 value = pmt.intern(f"-1, {_num_pos}")
                 self.add_item_tag(0,
-                    self.nitems_written(0) + idx,
-                    key,
-                    value)
+                                  self.nitems_written(0) + idx,
+                                  key,
+                                  value)
 
                 _code = self.code_append(code=_code, num=_num_pos, mode=+1)
 
@@ -152,9 +152,9 @@ class blk(gr.sync_block):
                 key = pmt.intern("e")
                 value = pmt.intern(f"+1, {_num_neg}")
                 self.add_item_tag(0,
-                    self.nitems_written(0) + idx,
-                    key,
-                    value)
+                                  self.nitems_written(0) + idx,
+                                  key,
+                                  value)
 
                 _code = self.code_append(code=_code, num=_num_neg, mode=-1)
 
@@ -168,9 +168,9 @@ class blk(gr.sync_block):
                 key = pmt.intern("e")
                 value = pmt.intern("+1")
                 self.add_item_tag(0,
-                    self.nitems_written(0) + idx,
-                    key,
-                    value)
+                                  self.nitems_written(0) + idx,
+                                  key,
+                                  value)
 
                 _num_neg = 0
                 _num_zero = 0
@@ -182,9 +182,9 @@ class blk(gr.sync_block):
                 key = pmt.intern("e")
                 value = pmt.intern("-1")
                 self.add_item_tag(0,
-                    self.nitems_written(0) + idx,
-                    key,
-                    value)
+                                  self.nitems_written(0) + idx,
+                                  key,
+                                  value)
 
                 _num_pos = 0
                 _num_zero = 0
@@ -194,14 +194,11 @@ class blk(gr.sync_block):
                 key = pmt.intern("e")
                 value = pmt.intern("0")
                 self.add_item_tag(0,
-                    self.nitems_written(0) + idx,
-                    key,
-                    value)
+                                  self.nitems_written(0) + idx,
+                                  key,
+                                  value)
 
                 self.transmit_code(code=_code)
                 self.reinit_code()
 
         return out
-
-            
-

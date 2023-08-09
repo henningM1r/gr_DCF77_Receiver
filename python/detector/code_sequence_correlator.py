@@ -1,5 +1,5 @@
 
-from gnuradio import gr 
+from gnuradio import gr
 import pmt
 import numpy as np
 
@@ -12,7 +12,7 @@ class msg_block(gr.basic_block):
             name="Code Sequence \n Correlator",
             in_sig=None,
             out_sig=None)
- 
+
         # prepare in and out ports for messages
         self.message_port_register_out(pmt.intern('msg_out'))
         self.message_port_register_in(pmt.intern('msg_in'))
@@ -64,7 +64,7 @@ class msg_block(gr.basic_block):
     def handle_msg(self, msg):
         # message contains whole spread sequence of a received second
         msg = pmt.to_python(msg)
-        #print("Message:", msg)
+        # print("Message:", msg)
 
         recv_sequence = list(map(int, msg))
         np_recv_seq = np.array(recv_sequence)
@@ -79,22 +79,22 @@ class msg_block(gr.basic_block):
         if np_recv_seq_padded[-1] == 2:
             np_recv_seq_padded = np.insert(np_recv_seq_padded,
                                            -2, np.zeros(10), axis=0)
-        
-        else: # ordinary case 
+
+        else:    # ordinary case
             np_recv_seq_padded = np.insert(np_recv_seq_padded,
                                            -1, np.zeros(10), axis=0)
 
         if len(np_recv_seq) > 0:
             res_zero = np.correlate(np_recv_seq_padded, self.np_knwn_zero_seq)
             res_one = np.correlate(np_recv_seq_padded, self.np_knwn_one_seq)
-            #print(res_zero)
-            #print(res_one)
+            # print(res_zero)
+            # print(res_one)
 
             # NOTE the max-norm provides good results so far
             norm_zero = max(res_zero)
             norm_one = max(res_one)
-            #print("N0: ", norm_zero)
-            #print("N1: ", norm_one)
+            # print("N0: ", norm_zero)
+            # print("N1: ", norm_one)
 
             if norm_zero > norm_one:
                 self.message_port_pub(pmt.intern('msg_out'),
@@ -106,18 +106,16 @@ class msg_block(gr.basic_block):
 
             # even if these norms are identical,
             # an error message might still be useful for the decoder
-            #else:
+            # else:
             #    self.message_port_pub(pmt.intern('msg_out'),
             #                          pmt.intern('e'))
 
             if self._min_marker == 1:
                 self.message_port_pub(pmt.intern('msg_out'),
                                       pmt.intern('2'))
-                # disable minute marker   
+                # disable minute marker
                 self._min_marker = 0
 
             # delay minute symbol for a single symbol
             if np_recv_seq[-1] == 2:
                 self._min_marker = 1
-
-

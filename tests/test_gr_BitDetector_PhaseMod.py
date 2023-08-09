@@ -32,7 +32,7 @@ class test_gr_bitDetector_PhaseMod(gr_unittest.TestCase):
         # NOTE the test_block must be instantiated and run once
         #      before a subroutines is called manually
         self.test_block = (DCF77_BitDetector_PhaseMod.DCF77_BitDetector_blk(
-                sample_rate=48000, chip_size=75))
+            sample_rate=48000, chip_size=75))
 
         self.tb.connect(self.src_sig, (self.test_block, 0))
         self.tb.connect((self.test_block, 0), self.snk_sig)

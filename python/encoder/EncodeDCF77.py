@@ -67,12 +67,12 @@ class DCF77Encoder():
 
                 # encode current time into bit-stream
                 bitstream = self.encode_dcf77_bitstream(
-                              day=day, month=month, year=year,
-                              hh=hh, mm=mm, ss=ss, weekday=weekday,
-                              weather=weather,
-                              call_bit=False,
-                              time_shift=False, time_offset=0,
-                              CEST=CEST, CET=CET, leap=False)
+                    day=day, month=month, year=year,
+                    hh=hh, mm=mm, ss=ss, weekday=weekday,
+                    weather=weather,
+                    call_bit=False,
+                    time_shift=False, time_offset=0,
+                    CEST=CEST, CET=CET, leap=False)
 
                 print(f"sending full block: \n {bitstream}\n"
                       " with 1 symbol per second")

@@ -5,6 +5,7 @@ import numpy as np
 
 from abc import ABC, abstractmethod
 
+
 class Class_DecodeDCF77_common(ABC):
 
     def __init__(self):
@@ -317,7 +318,8 @@ class Class_DecodeDCF77_common(ABC):
                     bitstream[21] ^ bitstream[22] == 0):
                 output += "58: Even parity of date and weekdays successful.\n"
             else:
-                output += "58: ERROR: Even parity of date and weekdays failed.\n"
+                output += "58: ERROR: Even parity of " + \
+                          "date and weekdays failed.\n"
         else:
             output += "58: ERROR: Even parity of date and weekdays is ?.\n"
 
@@ -329,6 +331,7 @@ class Class_DecodeDCF77_common(ABC):
         if bit == 0:
             output += "59: Minute mark of DCF77 phase modulation is 0.\n"
         else:
-            output += "59: ERROR: Minute mark of DCF77 phase modulation failed, it is not 0.\n"
+            output += "59: ERROR: Minute mark of DCF77 phase " + \
+                      "modulation failed, it is not 0.\n"
 
         return output

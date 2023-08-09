@@ -1,4 +1,6 @@
 # gr_DCF77_Receiver
+![Pipeline](https://github.com/henningM1r/gr_DCF77_Receiver/actions/workflows/docker-ci.yml/badge.svg)
+
 This is a basic DCF77 receiver for GNU Radio, containing:
 1. signal demodulation and detection of the DCF77 OOK signal with an SDR using GNU Radio (and Python modules)
 2. signal demodulation and detection of the DCF77 phase-modulated signal with an SDR using GNU Radio (and Python modules)

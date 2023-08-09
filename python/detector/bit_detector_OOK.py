@@ -260,7 +260,7 @@ class DCF77_BitDetector_blk(gr.sync_block):
                                       key,
                                       value)
 
-                    # detected 0 bit 
+                    # detected 0 bit
                     self.message_port_pub(pmt.intern("msg_out"),
                                           pmt.intern("1"))
 

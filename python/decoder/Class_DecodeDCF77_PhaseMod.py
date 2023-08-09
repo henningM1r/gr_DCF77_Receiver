@@ -111,7 +111,7 @@ class Class_DecodeDCF77_PhaseMod(DCF77.Class_DecodeDCF77_common):
 
             # too many bits trigger a reset of the current bitstream
             if count > 60:
-                print(f"Error: More than 60 bits at new minute")
+                print("Error: More than 60 bits at new minute")
                 print(f"#Bits: {len(bitstream)}")
 
                 # reset bitstream
