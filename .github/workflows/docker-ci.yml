@@ -1,0 +1,20 @@
+name: Docker-CI
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v3
+      
+      - name: build docker image
+        run: docker build . --file tests/Dockerfile --tag docker_gnuradio
+        
+      - name: unit testing in docker container
+        run: docker run --name container_gnuradio --rm --interactive docker_gnuradio bash -c "cd /home/user/gr_DCF77_Receiver/tests/; python3 -m unittest discover;"

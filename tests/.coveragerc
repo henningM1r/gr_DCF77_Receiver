@@ -1,0 +1,5 @@
+[report]
+omit =
+    test_*.py
+    /usr/lib/python3/*
+    */pybombs/lib/*
