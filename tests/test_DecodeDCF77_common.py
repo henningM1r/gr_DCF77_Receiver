@@ -560,3 +560,7 @@ class Test_Class_DecodeDCF77_common(unittest.TestCase):
         objective = "59: ERROR: Minute mark of DCF77 phase " + \
                     "modulation failed, it is not 0.\n"
         self.assertEqual(objective, result)
+
+if __name__ == '__main__':
+    testInstance = Test_Class_DecodeDCF77_common()
+    unittest.main()
