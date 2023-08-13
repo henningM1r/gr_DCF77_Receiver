@@ -275,7 +275,7 @@ blocks:
     bus_structure: null
     coordinate: [472, 344.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_multiply_const_vxx_1
   id: blocks_multiply_const_vxx
   parameters:
@@ -293,7 +293,7 @@ blocks:
     bus_structure: null
     coordinate: [1032, 360.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_multiply_const_vxx_1_0
   id: blocks_multiply_const_vxx
   parameters:
@@ -355,7 +355,7 @@ blocks:
     bus_structure: null
     coordinate: [664, 652.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: freq_xlating_fir_filter_xxx_0_0
   id: freq_xlating_fir_filter_xxx
   parameters:
@@ -377,7 +377,7 @@ blocks:
     bus_structure: null
     coordinate: [704, 332.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: gr_bit_detector_DCF77
   id: epy_block
   parameters:
@@ -626,9 +626,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [432, 644.0]
+    coordinate: [416, 644.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: osmosdr_source_0
   id: osmosdr_source
   parameters:
@@ -989,7 +989,7 @@ blocks:
     bus_structure: null
     coordinate: [80, 236.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_freq_sink_x_0
   id: qtgui_freq_sink_x
   parameters:
@@ -1151,7 +1151,7 @@ blocks:
     bus_structure: null
     coordinate: [1496, 188.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: qtgui_time_sink_x_0
   id: qtgui_time_sink_x
   parameters:
